@@ -3,7 +3,7 @@ import { AuthConfig } from "convex/server";
 export default {
   providers: [
     {
-      domain: "https://maximum-swine-40.clerk.accounts.dev",
+      domain: "https://neat-puma-23.clerk.accounts.dev",
       applicationID: "convex",
     },
   ],
