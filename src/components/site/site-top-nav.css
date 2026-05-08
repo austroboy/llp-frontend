@@ -1,0 +1,804 @@
+/* ─────────────────────────────────────────────────────────────────────
+ * SiteTopNav — global navigation extracted from landing.css.
+ * Self-contained scope: tokens declared on .lf-nav-scope so the nav
+ * renders correctly outside .lf-page (marketing/app pages).
+ * .lf-page also satisfies these selectors so landing keeps its look.
+ * Dark theme: data-theme="dark" on .lf-nav-scope (or .lf-page).
+ * ──────────────────────────────────────────────────────────────────── */
+
+.lf-nav-scope {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  /* Foundation v1.9 LIGHT tokens (subset used by topnav) */
+  --paper: #f8f6f1;
+  --paper-inner: #f1ede2;
+  --paper-warm: #ede8d8;
+  --ink: #141413;
+  --ink-2: #2c2a26;
+  --ink-3: #55534d;
+  --ink-4: #7a7870;
+  --ink-5: #a8a59c;
+  --ink-6: #d6d2c5;
+  --line-1: rgba(20, 20, 19, 0.06);
+  --line-2: rgba(20, 20, 19, 0.12);
+  --accent-blue: #1e3a5f;
+  --accent-blue-deep: #142840;
+  --accent-blue-ghost: rgba(30, 58, 95, 0.08);
+  --rust: #b85a1f;
+  --rust-deep: #8a4116;
+  --rust-ghost: rgba(184, 90, 31, 0.12);
+  --rust-peach: rgba(184, 90, 31, 0.16);
+  --bronze: #7a5a2b;
+  --bronze-ghost: rgba(122, 90, 43, 0.10);
+  --emerald: #3d6b4d;
+  --surface-accent: #2b3a4a;
+  --live: #b85a1f;
+  --s-1: 8px;
+  --s-2: 16px;
+  --s-3: 24px;
+  --s-4: 32px;
+  --s-5: 48px;
+  --s-6: 64px;
+  --s-7: 96px;
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --lf-display: var(--font-fraunces), "Source Serif 4", Charter, Georgia, serif;
+  --lf-body: var(--font-poppins), "Inter", -apple-system, system-ui, sans-serif;
+  --lf-mono: var(--font-jetbrains), "JetBrains Mono", ui-monospace, monospace;
+  --glass-bg: rgba(248, 246, 241, 0.6);
+  --glass-bg-strong: rgba(252, 250, 245, 0.82);
+  --glass-bg-white: rgba(255, 255, 253, 0.88);
+  --glass-border: rgba(20, 20, 19, 0.1);
+  --glass-shadow: 0 8px 28px -16px rgba(20, 20, 19, 0.18),
+    0 1px 2px rgba(20, 20, 19, 0.04);
+  --btn-ink: var(--ink);
+  --btn-ink-on: var(--paper);
+  font-family: var(--lf-body);
+  color: var(--ink);
+}
+
+.lf-nav-scope[data-theme="dark"] {
+  /* Coffee/brown dark palette — mirrors .lf-page[data-theme="dark"] */
+  --paper: #1e1a14;
+  --paper-inner: #2a241b;
+  --paper-warm: #342a1d;
+  --ink: #ede4d2;
+  --ink-2: #d4c9b8;
+  --ink-3: #a0937f;
+  --ink-4: #786d5c;
+  --ink-5: #4a4338;
+  --ink-6: #2c261d;
+  --line-1: rgba(237, 228, 210, 0.07);
+  --line-2: rgba(237, 228, 210, 0.14);
+  --accent-blue: #8eb8de;
+  --accent-blue-deep: #6092c2;
+  --accent-blue-ghost: rgba(142, 184, 222, 0.14);
+  --rust: #d97e3f;
+  --rust-deep: #b85a1f;
+  --rust-ghost: rgba(217, 126, 63, 0.16);
+  --rust-peach: rgba(217, 126, 63, 0.22);
+  --bronze: #c19a5e;
+  --bronze-ghost: rgba(193, 154, 94, 0.16);
+  --emerald: #7ea88d;
+  --surface-accent: #87714e;
+  --live: #d4a674;
+  --glass-bg: rgba(42, 34, 24, 0.58);
+  --glass-bg-strong: rgba(58, 46, 32, 0.78);
+  --glass-bg-white: rgba(72, 58, 40, 0.82);
+  --glass-border: rgba(237, 228, 210, 0.12);
+  --glass-shadow: 0 8px 32px -16px rgba(0, 0, 0, 0.55),
+    0 1px 2px rgba(0, 0, 0, 0.30);
+  --btn-ink: var(--ink);
+  --btn-ink-on: #1e1a14;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * TOP NAV — Tanbhir layout fitted into floating glass pill
+ * ═══════════════════════════════════════════════════════════════════ */
+.lf-topnav {
+  padding: 0;
+  margin-bottom: 0;
+  background: transparent;
+  pointer-events: none;
+}
+.lf-topnav-inner {
+  max-width: none;
+  margin: 0;
+  height: 60px;
+  padding: 0 var(--s-3);
+  border-radius: 0;
+  background: var(--glass-bg-white);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 0;
+  border-bottom: 0.5px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  pointer-events: auto;
+}
+
+/* Dark theme — paint warm coffee gradient across every page so the
+   global navbar visually anchors with sidebars + surface chrome.
+   Drops the glass blur (no canvas behind the bar to blur). */
+.lf-nav-scope[data-theme="dark"] .lf-topnav-inner,
+.lf-page[data-theme="dark"] .lf-topnav-inner {
+  background: linear-gradient(180deg, #2a241b 0%, #1e1a14 100%);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom-color: rgba(237, 228, 210, 0.10);
+  box-shadow: 0 4px 18px -8px rgba(0, 0, 0, 0.45);
+}
+.lf-topnav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  padding-right: var(--s-2);
+  border-right: 0.5px solid var(--line-2);
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lf-topnav-brand:hover {
+  transform: translateY(-1px);
+}
+.lf-topnav-brand svg rect {
+  transition: transform 360ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 240ms ease;
+  transform-origin: center;
+}
+.lf-topnav-brand:hover svg rect:nth-of-type(2) {
+  transform: translateX(1.5px);
+}
+.lf-topnav-brand:hover svg rect:nth-of-type(4) {
+  transform: translateX(-1.5px);
+}
+.lf-topnav-name {
+  font-family: var(--lf-display);
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.006em;
+  white-space: nowrap;
+  transition: color 220ms ease;
+}
+.lf-topnav-brand:hover .lf-topnav-name {
+  color: var(--accent-blue);
+}
+.lf-topnav-items {
+  display: flex;
+  margin-left: 4px;
+  gap: 0;
+}
+.lf-topnav-item {
+  position: relative;
+  padding: 6px 12px;
+  font-family: var(--lf-display);
+  font-size: 14px;
+  color: var(--ink-3);
+  cursor: pointer;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
+  transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    background 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  border-radius: 999px;
+}
+.lf-topnav-item::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 2px;
+  height: 1px;
+  background: var(--accent-blue);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 360ms cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  opacity: 0.85;
+}
+.lf-topnav-item:hover::after {
+  transform: scaleX(1);
+}
+.lf-topnav-item:hover {
+  color: var(--ink);
+  background: var(--glass-bg);
+}
+.lf-topnav-item.lf-active {
+  color: var(--accent-blue);
+}
+.lf-topnav-item.lf-active::after {
+  transform: scaleX(1);
+}
+.lf-topnav-roman {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: inline-block;
+  transition: color 220ms ease,
+    transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lf-topnav-item:hover .lf-topnav-roman {
+  color: var(--accent-blue);
+  transform: translateY(-1px);
+}
+
+.lf-topnav-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.lf-topnav-lang {
+  font-family: var(--lf-display);
+  font-size: 14px;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: color 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    background 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  background: none;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 999px;
+  min-width: 64px;
+  text-align: center;
+}
+.lf-topnav-lang:hover {
+  color: var(--ink);
+  background: var(--glass-bg);
+}
+
+.lf-topnav-theme {
+  width: 30px;
+  height: 30px;
+  border: 0.5px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  color: var(--ink-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 50%;
+  transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
+}
+.lf-topnav-theme:hover {
+  border-color: var(--line-2);
+  color: var(--ink);
+  background: var(--glass-bg);
+}
+.lf-topnav-theme svg {
+  width: 16px;
+  height: 16px;
+}
+
+.lf-topnav-desk {
+  font-family: var(--lf-display);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.006em;
+  padding: 7px 14px;
+  background: #1e3a5f;
+  color: #fff;
+  border: 0.5px solid #142840;
+  border-radius: 999px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  transition: background 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.lf-topnav-desk:hover {
+  background: #142840;
+  transform: translateY(-0.5px);
+}
+.lf-topnav-desk.lf-active {
+  background: #142840;
+  color: #fff;
+  border-color: #142840;
+}
+.lf-topnav-desk svg {
+  width: 12px;
+  height: 12px;
+}
+
+.lf-topnav-audit {
+  font-family: var(--lf-display);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.006em;
+  padding: 8px 16px 8px 14px;
+  background: var(--rust);
+  color: #fff;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 160ms ease, transform 160ms ease;
+  white-space: nowrap;
+  text-decoration: none;
+  position: relative;
+}
+.lf-topnav-audit:hover {
+  background: var(--rust-deep);
+  transform: translateY(-0.5px);
+}
+.lf-nav-scope[data-theme="dark"] .lf-topnav-audit,
+.lf-page[data-theme="dark"] .lf-topnav-audit {
+  background: linear-gradient(180deg, #6e4a2a 0%, #553318 100%);
+  color: #f3e7d4;
+}
+.lf-nav-scope[data-theme="dark"] .lf-topnav-audit:hover,
+.lf-page[data-theme="dark"] .lf-topnav-audit:hover {
+  background: linear-gradient(180deg, #7a5532 0%, #604027 100%);
+  filter: brightness(1.05);
+}
+.lf-topnav-audit-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  animation: lf-pulse-soft 1.8s ease-in-out infinite;
+}
+@keyframes lf-pulse-soft {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(0.85); }
+}
+
+.lf-topnav-signin {
+  font-family: var(--lf-display);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.006em;
+  padding: 8px 18px;
+  background: var(--btn-ink);
+  color: var(--btn-ink-on);
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 220ms ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.lf-topnav-signin:hover {
+  background: var(--accent-blue);
+  color: #fff;
+  transform: translateY(-0.5px);
+  box-shadow: 0 6px 18px -10px rgba(30, 58, 95, 0.55);
+}
+.lf-topnav-signin > span:last-child {
+  display: inline-block;
+  transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lf-topnav-signin:hover > span:last-child {
+  transform: translateX(3px);
+}
+
+.lf-topnav-user {
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+}
+.lf-clerk-avatar {
+  box-shadow: 0 0 0 1px var(--line-2);
+  transition: box-shadow 160ms ease;
+}
+
+.lf-topnav-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.lf-topnav-actions-toggle {
+  display: none;
+  width: 34px;
+  height: 34px;
+  border: 0.5px solid var(--line-2);
+  background: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  color: var(--ink-2);
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 50%;
+  transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
+}
+.lf-topnav-actions-toggle:hover {
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--ink);
+  border-color: var(--ink-3);
+}
+.lf-topnav-actions-toggle svg { width: 18px; height: 18px; }
+.lf-nav-scope[data-theme="dark"] .lf-topnav-actions-toggle,
+.lf-page[data-theme="dark"] .lf-topnav-actions-toggle {
+  background: var(--glass-bg);
+  border-color: var(--glass-border);
+}
+
+.lf-topnav-menu {
+  display: none;
+  width: 34px;
+  height: 34px;
+  border: 0.5px solid var(--line-2);
+  background: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  color: var(--ink-2);
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 50%;
+  transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
+}
+.lf-topnav-menu:hover {
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--ink);
+  border-color: var(--ink-3);
+}
+.lf-topnav-menu svg {
+  width: 16px;
+  height: 16px;
+}
+.lf-nav-scope[data-theme="dark"] .lf-topnav-menu,
+.lf-page[data-theme="dark"] .lf-topnav-menu {
+  background: var(--glass-bg);
+  border-color: var(--glass-border);
+  color: var(--ink-2);
+}
+
+.lf-topnav-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 14, 12, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 49;
+  animation: lf-fade-in 160ms ease both;
+}
+.lf-topnav-drawer {
+  position: fixed;
+  top: 80px;
+  right: var(--s-3);
+  left: var(--s-3);
+  z-index: 51;
+  pointer-events: auto;
+  border-radius: 22px;
+  /* Solid paper — readability over busy page content */
+  background: var(--paper);
+  background-image: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--paper) 96%, var(--accent-blue) 4%) 0%,
+    var(--paper) 100%
+  );
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid color-mix(in oklab, var(--ink) 14%, transparent);
+  box-shadow:
+    0 1px 0 color-mix(in oklab, var(--paper) 80%, white) inset,
+    0 36px 90px -22px color-mix(in oklab, var(--ink) 38%, transparent),
+    0 12px 32px -16px color-mix(in oklab, var(--ink) 22%, transparent);
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: lf-slide-down 200ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes lf-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes lf-slide-down {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.lf-topnav-drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 4px 8px;
+  border-bottom: 0.5px dashed var(--line-2);
+  margin-bottom: 4px;
+}
+.lf-topnav-drawer-eyebrow {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.lf-topnav-drawer-close {
+  width: 30px;
+  height: 30px;
+  border: 0.5px solid var(--line-2);
+  background: transparent;
+  color: var(--ink-2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 160ms ease, border-color 160ms ease;
+}
+.lf-topnav-drawer-close:hover {
+  color: var(--ink);
+  border-color: var(--ink-3);
+}
+.lf-topnav-drawer-close svg { width: 14px; height: 14px; }
+.lf-topnav-drawer-head-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.lf-topnav-drawer-theme {
+  width: 30px;
+  height: 30px;
+  border: 0.5px solid var(--line-2);
+  background: transparent;
+  color: var(--ink-2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 160ms ease, border-color 160ms ease;
+}
+.lf-topnav-drawer-theme:hover {
+  color: var(--ink);
+  border-color: var(--ink-3);
+}
+.lf-topnav-drawer-theme svg { width: 14px; height: 14px; }
+
+.lf-topnav-drawer-list {
+  display: flex;
+  flex-direction: column;
+}
+.lf-topnav-drawer-item {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  align-items: baseline;
+  gap: 12px;
+  padding: 12px 6px;
+  font-family: var(--lf-display);
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.006em;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 0.5px dashed var(--line-2);
+  transition: color 140ms ease;
+}
+.lf-topnav-drawer-item:last-child { border-bottom: none; }
+.lf-topnav-drawer-item:hover { color: var(--accent-blue); }
+.lf-topnav-drawer-roman {
+  font-family: var(--lf-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--rust);
+  text-transform: uppercase;
+  text-align: right;
+}
+.lf-topnav-drawer-label { line-height: 1.2; }
+
+.lf-topnav-drawer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 0.5px dashed var(--line-2);
+}
+.lf-topnav-drawer-pill {
+  font-family: var(--lf-display);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.006em;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--ink-2);
+  border: 0.5px solid var(--line-2);
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  text-decoration: none;
+  transition: background 140ms ease, color 140ms ease, border-color 140ms ease;
+}
+.lf-topnav-drawer-pill:hover {
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--ink);
+  border-color: var(--ink-3);
+}
+.lf-topnav-drawer-pill svg { width: 12px; height: 12px; }
+.lf-topnav-drawer-pill--ink {
+  background: var(--btn-ink);
+  color: var(--btn-ink-on);
+  border-color: transparent;
+}
+.lf-topnav-drawer-pill--ink:hover {
+  background: var(--accent-blue);
+  color: #fff;
+  border-color: transparent;
+}
+.lf-nav-scope[data-theme="dark"] .lf-topnav-drawer-pill,
+.lf-page[data-theme="dark"] .lf-topnav-drawer-pill {
+  background: var(--glass-bg);
+  border-color: var(--glass-border);
+}
+.lf-nav-scope[data-theme="dark"] .lf-topnav-drawer-pill--ink,
+.lf-page[data-theme="dark"] .lf-topnav-drawer-pill--ink {
+  background: var(--ink);
+  color: #1e1a14;
+  border-color: transparent;
+}
+.lf-nav-scope[data-theme="dark"] .lf-topnav-drawer-pill--ink:hover,
+.lf-page[data-theme="dark"] .lf-topnav-drawer-pill--ink:hover {
+  background: var(--accent-blue);
+  color: #1e1a14;
+  border-color: transparent;
+}
+.lf-clerk-avatar:hover {
+  box-shadow: 0 0 0 1px var(--accent-blue);
+}
+
+/* ── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 1180px) {
+  .lf-topnav-item {
+    padding: 6px 9px;
+    font-size: 13px;
+  }
+}
+@media (max-width: 1550px) {
+  .lf-topnav {
+    top: 0;
+    margin-bottom: 0;
+  }
+  .lf-topnav-inner {
+    padding: 0 var(--s-2);
+    gap: 6px;
+    height: 52px;
+  }
+  .lf-topnav-lang {
+    display: none;
+  }
+  .lf-topnav-right { gap: 6px; }
+  .lf-topnav-actions-toggle {
+    display: inline-flex;
+  }
+  .lf-topnav-actions {
+    display: none;
+    align-items: center;
+    gap: 6px;
+  }
+  .lf-topnav-actions[data-open="true"] {
+    display: flex;
+  }
+  .lf-topnav:has(.lf-topnav-actions[data-open="true"]) .lf-topnav-name {
+    display: none;
+  }
+  .lf-topnav-theme {
+    width: 34px;
+    height: 34px;
+    border: 0.5px solid var(--line-2);
+    background: rgba(255, 255, 255, 0.55);
+  }
+  .lf-nav-scope[data-theme="dark"] .lf-topnav-theme,
+  .lf-page[data-theme="dark"] .lf-topnav-theme {
+    background: var(--glass-bg);
+    border-color: var(--glass-border);
+  }
+  .lf-topnav-desk {
+    padding: 6px 12px;
+    font-size: 13px;
+    gap: 0;
+  }
+  .lf-topnav-desk svg {
+    display: none;
+  }
+  .lf-topnav-audit {
+    padding: 6px 12px;
+    font-size: 13px;
+    gap: 6px;
+  }
+}
+@media (max-width: 1050px) {
+  .lf-topnav-items {
+    display: none;
+  }
+  .lf-topnav-menu {
+    display: inline-flex;
+  }
+}
+@media (max-width: 700px) {
+  .lf-topnav {
+    padding: 0;
+  }
+  .lf-topnav-inner {
+    width: 100%;
+    max-width: none;
+    gap: 8px;
+    padding: 0 12px;
+  }
+  /* Collapse mobile chrome — only brand + hamburger remain.
+     Lang, theme, desk, sign-in all live inside the drawer. */
+  .lf-topnav-actions-toggle,
+  .lf-topnav-actions,
+  .lf-topnav-signin {
+    display: none !important;
+  }
+  /* Keep Clerk avatar — signed-in users need access to user menu */
+  .lf-topnav-user {
+    padding: 0;
+  }
+  .lf-topnav-brand {
+    padding-right: 0;
+    border-right: none;
+  }
+  .lf-topnav-right {
+    gap: 0;
+    margin-left: auto;
+  }
+  /* Bigger tap target on small screens */
+  .lf-topnav-menu {
+    width: 38px;
+    height: 38px;
+  }
+  .lf-topnav-menu svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+@media (max-width: 380px) {
+  .lf-topnav-name {
+    font-size: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lf-topnav-audit,
+  .lf-topnav-signin,
+  .lf-topnav-brand,
+  .lf-topnav-item,
+  .lf-topnav-item::after,
+  .lf-topnav-roman,
+  .lf-topnav-brand svg rect,
+  .lf-topnav-signin > span:last-child {
+    transition: none;
+  }
+  .lf-topnav-audit:hover,
+  .lf-topnav-signin:hover,
+  .lf-topnav-brand:hover,
+  .lf-topnav-item:hover .lf-topnav-roman,
+  .lf-topnav-brand:hover svg rect:nth-of-type(2),
+  .lf-topnav-brand:hover svg rect:nth-of-type(4),
+  .lf-topnav-signin:hover > span:last-child {
+    transform: none;
+  }
+  .lf-topnav-item:hover::after,
+  .lf-topnav-item.lf-active::after {
+    transform: scaleX(1);
+  }
+  .lf-topnav-audit-dot { animation: none; }
+}

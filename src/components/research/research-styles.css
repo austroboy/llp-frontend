@@ -1,0 +1,754 @@
+/*
+ * ── Research Lab styles (Tanbhir v56 / Foundation v1.9 port) ──
+ * Scoped under .lf-page; tokens (--paper, --ink-*, --line-*, --accent-blue,
+ * --rust, --emerald, --bronze, --s-N) inherited from landing.css.
+ * Used by /research, /research/biography, /research/situation.
+ */
+
+/* ── Wrap ─────────────────────────────────────────────────────── */
+.lf-page .lf-rl-wrap {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 var(--s-5);
+}
+@media (max-width: 900px) {
+  .lf-page .lf-rl-wrap { padding: 0 var(--s-3); }
+}
+
+/* ── Hero (shared) ────────────────────────────────────────────── */
+.lf-page .lf-rl-hero {
+  padding: calc(var(--s-7) + 48px) 0 var(--s-6);
+  max-width: 880px;
+}
+@media (max-width: 900px) {
+  .lf-page .lf-rl-hero { padding: calc(var(--s-6) + 32px) 0 var(--s-5); }
+}
+.lf-page .lf-rl-title {
+  font-family: var(--lf-display);
+  font-size: 56px;
+  font-weight: 400;
+  letter-spacing: -0.026em;
+  line-height: 1.06;
+  color: var(--ink);
+  margin: 0 0 var(--s-3);
+}
+.lf-page .lf-rl-title em {
+  font-style: italic;
+  color: var(--accent-blue);
+  font-weight: 400;
+}
+@media (max-width: 900px) {
+  .lf-page .lf-rl-title { font-size: 40px; }
+}
+@media (max-width: 480px) {
+  .lf-page .lf-rl-title { font-size: 32px; }
+}
+.lf-page .lf-rl-deck {
+  font-family: var(--lf-display);
+  font-style: italic;
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--ink-3);
+  margin: 0;
+  max-width: 760px;
+}
+
+/* ── Tools picker (lab entry) ─────────────────────────────────── */
+.lf-page .lf-rl-tools {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-3);
+  margin-top: var(--s-5);
+  align-items: stretch;
+}
+@media (max-width: 800px) {
+  .lf-page .lf-rl-tools { grid-template-columns: 1fr; }
+}
+.lf-page .lf-rl-tool {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-align: left;
+  padding: var(--s-5);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  backdrop-filter: blur(14px) saturate(130%);
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 12px 40px -16px rgba(15, 23, 42, 0.18);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 240ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              border-color 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.lf-page .lf-rl-tool:hover {
+  border-color: color-mix(in oklab, var(--accent-blue) 36%, var(--glass-border));
+  transform: translateY(-2px);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.6) inset,
+    0 18px 48px -16px color-mix(in oklab, var(--accent-blue) 24%, rgba(15, 23, 42, 0.22));
+}
+.lf-page .lf-rl-tool-kicker {
+  font-family: var(--lf-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: var(--s-2);
+}
+.lf-page .lf-rl-tool-title {
+  font-family: var(--lf-display);
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  line-height: 1.18;
+  color: var(--ink);
+  margin: 0 0 var(--s-2);
+}
+.lf-page .lf-rl-tool-title em {
+  font-style: italic;
+  color: var(--accent-blue);
+}
+.lf-page .lf-rl-tool-desc {
+  font-family: var(--lf-display);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink-3);
+  margin: 0 0 var(--s-3);
+}
+.lf-page .lf-rl-tool-anchor {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  align-self: flex-start;
+  font-family: var(--lf-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-blue);
+}
+.lf-page .lf-rl-tool-anchor::after {
+  content: "→";
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lf-page .lf-rl-tool:hover .lf-rl-tool-anchor::after {
+  transform: translateX(4px);
+}
+.lf-page .lf-rl-foot {
+  margin-top: var(--s-5);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--line-1);
+  font-family: var(--lf-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--ink-4);
+}
+.lf-page .lf-rl-foot kbd {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  padding: 2px 6px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-sm);
+  background: var(--paper);
+  margin: 0 2px;
+  color: var(--ink-3);
+}
+.lf-page .lf-rl-foot strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ── Insight strip (biography hero accent) ────────────────────── */
+.lf-page .lf-rl-insights {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--glass-border);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  backdrop-filter: blur(14px) saturate(130%);
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 12px 40px -16px rgba(15, 23, 42, 0.18);
+  margin-top: var(--s-4);
+}
+@media (max-width: 700px) {
+  .lf-page .lf-rl-insights { grid-template-columns: 1fr; }
+}
+.lf-page .lf-rl-insight {
+  background: var(--glass-bg);
+  padding: var(--s-3);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.lf-page .lf-rl-insight-label {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-blue);
+  font-weight: 500;
+}
+.lf-page .lf-rl-insight-stat {
+  font-family: var(--lf-display);
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: -0.014em;
+  color: var(--ink);
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0;
+}
+.lf-page .lf-rl-insight-stat .unit {
+  font-family: var(--lf-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  font-weight: 500;
+}
+.lf-page .lf-rl-insight-desc {
+  font-family: var(--lf-display);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ink-3);
+  margin: 0;
+}
+.lf-page .lf-rl-insight-desc strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ── Section chips (compose pickers) ──────────────────────────── */
+.lf-page .lf-rl-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: var(--s-4);
+}
+.lf-page .lf-rl-chip {
+  font-family: var(--lf-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 9px 16px;
+  background: var(--glass-bg);
+  color: var(--ink-2);
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  cursor: pointer;
+  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  transition: border-color 240ms ease, color 240ms ease, background 240ms ease, transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.lf-page .lf-rl-chip:hover {
+  border-color: color-mix(in oklab, var(--rust) 32%, var(--glass-border));
+  color: var(--rust);
+  background: var(--glass-bg-strong);
+  transform: translateY(-1px);
+}
+.lf-page .lf-rl-chip[data-active="true"] {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: color-mix(in oklab, var(--ink) 70%, white 10%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 10px 26px -10px color-mix(in oklab, var(--ink) 50%, transparent);
+}
+
+/* ────────────────────────────────────────────────────────────── */
+/* BIOGRAPHY                                                     */
+/* ────────────────────────────────────────────────────────────── */
+.lf-page .lf-rl-bio {
+  margin-top: var(--s-5);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 18px 48px -16px rgba(15, 23, 42, 0.18);
+  overflow: hidden;
+}
+.lf-page .lf-rl-bio-head {
+  padding: var(--s-4);
+  border-bottom: 1px solid var(--line-2);
+  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-inner) 100%);
+}
+.lf-page .lf-rl-bio-meta {
+  font-family: var(--lf-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: 8px;
+}
+.lf-page .lf-rl-bio-title {
+  font-family: var(--lf-display);
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: -0.014em;
+  line-height: 1.18;
+  color: var(--ink);
+  margin: 0 0 var(--s-3);
+}
+.lf-page .lf-rl-bio-title em {
+  font-style: italic;
+  color: var(--accent-blue);
+}
+.lf-page .lf-rl-bio-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-4);
+}
+.lf-page .lf-rl-bio-row-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.lf-page .lf-rl-bio-row-label {
+  font-family: var(--lf-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+.lf-page .lf-rl-bio-row-value {
+  font-family: var(--lf-display);
+  font-size: 16px;
+  color: var(--ink);
+}
+
+/* Disciplines row */
+.lf-page .lf-rl-bio-disc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: var(--s-3) var(--s-4);
+  border-bottom: 1px solid var(--line-2);
+  background: var(--paper-inner);
+}
+.lf-page .lf-rl-bio-disc-chip {
+  font-family: var(--lf-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-radius: 100px;
+  border: 1px solid currentColor;
+}
+.lf-page .lf-rl-bio-disc-chip[data-tier="primary"] { color: var(--rust); background: var(--rust-ghost); }
+.lf-page .lf-rl-bio-disc-chip[data-tier="secondary"] { color: var(--accent-blue); background: var(--accent-blue-ghost); }
+.lf-page .lf-rl-bio-disc-chip[data-tier="tertiary"] { color: var(--ink-4); }
+
+/* Body grid: spine + orbit */
+.lf-page .lf-rl-bio-body {
+  display: grid;
+  grid-template-columns: 1.2fr 1px 1fr;
+  gap: 0;
+}
+@media (max-width: 1000px) {
+  .lf-page .lf-rl-bio-body {
+    grid-template-columns: 1fr;
+  }
+}
+.lf-page .lf-rl-bio-divider {
+  background: var(--line-2);
+}
+@media (max-width: 1000px) {
+  .lf-page .lf-rl-bio-divider {
+    height: 1px;
+    width: 100%;
+  }
+}
+
+/* Spine timeline (amendments) */
+.lf-page .lf-rl-spine {
+  padding: var(--s-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+.lf-page .lf-rl-spine-label {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: var(--s-2);
+}
+.lf-page .lf-rl-spine-item {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: var(--s-2);
+  padding-bottom: var(--s-3);
+  border-bottom: 1px dashed var(--line-2);
+}
+.lf-page .lf-rl-spine-item:last-child { border-bottom: 0; padding-bottom: 0; }
+.lf-page .lf-rl-spine-year {
+  font-family: var(--lf-display);
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  line-height: 1;
+}
+.lf-page .lf-rl-spine-item[data-kind="current"] .lf-rl-spine-year { color: var(--rust); }
+.lf-page .lf-rl-spine-item[data-kind="adjacent"] .lf-rl-spine-year { color: var(--ink-4); font-style: italic; }
+.lf-page .lf-rl-spine-type {
+  font-family: var(--lf-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: 4px;
+}
+.lf-page .lf-rl-spine-item[data-kind="current"] .lf-rl-spine-type { color: var(--rust); }
+.lf-page .lf-rl-spine-title {
+  font-family: var(--lf-display);
+  font-size: 15.5px;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+.lf-page .lf-rl-spine-gloss {
+  font-family: var(--lf-display);
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-3);
+  margin: 0 0 6px;
+}
+.lf-page .lf-rl-spine-instrument {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--ink-4);
+}
+
+/* Orbit columns (left = governs, right = governed) */
+.lf-page .lf-rl-orbit {
+  padding: var(--s-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+.lf-page .lf-rl-orbit-col-label {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: 8px;
+}
+.lf-page .lf-rl-orbit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.lf-page .lf-rl-orbit-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--line-2);
+  align-items: center;
+}
+.lf-page .lf-rl-orbit-item:last-child { border-bottom: 0; }
+.lf-page .lf-rl-orbit-name {
+  font-family: var(--lf-display);
+  font-size: 14.5px;
+  color: var(--ink);
+}
+.lf-page .lf-rl-orbit-role {
+  font-family: var(--lf-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  color: var(--ink-4);
+}
+.lf-page .lf-rl-orbit-pressure {
+  display: inline-flex;
+  gap: 2px;
+}
+.lf-page .lf-rl-orbit-pressure span {
+  width: 5px;
+  height: 14px;
+  background: var(--line-2);
+  border-radius: 1px;
+}
+.lf-page .lf-rl-orbit-item[data-pressure-cls="pressure-high"] .lf-rl-orbit-pressure span:nth-child(-n+4) { background: var(--rust); }
+.lf-page .lf-rl-orbit-item[data-pressure-cls="pressure-mid"] .lf-rl-orbit-pressure span:nth-child(-n+2) { background: var(--accent-blue); }
+.lf-page .lf-rl-orbit-item[data-pressure-cls="pressure-low"] .lf-rl-orbit-pressure span:nth-child(-n+1) { background: var(--bronze); }
+
+/* AI observation */
+.lf-page .lf-rl-bio-obs {
+  padding: var(--s-4);
+  border-top: 1px solid var(--line-2);
+  background: var(--paper-inner);
+  display: flex;
+  gap: 14px;
+}
+.lf-page .lf-rl-bio-obs-icon {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--emerald);
+  color: var(--paper);
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  border-radius: 50%;
+}
+.lf-page .lf-rl-bio-obs-body {
+  font-family: var(--lf-display);
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin: 0;
+}
+.lf-page .lf-rl-bio-obs-body strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ────────────────────────────────────────────────────────────── */
+/* SITUATION                                                     */
+/* ────────────────────────────────────────────────────────────── */
+.lf-page .lf-rl-sit {
+  margin-top: var(--s-5);
+}
+.lf-page .lf-rl-sit-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  font-family: var(--lf-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--ink-4);
+  margin-top: var(--s-4);
+}
+.lf-page .lf-rl-sit-trust strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.lf-page .lf-rl-sit-card {
+  margin-top: var(--s-4);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 18px 48px -16px rgba(15, 23, 42, 0.18);
+  overflow: hidden;
+}
+.lf-page .lf-rl-sit-head {
+  padding: var(--s-4);
+  border-bottom: 1px solid var(--line-2);
+  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-inner) 100%);
+}
+.lf-page .lf-rl-sit-kicker {
+  font-family: var(--lf-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: 6px;
+}
+.lf-page .lf-rl-sit-query {
+  font-family: var(--lf-display);
+  font-style: italic;
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0;
+}
+.lf-page .lf-rl-sit-body {
+  padding: var(--s-4);
+  font-family: var(--lf-display);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--ink-2);
+  border-bottom: 1px solid var(--line-2);
+}
+.lf-page .lf-rl-sit-body strong {
+  color: var(--rust);
+  font-weight: 500;
+}
+.lf-page .lf-rl-sit-applies {
+  padding: var(--s-4);
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: var(--s-3);
+  border-bottom: 1px solid var(--line-2);
+}
+@media (max-width: 700px) {
+  .lf-page .lf-rl-sit-applies { grid-template-columns: 1fr; }
+}
+.lf-page .lf-rl-sit-applies-label {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+.lf-page .lf-rl-sit-applies-meta p {
+  font-family: var(--lf-display);
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink-3);
+  margin: 0 0 var(--s-2);
+}
+.lf-page .lf-rl-sit-applies-meta p:last-child { margin-bottom: 0; }
+.lf-page .lf-rl-sit-applies-meta strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.lf-page .lf-rl-sit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--line-1);
+}
+@media (max-width: 800px) {
+  .lf-page .lf-rl-sit-grid { grid-template-columns: 1fr; }
+}
+.lf-page .lf-rl-sit-col {
+  background: var(--paper);
+  padding: var(--s-3) var(--s-4);
+}
+.lf-page .lf-rl-sit-col-label {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: var(--s-2);
+}
+.lf-page .lf-rl-sit-node {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--line-2);
+}
+.lf-page .lf-rl-sit-node:last-child { border-bottom: 0; }
+.lf-page .lf-rl-sit-node-name {
+  font-family: var(--lf-display);
+  font-size: 14.5px;
+  color: var(--ink);
+}
+.lf-page .lf-rl-sit-node-meta {
+  font-family: var(--lf-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  color: var(--ink-4);
+}
+.lf-page .lf-rl-sit-node-amended {
+  font-family: var(--lf-mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rust);
+  padding: 2px 6px;
+  border: 1px solid var(--rust);
+  border-radius: 100px;
+}
+.lf-page .lf-rl-sit-node[data-primary="true"] {
+  padding: 10px;
+  margin: 0 -10px;
+  background: var(--rust-ghost);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--rust);
+}
+.lf-page .lf-rl-sit-node[data-nucleus="true"] .lf-rl-sit-node-name {
+  color: var(--accent-blue);
+  font-style: italic;
+}
+
+.lf-page .lf-rl-sit-actions {
+  padding: var(--s-3) var(--s-4);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  border-top: 1px solid var(--line-2);
+  background: var(--paper-inner);
+}
+.lf-page .lf-rl-sit-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-family: var(--lf-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  color: var(--ink);
+  cursor: pointer;
+  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  transition: border-color 240ms ease, color 240ms ease, background 240ms ease,
+              transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.lf-page .lf-rl-sit-action:hover {
+  border-color: color-mix(in oklab, var(--rust) 32%, var(--glass-border));
+  color: var(--rust);
+  background: var(--glass-bg-strong);
+  transform: translateY(-1px);
+}
+.lf-page .lf-rl-sit-action.primary {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: color-mix(in oklab, var(--ink) 70%, white 10%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 14px 36px -10px color-mix(in oklab, var(--ink) 50%, transparent);
+}
+.lf-page .lf-rl-sit-action.primary:hover {
+  background: var(--accent-blue);
+  border-color: color-mix(in oklab, var(--accent-blue) 60%, white 10%);
+  color: var(--paper);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    0 22px 48px -12px color-mix(in oklab, var(--accent-blue) 60%, transparent);
+}
+.lf-page .lf-rl-sit-byline {
+  padding: var(--s-3) var(--s-4);
+  font-family: var(--lf-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-4);
+  border-top: 1px solid var(--line-1);
+}
+.lf-page .lf-rl-sit-byline strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ── Reduced motion ──────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .lf-page .lf-rl-tool { transition: none; }
+  .lf-page .lf-rl-tool:hover { transform: none; }
+  .lf-page .lf-rl-tool-anchor::after { transition: none; }
+  .lf-page .lf-rl-tool:hover .lf-rl-tool-anchor::after { transform: none; }
+}

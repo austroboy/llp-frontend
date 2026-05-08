@@ -1,0 +1,50 @@
+node_modules/
+**/node_modules/
+.next/
+.env*
+!.env.example
+!**/.env.example
+*.pdf
+!docs/pdf/**/*.pdf
+.playwright-mcp/
+.vercel/
+.wrangler/
+
+# data file backups from ingest/rebuild scripts
+*.bak
+*.bak-*
+scripts/ingest-doc009/backup-*.json
+backup/
+exports/
+coverage/
+playwright-report/
+test-results/
+scripts/test-results/
+dist/
+**/dist/
+*.log
+.DS_Store
+Thumbs.db
+
+# clerk configuration (can include secrets)
+/.clerk/
+.claude/
+.claude.memory/
+.raw/
+.superpowers/
+.understand-anything/
+
+aws-credentials/
+**/.env.ec2
+# Added by code-review-graph
+.code-review-graph/
+.vercel
+tsconfig.tsbuildinfo
+
+# Claude tooling — local-only, not for public repo
+CLAUDE.md
+AGENTS.md
+.mcp.json
+.codex
+skills-src/
+skills-lock.json

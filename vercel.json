@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/headhunting-alerts",
+      "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/cron/overdue-alerts",
+      "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/engagement-score",
+      "schedule": "0 20 * * *"
+    }
+  ]
+}

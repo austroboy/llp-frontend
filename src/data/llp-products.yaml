@@ -1,0 +1,111 @@
+products:
+  - id: expatriate-visa
+    name: "Expatriate & Visa Solutions"
+    nameBn: "প্রবাসী ও ভিসা সেবা"
+    description: "Complete visa, work permit, and tax compliance services for foreign nationals working in Bangladesh."
+    descriptionBn: "বাংলাদেশে কর্মরত বিদেশি নাগরিকদের জন্য সম্পূর্ণ ভিসা, ওয়ার্ক পারমিট এবং কর সম্মতি সেবা।"
+    status: live
+    directTriggers:
+      - "llp expatriate"
+      - "llp visa"
+      - "expatriate & visa solutions"
+    relatedDomains:
+      - "foreign_workers"
+      - "employment_conditions"
+    tierAvailability: "all"
+    url: "/services"
+    lastUpdated: "2026-03-16"
+
+  - id: hr-services
+    name: "HR & People Solutions"
+    nameBn: "এইচআর ও জনবল সমাধান"
+    description: "Strategic recruitment, HR consulting, training, and workforce management services for organizations of all sizes."
+    descriptionBn: "সকল আকারের প্রতিষ্ঠানের জন্য কৌশলগত নিয়োগ, এইচআর পরামর্শ, প্রশিক্ষণ এবং জনবল ব্যবস্থাপনা সেবা।"
+    status: live
+    directTriggers:
+      - "llp hr"
+      - "llp hr services"
+      - "hr & people solutions"
+    relatedDomains:
+      - "employment_conditions"
+      - "contract"
+      - "termination"
+    tierAvailability: "all"
+    url: "/services"
+    lastUpdated: "2026-03-16"
+
+  - id: licensing-regulatory
+    name: "Licensing & Regulatory Services"
+    nameBn: "লাইসেন্সিং ও নিয়ন্ত্রক সেবা"
+    description: "Trade licenses, factory permits, fire safety, environmental clearance, and all regulatory compliance handled end-to-end."
+    descriptionBn: "ট্রেড লাইসেন্স, কারখানা অনুমতি, অগ্নি নিরাপত্তা, পরিবেশগত ছাড়পত্র এবং সকল নিয়ন্ত্রক সম্মতি সম্পূর্ণভাবে পরিচালিত।"
+    status: live
+    directTriggers:
+      - "llp licensing"
+      - "llp regulatory"
+      - "licensing & regulatory services"
+    relatedDomains:
+      - "factory_regulations"
+      - "workplace_safety"
+    tierAvailability: "all"
+    url: "/services"
+    lastUpdated: "2026-03-16"
+
+  - id: marketplace
+    name: "LLP Marketplace"
+    nameBn: "LLP মার্কেটপ্লেস"
+    description: "Find verified labour law experts and professionals through our expert directory."
+    descriptionBn: "আমাদের বিশেষজ্ঞ ডিরেক্টরির মাধ্যমে যাচাইকৃত শ্রম আইন বিশেষজ্ঞ এবং পেশাদার খুঁজুন।"
+    status: live
+    directTriggers:
+      - "llp marketplace"
+    relatedDomains:
+      - "dispute_resolution"
+      - "compensation"
+    tierAvailability: "all"
+    url: "/experts"
+    lastUpdated: "2026-03-16"
+
+  - id: help-desk
+    name: "LLP Help Desk"
+    nameBn: "LLP হেল্প ডেস্ক"
+    description: "Direct contact for professional service support — listed or ad-hoc compliance services handled by LLP specialists."
+    descriptionBn: "পেশাদার সেবা সহায়তার জন্য সরাসরি যোগাযোগ — LLP বিশেষজ্ঞদের দ্বারা তালিকাভুক্ত বা অ্যাড-হক সম্মতি সেবা।"
+    status: live
+    directTriggers:
+      - "llp help desk"
+      - "llp service desk"
+    relatedDomains: []
+    tierAvailability: "all"
+    url: "/services"
+    lastUpdated: "2026-03-16"
+
+  - id: headhunting
+    name: "LLP Headhunting"
+    nameBn: "LLP হেডহান্টিং"
+    description: "Talent sourcing and recruitment network connecting organizations with the right professionals."
+    descriptionBn: "সঠিক পেশাদারদের সাথে প্রতিষ্ঠানগুলোকে সংযুক্ত করে প্রতিভা সোর্সিং ও নিয়োগ নেটওয়ার্ক।"
+    status: coming_soon
+    directTriggers:
+      - "llp headhunting"
+    relatedDomains:
+      - "employment_conditions"
+      - "contract"
+    tierAvailability: "all"
+    url: "/headhunting"
+    lastUpdated: "2026-03-16"
+
+  - id: academy
+    name: "LLP Academy"
+    nameBn: "LLP একাডেমি"
+    description: "Training, workshops, and certification programs for HR professionals and compliance officers."
+    descriptionBn: "এইচআর পেশাদার এবং সম্মতি কর্মকর্তাদের জন্য প্রশিক্ষণ, কর্মশালা এবং সার্টিফিকেশন প্রোগ্রাম।"
+    status: coming_soon
+    directTriggers:
+      - "llp academy"
+    relatedDomains:
+      - "workplace_safety"
+      - "factory_regulations"
+    tierAvailability: "all"
+    url: "/academy"
+    lastUpdated: "2026-03-16"

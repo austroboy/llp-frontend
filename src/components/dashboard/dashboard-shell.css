@@ -1,0 +1,1412 @@
+/* ─────────────────────────────────────────────────────────────────────
+ * Dashboard shell — v56 "MY DESK" personal account dashboard surfaces.
+ * Scope: every rule below is qualified by `.lf-page`. Tokens inherit
+ * from landing.css (`--paper`, `--ink-*`, `--accent-blue`, `--rust`,
+ * `--bronze`, `--line-*`, `--s-*`, `--r-*`, `--lf-display/body/mono`).
+ * Class names mirror v56 `desk-*` source, prefixed `dash-`.
+ * ──────────────────────────────────────────────────────────────────── */
+
+/* ═══════════════════════════════════════════════════════════════════
+ * Shadcn token compat shim — admin pages render shadcn Card / Button /
+ * Dialog / Badge / Input widely. globals.css defines these tokens in
+ * oklch warm-green hues that don't read clean against lf-* paper
+ * surfaces. Remap the shadcn token surface to lf-* equivalents inside
+ * `.lf-page.dash-page` so primitives surface cleanly without per-page
+ * rewrites. Member pages don't author shadcn surfaces in their lf-*
+ * JSX, so this shim doesn't visually affect them.
+ * ═══════════════════════════════════════════════════════════════════ */
+.lf-page.dash-page {
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--paper);
+  --card-foreground: var(--ink);
+  --popover: var(--paper);
+  --popover-foreground: var(--ink);
+  --primary: var(--accent-blue);
+  --primary-foreground: #fafaf5;
+}
+
+/* Dark mode: shadcn primary swaps blue → coffee-rust to match the global
+ * lf-cta--primary rule. Light mode keeps the accent-blue primary. */
+.lf-page.dash-page[data-theme="dark"] {
+  --primary: #553318;
+  --primary-foreground: #f3e7d4;
+}
+
+.lf-page.dash-page {
+  --secondary: var(--paper-inner);
+  --secondary-foreground: var(--ink);
+  --muted: var(--paper-inner);
+  --muted-foreground: var(--ink-3);
+  --accent: var(--accent-blue);
+  --accent-foreground: #fafaf5;
+  --destructive: var(--rust);
+  --destructive-foreground: #fafaf5;
+  --border: var(--line-2);
+  --input: var(--line-2);
+  --ring: var(--accent-blue);
+  --sidebar: var(--paper-inner);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--accent-blue);
+  --sidebar-primary-foreground: #fafaf5;
+  --sidebar-accent: var(--accent-blue-ghost);
+  --sidebar-accent-foreground: var(--accent-blue);
+  --sidebar-border: var(--line-2);
+  --sidebar-ring: var(--accent-blue);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * SiteTopNav override — flatten the floating pill into a flush
+ * edge-to-edge bar inside `.lf-page.dash-page` only. Public surfaces
+ * keep the rounded glass pill.
+ * ═══════════════════════════════════════════════════════════════════ */
+.lf-page.dash-page .lf-topnav {
+  padding: 0;
+  margin-bottom: 0;
+  pointer-events: auto;
+}
+.lf-page.dash-page .lf-topnav-inner {
+  max-width: none;
+  margin: 0;
+  border-radius: 0;
+  border: none;
+  border-bottom: 0.5px solid var(--line-2);
+  box-shadow: none;
+  padding: 0 var(--s-5) 0 var(--s-4);
+  background: var(--glass-bg-white);
+}
+.lf-page.dash-page[data-theme="dark"] .lf-topnav-inner {
+  background: linear-gradient(180deg, #2a241b 0%, #1e1a14 100%);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom-color: rgba(237, 228, 210, 0.10);
+  box-shadow: 0 4px 18px -8px rgba(0, 0, 0, 0.45);
+}
+@media (max-width: 1024px) {
+  .lf-page.dash-page .lf-topnav-inner {
+    padding: 0 var(--s-3);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * Shell layout
+ * On dashboard pages the SiteTopNav is flattened to a flush 60px bar
+ * at top:0 (see dash-page override block above), so the shell sits
+ * directly below it. Sidebar pins to the nav bottom on scroll.
+ * ═══════════════════════════════════════════════════════════════════ */
+/* Sticky sidebar requires no scroll-container ancestor. Landing.css sets
+ * `.lf-page { overflow-x: hidden }`, which Chromium treats as a scroll
+ * container and breaks `position: sticky` on the sidebar. On dashboard
+ * routes, swap to `overflow-x: clip` — same horizontal overflow
+ * protection, no scroll context. */
+.lf-page.dash-page {
+  overflow-x: clip;
+}
+
+.lf-page .dash-shell {
+  --dash-nav-offset: 60px;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: calc(100vh - var(--dash-nav-offset));
+  /* Paint the sidebar column color directly on the shell so the
+   * paper-inner band (and its hairline divider) extends to the full
+   * grid track height even when the sticky sidebar element is shorter
+   * than the page content. */
+  background:
+    linear-gradient(
+      to right,
+      var(--paper-inner) 239.5px,
+      var(--line-2) 239.5px,
+      var(--line-2) 240px,
+      var(--paper) 240px
+    );
+}
+@media (max-width: 1024px) {
+  .lf-page .dash-shell {
+    background: var(--paper);
+  }
+}
+@media (max-width: 1024px) {
+  .lf-page .dash-shell {
+    grid-template-columns: 1fr;
+  }
+  .lf-page .dash-shell .dash-sidebar {
+    display: none;
+  }
+  .lf-page .dash-shell[data-mobile-open="true"] .dash-sidebar {
+    display: flex;
+    position: fixed;
+    left: 0; top: 0;
+    z-index: 60;
+    width: 280px;
+    height: 100vh;
+    box-shadow: 0 8px 40px rgba(20,20,19,0.2);
+  }
+  .lf-page .dash-shell[data-mobile-open="true"]::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(20,20,19,0.4);
+    z-index: 55;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * Sidebar
+ * ═══════════════════════════════════════════════════════════════════ */
+.lf-page .dash-sidebar {
+  background: var(--paper-inner);
+  border-right: 0.5px solid var(--line-2);
+  padding: var(--s-4) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  position: sticky;
+  top: var(--dash-nav-offset, 92px);
+  align-self: start;
+  height: calc(100vh - var(--dash-nav-offset, 92px));
+  max-height: calc(100vh - var(--dash-nav-offset, 92px));
+  overflow-y: auto;
+}
+
+/* ── Context switcher (Personal Desk / Organization) ───────────── */
+.lf-page .dash-context-switcher {
+  padding: var(--s-3);
+  border-bottom: 0.5px solid var(--line-1);
+  position: relative;
+}
+.lf-page .dash-ctx-trigger {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--paper);
+  border: 0.5px solid var(--line-2);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 120ms ease;
+  text-align: left;
+  font-family: inherit;
+  color: inherit;
+}
+.lf-page .dash-ctx-trigger:hover { border-color: var(--ink-3); }
+.lf-page .dash-ctx-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--lf-display);
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+  color: #fff;
+}
+.lf-page .dash-ctx-icon.personal { background: var(--accent-blue); }
+.lf-page .dash-ctx-icon.org { background: var(--surface-accent, var(--ink)); }
+.lf-page .dash-ctx-info { flex: 1; min-width: 0; }
+.lf-page .dash-ctx-type {
+  font-family: var(--lf-mono);
+  font-size: 9px;
+  color: var(--ink-4);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.lf-page .dash-ctx-name {
+  font-family: var(--lf-display);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lf-page .dash-ctx-chevron {
+  color: var(--ink-4);
+  flex-shrink: 0;
+}
+.lf-page .dash-ctx-chevron svg { width: 12px; height: 12px; }
+.lf-page .dash-ctx-menu {
+  position: absolute;
+  top: calc(100% - 4px);
+  left: var(--s-3);
+  right: var(--s-3);
+  background: var(--paper);
+  border: 0.5px solid var(--line-2);
+  border-radius: var(--r-md);
+  box-shadow: 0 8px 24px rgba(20,20,19,0.12);
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+.lf-page .dash-ctx-menu.on {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.lf-page .dash-ctx-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  text-align: left;
+  width: 100%;
+  transition: background 120ms ease;
+  font-family: inherit;
+  color: inherit;
+  border-bottom: 0.5px solid var(--line-1);
+}
+.lf-page .dash-ctx-option:last-child { border-bottom: none; }
+.lf-page .dash-ctx-option:hover { background: var(--paper-inner); }
+.lf-page .dash-ctx-option.selected { background: var(--accent-blue-ghost); }
+.lf-page .dash-ctx-option-check {
+  color: var(--accent-blue);
+  flex-shrink: 0;
+  opacity: 0;
+}
+.lf-page .dash-ctx-option.selected .dash-ctx-option-check { opacity: 1; }
+.lf-page .dash-ctx-option-check svg { width: 12px; height: 12px; }
+
+/* ── Section + label ──────────────────────────────────────────── */
+.lf-page .dash-sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 var(--s-3);
+}
+.lf-page .dash-sidebar-section + .dash-sidebar-section {
+  padding-top: var(--s-3);
+  margin-top: var(--s-2);
+  border-top: 0.5px solid var(--line-1);
+}
+.lf-page .dash-sidebar-label {
+  font-family: var(--lf-mono);
+  font-size: 9px;
+  color: var(--ink-4);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0 12px 8px;
+  font-weight: 500;
+}
+
+/* ── Nav item ────────────────────────────────────────────────── */
+.lf-page .dash-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  font-family: var(--lf-body);
+  font-size: 13px;
+  color: var(--ink-2);
+  background: none;
+  border: none;
+  text-align: left;
+  transition: all 120ms ease;
+  position: relative;
+  text-decoration: none;
+}
+.lf-page .dash-nav-item:hover {
+  background: var(--paper);
+  color: var(--ink);
+}
+.lf-page .dash-nav-item.active {
+  background: var(--accent-blue-ghost);
+  color: var(--accent-blue);
+  font-weight: 500;
+}
+.lf-page .dash-nav-item svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  stroke-width: 1.5;
+  opacity: 0.8;
+}
+.lf-page .dash-nav-item.active svg { opacity: 1; }
+.lf-page .dash-nav-badge {
+  margin-left: auto;
+  font-family: var(--lf-mono);
+  font-size: 9px;
+  padding: 2px 6px;
+  background: var(--accent-blue);
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+.lf-page .dash-nav-badge.muted {
+  background: var(--ink-5);
+  color: var(--paper);
+}
+.lf-page .dash-nav-badge.warn {
+  background: var(--rust);
+  color: #fff;
+}
+
+/* ── Sidebar foot user pill ───────────────────────────────────── */
+.lf-page .dash-sidebar-foot {
+  margin-top: auto;
+  padding: var(--s-3);
+  border-top: 0.5px solid var(--line-1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: background 120ms ease;
+  background: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  width: 100%;
+  font-family: inherit;
+  color: inherit;
+  text-align: left;
+}
+.lf-page .dash-sidebar-foot:hover { background: var(--paper); }
+.lf-page .dash-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent-blue);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--lf-display);
+  font-size: 14px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+.lf-page .dash-avatar.demo { background: var(--bronze); }
+.lf-page .dash-user-info { flex: 1; min-width: 0; }
+.lf-page .dash-user-name {
+  font-family: var(--lf-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lf-page .dash-user-email {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * Content area
+ * ═══════════════════════════════════════════════════════════════════ */
+.lf-page .dash-content {
+  padding: var(--s-5);
+  max-width: 100%;
+  min-width: 0;
+}
+@media (max-width: 1024px) {
+  .lf-page .dash-content {
+    padding: var(--s-4) var(--s-3);
+  }
+}
+
+/* ── Demo banner ──────────────────────────────────────────────── */
+.lf-page .dash-demo-banner {
+  padding: 10px var(--s-3);
+  background: var(--bronze-ghost);
+  border: 0.5px solid var(--bronze);
+  border-radius: var(--r-sm);
+  margin-bottom: var(--s-4);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-3);
+  flex-wrap: wrap;
+}
+.lf-page .dash-demo-text {
+  font-family: var(--lf-mono);
+  font-size: 11px;
+  color: var(--bronze);
+  letter-spacing: 0.04em;
+  font-weight: 500;
+}
+.lf-page .dash-demo-text strong { color: var(--ink); }
+.lf-page .dash-demo-cta {
+  padding: 6px 14px;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  font-family: var(--lf-display);
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+.lf-page .dash-demo-cta:hover { background: var(--accent-blue); }
+
+/* ── Page-level header (kicker + welcome + right cluster) ─────── */
+.lf-page .dash-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--s-3);
+  margin-bottom: var(--s-5);
+  align-items: start;
+}
+@media (max-width: 700px) {
+  .lf-page .dash-header { grid-template-columns: 1fr; }
+}
+.lf-page .dash-hello-kicker {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.lf-page .dash-hello-kicker strong {
+  color: var(--ink);
+  font-family: var(--lf-display);
+  font-size: 11px;
+  font-style: italic;
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 500;
+}
+.lf-page .dash-hello-title {
+  font-family: var(--lf-display);
+  font-size: 32px;
+  font-weight: 500;
+  letter-spacing: -0.018em;
+  line-height: 1.1;
+  color: var(--ink);
+  margin: 0 0 4px;
+}
+@media (max-width: 700px) {
+  .lf-page .dash-hello-title { font-size: 26px; }
+}
+.lf-page .dash-hello-title em {
+  font-style: italic;
+  color: var(--accent-blue);
+}
+.lf-page .dash-hello-sub {
+  font-family: var(--lf-display);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-3);
+  margin: 0;
+}
+
+.lf-page .dash-header-right {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.lf-page .dash-notify-btn {
+  position: relative;
+  padding: 10px;
+  background: var(--paper);
+  border: 0.5px solid var(--line-2);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  color: var(--ink-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 120ms ease;
+}
+.lf-page .dash-notify-btn:hover {
+  border-color: var(--ink-3);
+  color: var(--ink);
+}
+.lf-page .dash-notify-btn svg { width: 16px; height: 16px; }
+.lf-page .dash-notify-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--rust);
+  border: 1.5px solid var(--paper);
+}
+.lf-page .dash-search-btn {
+  padding: 10px 14px;
+  background: var(--paper);
+  border: 0.5px solid var(--line-2);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  color: var(--ink-3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--lf-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  transition: all 120ms ease;
+}
+.lf-page .dash-search-btn:hover {
+  border-color: var(--ink-3);
+  color: var(--ink);
+}
+.lf-page .dash-search-btn svg { width: 12px; height: 12px; }
+.lf-page .dash-search-btn kbd {
+  padding: 1px 5px;
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  background: var(--paper-inner);
+  border: 0.5px solid var(--line-2);
+  border-radius: 3px;
+  color: var(--ink-4);
+}
+
+/* ── Notifications panel ──────────────────────────────────────── */
+.lf-page .dash-notify-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 360px;
+  max-width: 90vw;
+  background: var(--paper);
+  border: 0.5px solid var(--line-2);
+  border-radius: var(--r-md);
+  box-shadow: 0 8px 24px rgba(20,20,19,0.12);
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+.lf-page .dash-notify-panel.on {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.lf-page .dash-notify-head {
+  padding: var(--s-3);
+  border-bottom: 0.5px solid var(--line-1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.lf-page .dash-notify-head-title {
+  font-family: var(--lf-display);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.lf-page .dash-notify-clear {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+.lf-page .dash-notify-clear:hover { color: var(--ink); }
+.lf-page .dash-notify-list {
+  max-height: 380px;
+  overflow-y: auto;
+}
+.lf-page .dash-notify-item {
+  padding: 12px var(--s-3);
+  border-bottom: 0.5px solid var(--line-1);
+  cursor: pointer;
+  transition: background 120ms ease;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  text-decoration: none;
+  color: inherit;
+}
+.lf-page .dash-notify-item:hover { background: var(--paper-inner); }
+.lf-page .dash-notify-item:last-child { border-bottom: none; }
+.lf-page .dash-notify-item.unread .dash-notify-dot-inline {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--rust);
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+.lf-page .dash-notify-item:not(.unread) .dash-notify-dot-inline {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+}
+.lf-page .dash-notify-body { flex: 1; min-width: 0; }
+.lf-page .dash-notify-title {
+  font-family: var(--lf-display);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.35;
+  margin-bottom: 2px;
+}
+.lf-page .dash-notify-detail {
+  font-family: var(--lf-display);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--ink-3);
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+.lf-page .dash-notify-time {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.04em;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * Summary cards (4-up hairline strip)
+ * ═══════════════════════════════════════════════════════════════════ */
+.lf-page .dash-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--line-1);
+  border: 0.5px solid var(--line-2);
+  border-radius: var(--r-md);
+  margin-bottom: var(--s-5);
+  overflow: hidden;
+}
+@media (max-width: 900px) {
+  .lf-page .dash-summary { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 500px) {
+  .lf-page .dash-summary { grid-template-columns: 1fr; }
+}
+.lf-page .dash-sum-card {
+  padding: var(--s-3);
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  transition: background 120ms ease;
+  text-align: left;
+  border: none;
+  font-family: inherit;
+  color: inherit;
+  text-decoration: none;
+}
+.lf-page .dash-sum-card:hover { background: var(--paper-inner); }
+.lf-page .dash-sum-label {
+  font-family: var(--lf-mono);
+  font-size: 9px;
+  color: var(--ink-4);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.lf-page .dash-sum-value {
+  font-family: var(--lf-display);
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.018em;
+  line-height: 1;
+  color: var(--ink);
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.lf-page .dash-sum-value .unit {
+  font-size: 13px;
+  color: var(--ink-3);
+  font-weight: 400;
+}
+.lf-page .dash-sum-note {
+  font-family: var(--lf-display);
+  font-style: italic;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--ink-3);
+  margin: 0;
+}
+.lf-page .dash-sum-note strong {
+  color: var(--ink);
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * Section heading
+ * ═══════════════════════════════════════════════════════════════════ */
+.lf-page .dash-section { margin-bottom: var(--s-5); }
+.lf-page .dash-section-header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+  margin-bottom: var(--s-3);
+  padding-bottom: 8px;
+  border-bottom: 0.5px solid var(--line-1);
+}
+.lf-page .dash-section-title {
+  font-family: var(--lf-display);
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0;
+}
+.lf-page .dash-section-meta {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.08em;
+  margin-left: auto;
+}
+.lf-page .dash-section-link {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  color: var(--accent-blue);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  font-weight: 500;
+  text-decoration: none;
+}
+.lf-page .dash-section-link::after { content: "  →"; }
+
+/* ═══════════════════════════════════════════════════════════════════
+ * Next steps
+ * ═══════════════════════════════════════════════════════════════════ */
+.lf-page .dash-next-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s-3);
+}
+@media (max-width: 900px) {
+  .lf-page .dash-next-grid { grid-template-columns: 1fr; }
+}
+.lf-page .dash-next-card {
+  padding: var(--s-3);
+  background: var(--paper);
+  border: 0.5px solid var(--line-2);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: all 150ms ease;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  font-family: inherit;
+  color: inherit;
+  text-decoration: none;
+}
+.lf-page .dash-next-card:hover {
+  border-color: var(--accent-blue);
+  background: var(--paper-inner);
+}
+.lf-page .dash-next-card.primary {
+  border-color: var(--accent-blue);
+  border-width: 1.5px;
+}
+.lf-page .dash-next-card.primary::before {
+  content: "Continue";
+  font-family: var(--lf-mono);
+  font-size: 9px;
+  color: var(--accent-blue);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+.lf-page .dash-next-kicker {
+  font-family: var(--lf-mono);
+  font-size: 9px;
+  color: var(--ink-4);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.lf-page .dash-next-title {
+  font-family: var(--lf-display);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.008em;
+  line-height: 1.3;
+  color: var(--ink);
+  margin: 0;
+}
+.lf-page .dash-next-title em {
+  font-style: italic;
+  color: var(--ink-3);
+}
+.lf-page .dash-next-desc {
+  font-family: var(--lf-display);
+  font-style: italic;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-3);
+  margin: 0;
+  flex: 1;
+}
+.lf-page .dash-next-meta {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.04em;
+  margin-top: 4px;
+}
+.lf-page .dash-next-meta strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * Module feature (Path · primary CTA when active)
+ * ═══════════════════════════════════════════════════════════════════ */
+.lf-page .dash-module-feature {
+  padding: var(--s-3);
+  background: var(--paper);
+  border: 0.5px solid var(--line-2);
+  border-radius: var(--r-md);
+  margin-bottom: var(--s-3);
+}
+.lf-page .dmf-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--s-3);
+  align-items: start;
+}
+@media (max-width: 700px) {
+  .lf-page .dmf-head { grid-template-columns: 1fr; }
+}
+.lf-page .dmf-kicker {
+  font-family: var(--lf-mono);
+  font-size: 9px;
+  color: var(--accent-blue);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: inline-flex;
+  align-items: center;
+}
+.lf-page .dmf-kicker::before {
+  content: "● ";
+  margin-right: 4px;
+  font-size: 10px;
+}
+.lf-page .dmf-title {
+  font-family: var(--lf-display);
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.012em;
+  line-height: 1.3;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+.lf-page .dmf-title em {
+  font-style: italic;
+  color: var(--accent-blue);
+  font-weight: 500;
+}
+.lf-page .dmf-desc {
+  font-family: var(--lf-display);
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-3);
+  margin: 0;
+  max-width: 60ch;
+}
+.lf-page .dmf-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.lf-page .dmf-progress-ring {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+.lf-page .dmf-progress-num {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--lf-display);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.lf-page .dmf-progress-num span {
+  font-size: 10px;
+  color: var(--ink-4);
+  margin-left: 1px;
+}
+.lf-page .dmf-progress-label {
+  font-family: var(--lf-mono);
+  font-size: 9px;
+  color: var(--ink-4);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.lf-page .dmf-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-3);
+  margin-top: var(--s-3);
+  padding-top: var(--s-3);
+  border-top: 0.5px solid var(--line-1);
+  flex-wrap: wrap;
+}
+.lf-page .dmf-cta {
+  padding: 8px 14px;
+  background: var(--accent-blue);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  font-family: var(--lf-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 150ms ease;
+  text-decoration: none;
+}
+.lf-page .dmf-cta:hover { background: var(--accent-blue-deep); }
+.lf-page .dmf-cta svg { width: 12px; height: 12px; }
+.lf-page .dmf-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.04em;
+}
+.lf-page .dmf-meta strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * Modules grid (2-up by default)
+ * ═══════════════════════════════════════════════════════════════════ */
+.lf-page .dash-modules {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-3);
+}
+@media (max-width: 900px) {
+  .lf-page .dash-modules { grid-template-columns: 1fr; }
+}
+.lf-page .dash-module {
+  padding: var(--s-3);
+  background: var(--paper);
+  border: 0.5px solid var(--line-2);
+  border-radius: var(--r-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+.lf-page .dash-module-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 8px;
+  border-bottom: 0.5px solid var(--line-1);
+}
+.lf-page .dash-module-title {
+  font-family: var(--lf-display);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.008em;
+  color: var(--ink);
+  margin: 0;
+}
+.lf-page .dash-module-status {
+  font-family: var(--lf-mono);
+  font-size: 9px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.lf-page .dash-module-status.active {
+  color: var(--accent-blue);
+  background: var(--accent-blue-ghost);
+  border: 0.5px solid var(--accent-blue);
+}
+.lf-page .dash-module-status.idle {
+  color: var(--ink-4);
+  border: 0.5px solid var(--ink-5);
+}
+.lf-page .dash-module-status.not-started {
+  color: var(--ink-4);
+  border: 0.5px dashed var(--ink-5);
+}
+.lf-page .dash-module-stat {
+  display: flex;
+  gap: var(--s-3);
+  flex-wrap: wrap;
+}
+.lf-page .dash-module-stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.lf-page .dash-module-stat-val {
+  font-family: var(--lf-display);
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.014em;
+  line-height: 1;
+  color: var(--ink);
+}
+.lf-page .dash-module-stat-val.muted {
+  color: var(--ink-4);
+  font-style: italic;
+  font-size: 18px;
+}
+.lf-page .dash-module-stat-label {
+  font-family: var(--lf-mono);
+  font-size: 9px;
+  color: var(--ink-4);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.lf-page .dash-module-detail {
+  font-family: var(--lf-display);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-3);
+  margin: 0;
+}
+.lf-page .dash-module-detail strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+.lf-page .dash-module-foot {
+  padding-top: 8px;
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-2);
+}
+.lf-page .dash-module-cta {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  color: var(--accent-blue);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  font-weight: 500;
+  text-decoration: none;
+}
+.lf-page .dash-module-cta::after { content: "  →"; }
+.lf-page .dash-module-tip {
+  font-family: var(--lf-mono);
+  font-size: 9px;
+  color: var(--ink-4);
+  letter-spacing: 0.04em;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * From LLP editorial brief
+ * ═══════════════════════════════════════════════════════════════════ */
+.lf-page .dash-from-llp {
+  padding: var(--s-3);
+  background: var(--accent-blue-ghost);
+  border-left: 2px solid var(--accent-blue);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--s-5);
+}
+.lf-page .dash-from-llp-label {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  color: var(--accent-blue);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.lf-page .dash-from-llp-text {
+  font-family: var(--lf-display);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.5;
+  flex: 1;
+  margin: 0;
+}
+.lf-page .dash-from-llp-text strong {
+  color: var(--ink);
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * Recent activity
+ * ═══════════════════════════════════════════════════════════════════ */
+.lf-page .dash-activity {
+  display: flex;
+  flex-direction: column;
+}
+.lf-page .dash-activity-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--s-3);
+  padding: 10px 0;
+  border-bottom: 0.5px solid var(--line-1);
+  align-items: start;
+}
+.lf-page .dash-activity-row:last-child { border-bottom: none; }
+.lf-page .dash-activity-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--paper-inner);
+  border: 0.5px solid var(--line-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-3);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.lf-page .dash-activity-icon svg {
+  width: 11px;
+  height: 11px;
+  stroke-width: 2;
+}
+.lf-page .dash-activity-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.lf-page .dash-activity-title {
+  font-family: var(--lf-display);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.35;
+}
+.lf-page .dash-activity-detail {
+  font-family: var(--lf-display);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--ink-3);
+  line-height: 1.4;
+}
+.lf-page .dash-activity-time {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * Stamp (page footer)
+ * ═══════════════════════════════════════════════════════════════════ */
+.lf-page .dash-stamp {
+  padding: var(--s-4) 0 var(--s-6);
+  border-top: 0.5px solid var(--line-1);
+  margin-top: var(--s-4);
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.04em;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+.lf-page .dash-stamp span:first-child {
+  max-width: 640px;
+  line-height: 1.6;
+}
+.lf-page .dash-stamp strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+.lf-page .dash-stamp-right {
+  display: flex;
+  gap: var(--s-3);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * Floating chat (FAB)
+ * ═══════════════════════════════════════════════════════════════════ */
+.lf-page .dash-chat {
+  position: fixed;
+  bottom: var(--s-4);
+  right: var(--s-4);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--accent-blue);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(30, 58, 95, 0.24);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+  text-decoration: none;
+}
+.lf-page .dash-chat:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(30, 58, 95, 0.32);
+}
+.lf-page .dash-chat svg { width: 22px; height: 22px; }
+.lf-page .dash-chat-label {
+  position: absolute;
+  right: 64px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 6px 12px;
+  border-radius: var(--r-sm);
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+}
+.lf-page .dash-chat:hover .dash-chat-label { opacity: 1; }
+
+/* ═══════════════════════════════════════════════════════════════════
+ * Mobile sidebar trigger (in-page header burger)
+ * ═══════════════════════════════════════════════════════════════════ */
+.lf-page .dash-mobile-burger {
+  display: none;
+}
+@media (max-width: 1024px) {
+  .lf-page .dash-mobile-burger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    background: var(--paper);
+    border: 0.5px solid var(--line-2);
+    border-radius: var(--r-sm);
+    color: var(--ink-3);
+    cursor: pointer;
+    margin-right: 8px;
+  }
+  .lf-page .dash-mobile-burger svg { width: 16px; height: 16px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * Inner-page surfaces — generic table + empty state primitives
+ * (reused by /dashboard/* sub-routes)
+ * ═══════════════════════════════════════════════════════════════════ */
+.lf-page .dash-table-wrap {
+  border: 0.5px solid var(--line-2);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: var(--paper);
+}
+.lf-page .dash-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--lf-body);
+}
+.lf-page .dash-table thead th {
+  font-family: var(--lf-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  font-weight: 500;
+  padding: 10px var(--s-3);
+  border-bottom: 0.5px solid var(--line-1);
+  background: var(--paper-inner);
+  text-align: left;
+}
+.lf-page .dash-table tbody td {
+  padding: 12px var(--s-3);
+  border-bottom: 0.5px solid var(--line-1);
+  font-size: 13px;
+  color: var(--ink-2);
+}
+.lf-page .dash-table tbody tr:last-child td { border-bottom: none; }
+.lf-page .dash-table tbody tr:hover { background: var(--paper-inner); }
+.lf-page .dash-table-empty {
+  padding: var(--s-5) var(--s-3);
+  text-align: center;
+  color: var(--ink-4);
+  font-family: var(--lf-display);
+  font-style: italic;
+  font-size: 13px;
+}
+
+.lf-page .dash-empty {
+  padding: var(--s-5) var(--s-3);
+  border: 0.5px dashed var(--line-2);
+  border-radius: var(--r-md);
+  background: var(--paper);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-2);
+}
+.lf-page .dash-empty-title {
+  font-family: var(--lf-display);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.lf-page .dash-empty-body {
+  font-family: var(--lf-display);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-3);
+  max-width: 48ch;
+  line-height: 1.5;
+}

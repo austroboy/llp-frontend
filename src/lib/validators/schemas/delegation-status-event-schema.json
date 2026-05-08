@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://laborlawpartner.com/schemas/delegation-status-event.v1.json",
+  "title": "LLP Chat Delegation Status NDJSON Event",
+  "description": "NDJSON event emitted by chat-proxy on the turn-2+ stream when llp-chat-followup delegates to a sub-agent. Frontend chat-message.tsx consumes this to render the 'checking sources...' indicator and the 'Verified' badge. Companion to delegation-request-schema.json (which is the follow-up to-sub payload). Phase A: state transitions are pending -> complete (or pending -> error). Phase B may add streaming partial updates.",
+  "type": "object",
+  "required": ["event", "trace_id", "agent", "state"],
+  "properties": {
+    "event": {
+      "type": "string",
+      "const": "delegation_status",
+      "description": "Discriminator. NDJSON consumer dispatches on this field. Other event types in the same stream: 'token', 'citation', 'clarify_options', 'citations_audit', 'coverage_additions'."
+    },
+    "trace_id": {
+      "type": "string",
+      "pattern": "^trc_[0-9TZ:.-]+_[a-z0-9]{6,}$",
+      "description": "Echoed from the originating delegation_request. Lets frontend correlate the status event with the in-flight delegation."
+    },
+    "agent": {
+      "type": "string",
+      "enum": ["llp-chat-verify", "llp-chat-filegen"],
+      "description": "Which sub-agent the status applies to."
+    },
+    "intent": {
+      "type": "string",
+      "description": "Echoed from the request. Frontend may show this in the indicator text (e.g. 'Verifying section citation...')."
+    },
+    "state": {
+      "type": "string",
+      "enum": ["pending", "complete", "error", "timeout"],
+      "description": "pending: sub-agent invoked, awaiting response. complete: response received, included in result payload. error: sub-agent failed. timeout: max_response_ms exceeded; followup proceeded without sub-agent input."
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 UTC. Set when state=pending is first emitted."
+    },
+    "finished_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 UTC. Set when state in {complete, error, timeout}."
+    },
+    "result_summary": {
+      "type": "string",
+      "description": "One-line human summary for the badge tooltip. Examples: 'Cited DOC-011 §27 confirmed.', 'Original cite was DOC-006 §26 — corrected to DOC-011 §27.', 'Claim outside Universe dataset; surfaced as unverified.'. Present when state=complete."
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["agree", "disagree", "partial", "not_verifiable"],
+      "description": "For agent=llp-chat-verify, state=complete. Drives badge color: agree=green, partial=amber, disagree=red, not_verifiable=grey."
+    },
+    "error_message": {
+      "type": "string",
+      "description": "Human-readable error reason. Present when state in {error, timeout}."
+    }
+  },
+  "examples": [
+    {
+      "event": "delegation_status",
+      "trace_id": "trc_2026-04-22T07-15-32Z_abc123",
+      "agent": "llp-chat-verify",
+      "intent": "verify_section_citation",
+      "state": "pending",
+      "started_at": "2026-04-22T07:15:32.104Z"
+    },
+    {
+      "event": "delegation_status",
+      "trace_id": "trc_2026-04-22T07-15-32Z_abc123",
+      "agent": "llp-chat-verify",
+      "intent": "verify_section_citation",
+      "state": "complete",
+      "started_at": "2026-04-22T07:15:32.104Z",
+      "finished_at": "2026-04-22T07:15:38.612Z",
+      "verdict": "agree",
+      "result_summary": "Cited DOC-011 §27 confirmed; notice period is 120 days for permanent workers."
+    },
+    {
+      "event": "delegation_status",
+      "trace_id": "trc_2026-04-22T07-22-08Z_def456",
+      "agent": "llp-chat-verify",
+      "intent": "verify_penalty_amount",
+      "state": "complete",
+      "started_at": "2026-04-22T07:22:08.331Z",
+      "finished_at": "2026-04-22T07:22:14.018Z",
+      "verdict": "disagree",
+      "result_summary": "Original cite was DOC-007 BDT 25,000 — corrected: DOC-007 r.118 sets penalty up to BDT 50,000."
+    },
+    {
+      "event": "delegation_status",
+      "trace_id": "trc_2026-04-22T07-30-15Z_jkl012",
+      "agent": "llp-chat-verify",
+      "intent": "verify_eligibility",
+      "state": "timeout",
+      "started_at": "2026-04-22T07:30:15.000Z",
+      "finished_at": "2026-04-22T07:30:27.001Z",
+      "error_message": "verify did not respond within 12000ms; followup proceeded with unverified badge."
+    }
+  ]
+}

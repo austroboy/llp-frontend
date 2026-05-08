@@ -1,0 +1,12 @@
+Output format is aligned.
+       agent_key        |    display_name     |   provider   |  model  | owner_id |                tenant                | status | agent_type | max_tokens | thinking_level | is_default |          created_at           |          updated_at           
+------------------------+---------------------+--------------+---------+----------+--------------------------------------+--------+------------+------------+----------------+------------+-------------------------------+-------------------------------
+ hr-chat                | HR Chat             | z-ai         | glm-5.1 | system   | 0193a5b0-7000-7000-8000-000000000001 | active | predefined |          0 |                | t          | 2026-04-06 09:08:26.048601+00 | 2026-04-06 09:08:26.048601+00
+ llp-chat-filegen       | LLP Chat FileGen    | claudecli    | opus    | admin    | 0193a5b0-7000-7000-8000-000000000001 | active | predefined |       8000 |                | t          | 2026-04-18 05:49:33.609726+00 | 2026-04-20 09:04:46.766322+00
+ llp-chat-filegen-draft | LLP FileGen Draft   | openai-codex | gpt-5.5 | admin    | 0193a5b0-7000-7000-8000-000000000001 | active | predefined |       4000 |                | f          | 2026-04-22 15:54:58.349478+00 | 2026-04-26 17:38:59.4745+00
+ llp-chat-filegen-emit  | LLP FileGen Emitter | claudecli    | opus    | admin    | 0193a5b0-7000-7000-8000-000000000001 | active | predefined |       3000 |                | f          | 2026-04-22 14:09:30.061896+00 | 2026-04-22 17:00:27.78969+00
+ llp-chat-followup      | LLP Chat Followup   | openai-codex | gpt-5.5 | admin    | 0193a5b0-7000-7000-8000-000000000001 | active | predefined |       1500 |                | t          | 2026-04-18 05:49:33.609726+00 | 2026-04-26 17:38:59.4745+00
+ llp-chat-recover       | LLP Chat Recover    | claudecli    | sonnet  | admin    | 0193a5b0-7000-7000-8000-000000000001 | active | open       |          0 |                | f          | 2026-04-27 19:39:34.471703+00 | 2026-04-27 19:39:34.471703+00
+ llp-chat-verify        | LLP Chat Verify     | claudecli    | opus    | admin    | 0193a5b0-7000-7000-8000-000000000001 | active | predefined |        600 |                | t          | 2026-04-18 07:55:24.29781+00  | 2026-04-22 12:32:13.801867+00
+(7 rows)
+

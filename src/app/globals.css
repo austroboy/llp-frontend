@@ -1,0 +1,992 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+
+@layer clerk {
+  /* ══════════════════════════════════════════════════════════════════
+   * Clerk — Codex identity chrome.
+   * Classes below are appended to Clerk's default `cl-*` classes via
+   * src/lib/clerk-appearance.ts (elements map). Keeps UserButton popover
+   * consistent across Codex (/) · Protocol (/dashboard) · Vault (/admin).
+   * Dark mode auto-flips via :root / .dark hp-* tokens in this file.
+   * ═══════════════════════════════════════════════════════════════ */
+
+  /* Trigger avatar in header */
+  .clerk-codex-trigger-avatar {
+    width: 2rem;
+    height: 2rem;
+    box-shadow: 0 0 0 1px var(--hp-rule-strong), 0 1px 2px rgba(29, 20, 16, 0.12);
+    transition: box-shadow 200ms ease;
+  }
+  .clerk-codex-trigger-avatar:hover {
+    box-shadow: 0 0 0 1px var(--hp-rust), 0 2px 6px rgba(178, 92, 34, 0.25);
+  }
+
+  /* Popover card shell */
+  .clerk-codex-card {
+    background: linear-gradient(180deg, var(--hp-card-bg) 0%, var(--hp-card-bg-end) 100%);
+    border: 1px solid var(--hp-card-border);
+    border-radius: 8px;
+    box-shadow:
+      0 12px 40px -18px rgba(29, 20, 16, 0.28),
+      0 2px 6px rgba(29, 20, 16, 0.06);
+    color: var(--hp-ink);
+    font-family: var(--hp-body);
+    overflow: hidden;
+  }
+  .dark .clerk-codex-card {
+    box-shadow:
+      0 16px 48px -20px rgba(0, 0, 0, 0.75),
+      0 2px 6px rgba(0, 0, 0, 0.35);
+  }
+
+  /* Main preview region (avatar + name + email) */
+  .clerk-codex-main {
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid var(--hp-rule);
+    background: color-mix(in oklab, var(--hp-rust) 3%, transparent);
+  }
+  .clerk-codex-preview {
+    gap: 12px;
+  }
+  .clerk-codex-preview-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    box-shadow: 0 0 0 1px var(--hp-rule-strong);
+  }
+  .clerk-codex-identifier-main {
+    font-family: var(--hp-display);
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+    color: var(--hp-ink);
+    font-variation-settings: "opsz" 22, "SOFT" 40;
+  }
+  .clerk-codex-identifier-secondary {
+    font-family: var(--hp-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: var(--hp-ink-muted);
+    margin-top: 2px;
+  }
+
+  /* Action list */
+  .clerk-codex-actions {
+    padding: 6px;
+    gap: 2px;
+    background: transparent;
+  }
+  .clerk-codex-action {
+    padding: 10px 12px;
+    border-radius: 6px;
+    color: var(--hp-ink);
+    font-family: var(--hp-body);
+    font-size: 13.5px;
+    font-weight: 500;
+    transition: background 160ms ease, color 160ms ease;
+  }
+  .clerk-codex-action:hover {
+    background: var(--hp-rust-soft);
+    color: var(--hp-rust);
+  }
+  .clerk-codex-action:focus-visible {
+    outline: 2px solid var(--hp-rust);
+    outline-offset: -2px;
+    background: var(--hp-rust-soft);
+  }
+  .clerk-codex-action-text {
+    color: inherit;
+  }
+  .clerk-codex-action-icon {
+    color: var(--hp-rust);
+    opacity: 0.8;
+    transition: opacity 160ms ease;
+  }
+  .clerk-codex-action:hover .clerk-codex-action-icon {
+    opacity: 1;
+  }
+
+  /* Hide "Development mode" / Clerk branding footer */
+  .clerk-codex-footer-hidden {
+    display: none !important;
+  }
+
+  /* Generic avatar fallback (used in SignIn / UserProfile surfaces) */
+  .clerk-codex-avatar {
+    box-shadow: 0 0 0 1px var(--hp-rule-strong);
+  }
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: var(--font-poppins), var(--font-bengali), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-baskerville), Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-outfit), ui-monospace, monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-muted: var(--brand-muted);
+  --color-brand-border: var(--brand-border);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-foreground-secondary: var(--foreground-secondary);
+  --color-surface-soft: var(--surface-soft);
+  --color-surface-strong: var(--surface-strong);
+  --color-border-soft: var(--border-soft);
+  --color-hero-tint-start: var(--hero-tint-start);
+  --color-hero-tint-end: var(--hero-tint-end);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --animate-rainbow: rainbow 5s infinite linear;
+  --animate-marquee: marquee var(--duration) infinite linear;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  @keyframes marquee {
+  from {
+    transform: translateX(0);
+    }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+    }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
+}
+
+:root {
+  --radius: 0.625rem;
+  /* Rainbow button colors */
+  --color-1: oklch(66.2% 0.225 25.9);
+  --color-2: oklch(60.4% 0.26 302);
+  --color-3: oklch(69.6% 0.165 251);
+  --color-4: oklch(80.2% 0.134 225);
+  --color-5: oklch(90.7% 0.231 133);
+  --animate-rainbow: rainbow var(--speed, 5s) infinite linear;
+  /* Clean bright background */
+  --background: oklch(0.975 0.010 82);
+  --foreground: oklch(0.155 0.005 82);
+  /* Pure white card */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.155 0.005 82);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.155 0.005 82);
+  /* Primary green — #2E7D5B */
+  --primary: oklch(0.531 0.095 161.9);
+  --primary-foreground: oklch(0.985 0 0);
+  /* Docs gradient — green-tinted */
+  --docs-gradient-from: oklch(0.94 0.03 162);
+  --docs-gradient-to: oklch(0.96 0.013 82.4);
+  /* Clean secondary */
+  --secondary: oklch(0.955 0.018 162);
+  --secondary-foreground: oklch(0.205 0.005 82);
+  --muted: oklch(0.945 0.010 84);
+  --muted-foreground: oklch(0.556 0.01 82);
+  /* Light green accent — #A7D7C5 */
+  --accent: oklch(0.840 0.056 170.1);
+  --accent-foreground: oklch(0.422 0.073 164.2);
+  --destructive: oklch(0.577 0.245 27.325);
+  /* Crisp borders */
+  --border: oklch(0.885 0.014 82);
+  --input: oklch(0.885 0.014 82);
+  --ring: oklch(0.531 0.095 161.9);
+  --chart-1: oklch(0.531 0.095 161.9);
+  --chart-2: oklch(0.422 0.073 164.2);
+  --chart-3: oklch(0.840 0.056 170.1);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  /* Sidebar — slightly warm */
+  --sidebar: oklch(0.970 0.010 82);
+  --sidebar-foreground: oklch(0.155 0.005 82);
+  /* Sidebar primary — dark green #1F5A43 */
+  --sidebar-primary: oklch(0.422 0.073 164.2);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.940 0.030 170);
+  --sidebar-accent-foreground: oklch(0.422 0.073 164.2);
+  --sidebar-border: oklch(0.910 0.012 82);
+  --sidebar-ring: oklch(0.531 0.095 161.9);
+  /* Brand colors — #2E7D5B / #1F5A43 / #A7D7C5 */
+  --brand: oklch(0.531 0.095 161.9);
+  --brand-hover: oklch(0.422 0.073 164.2);
+  --brand-muted: oklch(0.840 0.056 170.1 / 30%);
+  --brand-border: oklch(0.840 0.056 170.1 / 40%);
+  /* Surface */
+  --surface: oklch(0.992 0.008 84.6);
+  --surface-hover: oklch(0.960 0.013 82.4);
+  --foreground-secondary: oklch(0.500 0.008 82);
+  /* New surface tokens */
+  --surface-soft: oklch(0.968 0.008 82);
+  --surface-strong: oklch(1 0 0);
+  --border-soft: oklch(0.895 0.010 82);
+  --hero-tint-start: oklch(0.975 0.010 82);
+  --hero-tint-end: oklch(0.960 0.025 162);
+
+  /* ── Codex identity tokens (light) — promoted to :root so Clerk's */
+  /*    portaled popover (mounted on <body>, outside .hp-codex) can   */
+  /*    resolve them. Inside .hp-codex these are overridden by the    */
+  /*    same values, so no visual change on homepage surfaces.        */
+  --hp-paper:       #f4ecda;
+  --hp-paper-soft:  #faf4e2;
+  --hp-paper-warm:  #f1e8c8;
+  --hp-ink:         #1d1410;
+  --hp-ink-muted:   rgba(29, 20, 16, 0.62);
+  --hp-ink-faint:   rgba(29, 20, 16, 0.36);
+  --hp-rule:        rgba(29, 20, 16, 0.11);
+  --hp-rule-strong: rgba(29, 20, 16, 0.20);
+  --hp-rust:        #b25c22;
+  --hp-rust-deep:   #8a4116;
+  --hp-rust-soft:   rgba(178, 92, 34, 0.10);
+  --hp-green:       #2e7d5b;
+  --hp-green-deep:  #1f5a43;
+  --hp-green-soft:  rgba(46, 125, 91, 0.10);
+  --hp-card-bg:     #fbf5e2;
+  --hp-card-bg-end: #f3ead1;
+  --hp-card-border: rgba(29, 20, 16, 0.14);
+  --hp-mono:    var(--font-jetbrains), ui-monospace, monospace;
+  --hp-display: var(--font-fraunces), var(--font-baskerville), Georgia, serif;
+  --hp-body:    var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --hp-italic:  var(--font-fraunces), var(--font-lora), serif;
+}
+
+.dark {
+  --background: oklch(0.155 0.008 164);
+  --foreground: oklch(0.960 0.013 82.4);
+  --card: oklch(0.205 0.010 164);
+  --card-foreground: oklch(0.960 0.013 82.4);
+  --popover: oklch(0.205 0.010 164);
+  --popover-foreground: oklch(0.960 0.013 82.4);
+  /* Brighter green for dark mode */
+  --primary: oklch(0.650 0.12 162);
+  --primary-foreground: oklch(0.155 0.008 164);
+  --docs-gradient-from: oklch(0.2 0.03 164);
+  --docs-gradient-to: oklch(0.18 0.01 82);
+  --secondary: oklch(0.250 0.012 164);
+  --secondary-foreground: oklch(0.960 0.013 82.4);
+  --muted: oklch(0.250 0.012 164);
+  --muted-foreground: oklch(0.700 0.01 82);
+  --accent: oklch(0.300 0.04 164);
+  --accent-foreground: oklch(0.840 0.056 170.1);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.650 0.12 162);
+  --chart-1: oklch(0.650 0.12 162);
+  --chart-2: oklch(0.531 0.095 161.9);
+  --chart-3: oklch(0.840 0.056 170.1);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.185 0.010 164);
+  --sidebar-foreground: oklch(0.960 0.013 82.4);
+  --sidebar-primary: oklch(0.650 0.12 162);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.250 0.020 164);
+  --sidebar-accent-foreground: oklch(0.840 0.056 170.1);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.650 0.12 162);
+  /* Brand colors — dark mode */
+  --brand: oklch(0.650 0.12 162);
+  --brand-hover: oklch(0.700 0.13 162);
+  --brand-muted: oklch(0.531 0.095 161.9 / 20%);
+  --brand-border: oklch(0.531 0.095 161.9 / 30%);
+  --surface: oklch(0.205 0.010 164);
+  --surface-hover: oklch(0.250 0.012 164);
+  --foreground-secondary: oklch(0.650 0.01 82);
+  /* Surface tokens — dark */
+  --surface-soft: oklch(0.205 0.010 164);
+  --surface-strong: oklch(0.250 0.012 164);
+  --border-soft: oklch(1 0 0 / 12%);
+  /* Hero tint — dark */
+  --hero-tint-start: oklch(0.185 0.015 164);
+  --hero-tint-end: oklch(0.200 0.020 155);
+
+  /* ── Codex identity tokens (dark) — auto-flip for Clerk portal ── */
+  --hp-paper:       #111011;
+  --hp-paper-soft:  #0e0d0c;
+  --hp-paper-warm:  #0a0a0a;
+  --hp-ink:         #ede6d8;
+  --hp-ink-muted:   rgba(237, 230, 216, 0.58);
+  --hp-ink-faint:   rgba(237, 230, 216, 0.32);
+  --hp-rule:        rgba(237, 230, 216, 0.10);
+  --hp-rule-strong: rgba(237, 230, 216, 0.18);
+  --hp-rust:        #d38044;
+  --hp-rust-deep:   #b25c22;
+  --hp-rust-soft:   rgba(211, 128, 68, 0.14);
+  --hp-green:       #4ade80;
+  --hp-green-deep:  #2e7d5b;
+  --hp-green-soft:  rgba(74, 222, 128, 0.10);
+  --hp-card-bg:     #0a0a0a;
+  --hp-card-bg-end: #050505;
+  --hp-card-border: rgba(237, 230, 216, 0.12);
+}
+
+/* Reader-scoped sepia theme — applied to <main> content area only */
+.reader-sepia {
+  --reader-bg: #F5F0E8;
+  --reader-text: #3D3529;
+  --reader-muted: #8A7E6B;
+  --reader-border: #E5DDD0;
+  --reader-heading: #2A1F14;
+  background-color: var(--reader-bg);
+  color: var(--reader-text);
+}
+
+.reader-sepia h1,
+.reader-sepia h2,
+.reader-sepia h3 {
+  color: var(--reader-heading);
+}
+
+.reader-sepia .text-muted-foreground {
+  color: var(--reader-muted);
+}
+
+.reader-sepia .border-border,
+.reader-sepia .border-b,
+.reader-sepia [class*="border-primary"] {
+  border-color: var(--reader-border);
+}
+
+/* Dark mode sepia — warmer dark tones */
+.dark .reader-sepia {
+  --reader-bg: #1E1B16;
+  --reader-text: #D4C9B8;
+  --reader-muted: #8A7E6B;
+  --reader-border: #3A352C;
+  --reader-heading: #E8DFD0;
+  background-color: var(--reader-bg);
+  color: var(--reader-text);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-poppins), var(--font-bengali), ui-sans-serif, system-ui, sans-serif;
+  }
+  h1 {
+    font-family: var(--font-baskerville), Georgia, serif;
+  }
+  h2, h3, h4, h5, h6 {
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ---- Codex-tinted thin overlay scrollbar (GLOBAL) ----
+   Promoted from /chat container to global default so every scroll
+   surface (dashboards, admin, org, public) carries the same rust
+   thumb on transparent track. Utility classes `.no-scrollbar` /
+   `.scrollbar-none` still win via higher specificity. `.codex-scroll`
+   is kept as a no-op alias for any existing markup. */
+:root { --codex-scroll-rust: #b25c22; }
+.dark { --codex-scroll-rust: #d38044; }
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--codex-scroll-rust) 18%, transparent) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--codex-scroll-rust) 18%, transparent);
+  border-radius: 9999px;
+  transition: background 200ms ease;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in oklab, var(--codex-scroll-rust) 80%, transparent);
+}
+*::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+@keyframes rainbow {
+  0% { background-position: 0%; }
+  100% { background-position: 200%; }
+}
+
+.animate-rainbow {
+  animation: rainbow var(--speed, 5s) infinite linear;
+}
+
+@keyframes bling {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+  50% {
+    box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.8),
+                0 0 40px 10px rgba(255, 255, 255, 0.5),
+                inset 0 0 20px 5px rgba(255, 255, 255, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+.animate-bling {
+  animation: bling 0.8s ease-in-out;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out both;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Premium shimmer — used on the Generate-Document button             */
+/*  and (subtly) behind the Premium upgrade dialog header              */
+/* ------------------------------------------------------------------ */
+@keyframes premium-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+.shimmer-premium {
+  background-image: linear-gradient(
+    110deg,
+    #f59e0b 20%,
+    #fcd34d 40%,
+    #fed7aa 50%,
+    #fcd34d 60%,
+    #f59e0b 80%
+  );
+  background-size: 200% 100%;
+  animation: premium-shimmer 4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer-premium {
+    animation: none;
+    background-image: linear-gradient(135deg, #f59e0b, #f97316);
+    background-size: 100% 100%;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Background filegen job pulse — used on the FilesSidebar badges    */
+/*  that appear while a document is being generated. Soft breathing   */
+/*  ring that pairs with an internal animate-spin icon to read as     */
+/*  "alive but not frantic".                                          */
+/* ------------------------------------------------------------------ */
+@keyframes job-pulse-ring {
+  0%, 100% { transform: scale(1);    opacity: 0.7; }
+  50%      { transform: scale(1.08); opacity: 1;   }
+}
+
+.animate-job-pulse-ring {
+  animation: job-pulse-ring 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-job-pulse-ring {
+    animation: none;
+  }
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes marquee-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-right {
+  animation: marquee-right 45s linear infinite;
+}
+
+.animate-marquee-left {
+  animation: marquee-left 45s linear infinite;
+}
+
+.animate-marquee-slow {
+  animation: marquee-left 60s linear infinite;
+}
+
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float {
+  animation: float 5.5s ease-in-out infinite;
+}
+
+@keyframes progress-indeterminate {
+  0% {
+    width: 20%;
+    transform: translateX(-100%);
+  }
+  50% {
+    width: 40%;
+  }
+  100% {
+    width: 20%;
+    transform: translateX(400%);
+  }
+}
+
+.animate-progress-indeterminate {
+  animation: progress-indeterminate 1.8s ease-in-out infinite;
+}
+
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 80ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 160ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 240ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 320ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 400ms; }
+
+/* ------------------------------------------------------------------ */
+/*  TipTap ResizableNodeView — resize handles                         */
+/* ------------------------------------------------------------------ */
+
+[data-resize-container] {
+  position: relative;
+  display: inline-flex;
+  max-width: 100%;
+}
+
+[data-resize-container] img {
+  max-width: 100%;
+  display: block;
+}
+
+[data-resize-wrapper] {
+  position: relative;
+}
+
+/* Handle dots — hidden by default, visible on hover / selection */
+[data-resize-handle] {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 2px solid var(--background);
+  box-shadow: 0 0 0 1px var(--border);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 10;
+  pointer-events: auto;
+}
+
+[data-resize-wrapper]:hover [data-resize-handle],
+[data-resize-container].is-resizing [data-resize-handle] {
+  opacity: 1;
+}
+
+/* Corner cursors */
+[data-resize-handle="bottom-right"] { cursor: nwse-resize; }
+[data-resize-handle="bottom-left"]  { cursor: nesw-resize; }
+[data-resize-handle="top-right"]    { cursor: nesw-resize; }
+[data-resize-handle="top-left"]     { cursor: nwse-resize; }
+
+/* Selection outline while resizing */
+[data-resize-container].is-resizing [data-resize-wrapper] {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+/* Prevent text selection while dragging handles */
+[data-resize-container].is-resizing {
+  user-select: none;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Legal content styling — three-layer badges & 7-part response      */
+/* ------------------------------------------------------------------ */
+
+.legal-statutory {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgb(34 197 94 / 0.1);
+  color: rgb(22 163 74);
+  border-left: 3px solid rgb(22 163 74);
+}
+.dark .legal-statutory {
+  background: rgb(34 197 94 / 0.15);
+  color: rgb(74 222 128);
+}
+
+.legal-regulatory {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgb(59 130 246 / 0.1);
+  color: rgb(37 99 235);
+  border-left: 3px solid rgb(37 99 235);
+}
+.dark .legal-regulatory {
+  background: rgb(59 130 246 / 0.15);
+  color: rgb(96 165 250);
+}
+
+.legal-practice {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgb(245 158 11 / 0.1);
+  color: rgb(217 119 6);
+  border-left: 3px dashed rgb(217 119 6);
+}
+.dark .legal-practice {
+  background: rgb(245 158 11 / 0.15);
+  color: rgb(251 191 36);
+}
+
+.legal-next-step {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgb(168 85 247 / 0.1);
+  color: rgb(147 51 234);
+}
+.dark .legal-next-step {
+  background: rgb(168 85 247 / 0.15);
+  color: rgb(192 132 252);
+}
+
+.legal-references {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgb(107 114 128 / 0.1);
+  color: rgb(75 85 99);
+}
+.dark .legal-references {
+  background: rgb(107 114 128 / 0.15);
+  color: rgb(156 163 175);
+}
+
+.legal-direct-answer {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgb(16 185 129 / 0.1);
+  color: rgb(5 150 105);
+  border-left: 3px solid rgb(5 150 105);
+}
+.dark .legal-direct-answer {
+  background: rgb(16 185 129 / 0.15);
+  color: rgb(52 211 153);
+}
+
+.legal-requirement {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgb(99 102 241 / 0.1);
+  color: rgb(79 70 229);
+  border-left: 3px solid rgb(79 70 229);
+}
+.dark .legal-requirement {
+  background: rgb(99 102 241 / 0.15);
+  color: rgb(165 180 252);
+}
+
+.legal-steps {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgb(14 165 233 / 0.1);
+  color: rgb(2 132 199);
+}
+.dark .legal-steps {
+  background: rgb(14 165 233 / 0.15);
+  color: rgb(56 189 248);
+}
+
+.legal-risks {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgb(239 68 68 / 0.1);
+  color: rgb(220 38 38);
+  border-left: 3px solid rgb(220 38 38);
+}
+.dark .legal-risks {
+  background: rgb(239 68 68 / 0.15);
+  color: rgb(252 165 165);
+}
+
+.legal-best-practice {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgb(245 158 11 / 0.1);
+  color: rgb(180 83 9);
+}
+.dark .legal-best-practice {
+  background: rgb(245 158 11 / 0.15);
+  color: rgb(253 224 71);
+}
+
+.legal-evidence {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgb(139 92 246 / 0.1);
+  color: rgb(124 58 237);
+}
+.dark .legal-evidence {
+  background: rgb(139 92 246 / 0.15);
+  color: rgb(196 181 253);
+}
+
+/* Syntax highlighting theme override — keep bg transparent inside code blocks */
+.md-render pre code.hljs {
+  background: transparent;
+  padding: 0;
+}
+
+/* ═══════════════════════════════════════════════════════
+   Headhunting page — scoped design tokens & utilities
+   ═══════════════════════════════════════════════════════ */
+.ht-page {
+  --ht-ink: #16324F;
+  --ht-ink2: #23486C;
+  --ht-blue: #3B82F6;
+  --ht-aqua: #5BC0EB;
+  --ht-mist: #F5FAFF;
+  --ht-wash: #EAF4FF;
+  --ht-mint: #EAFBF5;
+  --ht-lilac: #F3EEFF;
+  --ht-warm: #FFF9F1;
+  --ht-rose: #FFF1F2;
+  --ht-line: #D9E7F5;
+  --ht-steel: #64809C;
+  --ht-navy: #132A44;
+}
+
+.ht-page .ht-system-grid {
+  background-image:
+    linear-gradient(rgba(22, 50, 79, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(22, 50, 79, 0.035) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.ht-page .ht-glass {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.ht-page .ht-gradient-border {
+  position: relative;
+  background: white;
+}
+.ht-page .ht-gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(59,130,246,0.22), rgba(91,192,235,0.18), rgba(163,140,255,0.18));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.ht-page .ht-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  filter: blur(4px);
+  transition:
+    opacity 700ms cubic-bezier(.16,1,.3,1),
+    transform 700ms cubic-bezier(.16,1,.3,1),
+    filter 700ms cubic-bezier(.16,1,.3,1);
+  will-change: opacity, transform, filter;
+}
+.ht-page .ht-reveal.ht-in-view {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.ht-page .ht-stagger > * {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 650ms cubic-bezier(.16,1,.3,1),
+    transform 650ms cubic-bezier(.16,1,.3,1);
+  will-change: opacity, transform;
+}
+.ht-page .ht-stagger.ht-in-view > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+.ht-page .ht-stagger.ht-in-view > *:nth-child(1) { transition-delay: 0ms; }
+.ht-page .ht-stagger.ht-in-view > *:nth-child(2) { transition-delay: 80ms; }
+.ht-page .ht-stagger.ht-in-view > *:nth-child(3) { transition-delay: 160ms; }
+.ht-page .ht-stagger.ht-in-view > *:nth-child(4) { transition-delay: 240ms; }
+.ht-page .ht-stagger.ht-in-view > *:nth-child(5) { transition-delay: 320ms; }
+.ht-page .ht-stagger.ht-in-view > *:nth-child(6) { transition-delay: 400ms; }
+.ht-page .ht-stagger.ht-in-view > *:nth-child(7) { transition-delay: 480ms; }
+.ht-page .ht-stagger.ht-in-view > *:nth-child(8) { transition-delay: 560ms; }
+.ht-page .ht-stagger.ht-in-view > *:nth-child(9) { transition-delay: 640ms; }
+
+/* Scout CTA shimmer */
+.ht-page .ht-scout-cta {
+  position: relative;
+  overflow: hidden;
+}
+.ht-page .ht-scout-cta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 20%,
+    rgba(59, 130, 246, 0.08) 35%,
+    rgba(59, 130, 246, 0.13) 50%,
+    rgba(59, 130, 246, 0.08) 65%,
+    transparent 80%
+  );
+  transform: translateX(-110%);
+  animation: ht-scout-shimmer 4.5s ease-in-out 1.5s infinite;
+  pointer-events: none;
+  border-radius: inherit;
+}
+@keyframes ht-scout-shimmer {
+  0%, 100% { transform: translateX(-110%); }
+  40%      { transform: translateX(110%); }
+  40.01%   { transform: translateX(-110%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ht-page .ht-reveal,
+  .ht-page .ht-stagger > * {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+  .ht-page .ht-scout-cta::after {
+    animation: none !important;
+  }
+}
+
+/* Deep-link flash — /dashboard/saved → /chat?conv=&msg= scroll target */
+@keyframes saved-deeplink-flash {
+  0%   { box-shadow: 0 0 0 0 rgba(178, 92, 34, 0); background-color: transparent; }
+  20%  { box-shadow: 0 0 0 6px rgba(178, 92, 34, 0.22); background-color: rgba(178, 92, 34, 0.08); }
+  100% { box-shadow: 0 0 0 0 rgba(178, 92, 34, 0); background-color: transparent; }
+}
+.saved-deeplink-flash {
+  border-radius: 14px;
+  animation: saved-deeplink-flash 2.2s ease-out;
+}

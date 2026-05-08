@@ -1,0 +1,600 @@
+/*
+ * ── Academy / Path styles (Tanbhir v56 / Foundation v1.9 port) ──
+ * Path-specific amber accent uses exact v56 hex values (not the generic
+ * --rust which is more orange-red). Other tokens inherit from
+ * landing.css's .lf-page block.
+ */
+
+.lf-page {
+  --path-accent: #b5803b;
+  --path-accent-dark: #8a6128;
+  --path-accent-soft: #f0e4c9;
+}
+.lf-page[data-theme="dark"] {
+  --path-accent: #d4a868;
+  --path-accent-dark: #b5803b;
+  --path-accent-soft: rgba(212, 168, 104, 0.12);
+}
+
+/* ── Page-local keyframes (v56 ships these in head; we scope here) ── */
+@keyframes lf-pc-fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes lf-pc-pulse-soft {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+
+/* ── Catalog grain + main wrap ─────────────────────────────────── */
+.lf-page .lf-pc-main { position: relative; }
+
+/* ── Hero ──────────────────────────────────────────────────────── */
+.lf-page .lf-pc-hero {
+  position: relative;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: calc(var(--s-7) + 48px) var(--s-5) var(--s-5);
+}
+@media (max-width: 700px) {
+  .lf-page .lf-pc-hero { padding: calc(var(--s-6) + 32px) var(--s-3) var(--s-4); }
+}
+
+.lf-page .lf-pc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border: 0.5px solid var(--line-2);
+  background: color-mix(in oklab, var(--paper) 70%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 999px;
+  margin-bottom: var(--s-4);
+  animation: lf-pc-fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.lf-page .lf-pc-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--path-accent);
+  animation: lf-pc-pulse-soft 2.4s ease-in-out infinite;
+}
+.lf-page .lf-pc-badge-text {
+  font-family: var(--lf-mono);
+  font-size: 11px;
+  color: var(--ink-4);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.lf-page .lf-pc-hero-title {
+  font-family: var(--lf-display);
+  font-size: 72px;
+  font-weight: 500;
+  letter-spacing: -0.012em;
+  line-height: 0.98;
+  color: var(--ink);
+  margin: 0 0 var(--s-4);
+  max-width: 900px;
+  animation: lf-pc-fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both 0.1s;
+}
+@media (max-width: 1280px) { .lf-page .lf-pc-hero-title { font-size: 60px; } }
+@media (max-width: 900px)  { .lf-page .lf-pc-hero-title { font-size: 48px; } }
+@media (max-width: 480px)  { .lf-page .lf-pc-hero-title { font-size: 34px; } }
+.lf-page .lf-pc-hero-title em {
+  font-style: italic;
+  color: var(--path-accent);
+  font-weight: 500;
+}
+
+.lf-page .lf-pc-hero-deck {
+  font-family: var(--lf-body);
+  font-size: 20px;
+  line-height: 1.55;
+  color: var(--ink-4);
+  margin: 0 0 var(--s-5);
+  max-width: 660px;
+  animation: lf-pc-fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both 0.2s;
+}
+@media (max-width: 700px) {
+  .lf-page .lf-pc-hero-deck { font-size: 17px; }
+}
+
+/* ── Method strip (what Path is) ───────────────────────────────── */
+.lf-page .lf-pc-method-strip-wrap {
+  padding: 0 var(--s-5);
+  max-width: 1440px;
+  margin: 0 auto;
+}
+@media (max-width: 700px) {
+  .lf-page .lf-pc-method-strip-wrap { padding: 0 var(--s-3); }
+}
+
+.lf-page .lf-pc-method-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--line-2);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  max-width: 1440px;
+  margin: 0 auto;
+  backdrop-filter: blur(14px) saturate(130%);
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 12px 40px -16px rgba(15, 23, 42, 0.18);
+  animation: lf-pc-fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both 0.3s;
+}
+@media (max-width: 900px) {
+  .lf-page .lf-pc-method-strip { grid-template-columns: repeat(2, 1fr); }
+}
+
+.lf-page .lf-pc-method-item {
+  padding: var(--s-4) var(--s-3);
+  background: var(--glass-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.lf-page .lf-pc-method-big {
+  font-family: var(--lf-display);
+  font-size: 30px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: -0.012em;
+}
+.lf-page .lf-pc-method-label {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  color: var(--path-accent);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-top: 4px;
+}
+.lf-page .lf-pc-method-sub {
+  font-family: var(--lf-body);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--ink-4);
+  line-height: 1.4;
+}
+
+/* ── Section wrapper (topics + methodology) ────────────────────── */
+.lf-page .lf-pc-section {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: var(--s-6) var(--s-5);
+}
+@media (max-width: 700px) {
+  .lf-page .lf-pc-section { padding: var(--s-5) var(--s-3); }
+}
+
+.lf-page .lf-pc-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: var(--s-4);
+  gap: var(--s-3);
+  flex-wrap: wrap;
+}
+.lf-page .lf-pc-section-head-left {
+  flex: 1;
+  min-width: 0;
+  max-width: 640px;
+}
+.lf-page .lf-pc-section-kicker {
+  font-family: var(--lf-mono);
+  font-size: 11px;
+  color: var(--path-accent);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.lf-page .lf-pc-section-title {
+  font-family: var(--lf-display);
+  font-size: 38px;
+  font-weight: 500;
+  letter-spacing: -0.012em;
+  line-height: 1.1;
+  color: var(--ink);
+  margin: 0 0 var(--s-2);
+}
+@media (max-width: 900px) {
+  .lf-page .lf-pc-section-title { font-size: 30px; }
+}
+.lf-page .lf-pc-section-title em {
+  font-style: italic;
+  color: var(--path-accent);
+  font-weight: 500;
+}
+.lf-page .lf-pc-section-deck {
+  font-family: var(--lf-body);
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink-4);
+  margin: 0;
+}
+.lf-page .lf-pc-section-meta {
+  font-family: var(--lf-mono);
+  font-size: 11px;
+  color: var(--ink-4);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+.lf-page .lf-pc-section-meta strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ── Topic catalog grid ────────────────────────────────────────── */
+.lf-page .lf-pc-topics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-3);
+}
+@media (max-width: 900px) {
+  .lf-page .lf-pc-topics { grid-template-columns: 1fr; }
+}
+
+.lf-page .lf-pc-topic-card {
+  padding: var(--s-4);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  backdrop-filter: blur(14px) saturate(130%);
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 12px 40px -16px rgba(15, 23, 42, 0.18);
+  transition: transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 240ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              border-color 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  min-height: 240px;
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+}
+.lf-page .lf-pc-topic-card:hover {
+  border-color: color-mix(in oklab, var(--path-accent) 36%, var(--glass-border));
+  transform: translateY(-2px);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.6) inset,
+    0 18px 48px -16px color-mix(in oklab, var(--path-accent) 24%, rgba(15, 23, 42, 0.22));
+}
+
+.lf-page .lf-pc-topic-card.lf-pc-topic-card--featured {
+  border: 1px solid color-mix(in oklab, var(--path-accent) 50%, var(--glass-border));
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.55) inset,
+    0 18px 48px -16px color-mix(in oklab, var(--path-accent) 28%, rgba(15, 23, 42, 0.22));
+  grid-column: 1 / -1;
+  flex-direction: row;
+  align-items: stretch;
+}
+@media (max-width: 900px) {
+  .lf-page .lf-pc-topic-card.lf-pc-topic-card--featured {
+    flex-direction: column;
+  }
+}
+
+.lf-page .lf-pc-topic-card.lf-pc-topic-card--featured .lf-pc-topic-left {
+  flex: 1.3;
+  padding-right: var(--s-4);
+  border-right: 0.5px solid var(--line-2);
+  display: flex;
+  flex-direction: column;
+}
+@media (max-width: 900px) {
+  .lf-page .lf-pc-topic-card.lf-pc-topic-card--featured .lf-pc-topic-left {
+    border-right: none;
+    padding-right: 0;
+    border-bottom: 0.5px solid var(--line-2);
+    padding-bottom: var(--s-3);
+  }
+}
+
+.lf-page .lf-pc-topic-card.lf-pc-topic-card--featured .lf-pc-topic-right {
+  flex: 1;
+  padding-left: var(--s-4);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+@media (max-width: 900px) {
+  .lf-page .lf-pc-topic-card.lf-pc-topic-card--featured .lf-pc-topic-right {
+    padding-left: 0;
+    padding-top: var(--s-3);
+  }
+}
+
+.lf-page .lf-pc-topic-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+}
+
+.lf-page .lf-pc-topic-badge {
+  font-family: var(--lf-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  padding: 3px 9px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.lf-page .lf-pc-topic-badge::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+.lf-page .lf-pc-topic-badge.lf-pc-topic-badge--live {
+  color: var(--path-accent-dark);
+  background: var(--path-accent-soft);
+  border: 0.5px solid var(--path-accent);
+}
+.lf-page .lf-pc-topic-badge.lf-pc-topic-badge--live::before {
+  background: var(--path-accent);
+  animation: lf-pc-pulse-soft 1.8s ease-in-out infinite;
+}
+.lf-page .lf-pc-topic-badge.lf-pc-topic-badge--authoring {
+  color: var(--ink-4);
+  border: 0.5px dashed var(--ink-3);
+  background: transparent;
+}
+.lf-page .lf-pc-topic-badge.lf-pc-topic-badge--authoring::before {
+  background: var(--ink-3);
+}
+.lf-page .lf-pc-topic-badge.lf-pc-topic-badge--coming {
+  color: var(--ink-4);
+  border: 0.5px solid var(--ink-3);
+  background: transparent;
+}
+.lf-page .lf-pc-topic-badge.lf-pc-topic-badge--coming::before {
+  background: var(--ink-3);
+}
+
+.lf-page .lf-pc-topic-meta-inline {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.06em;
+}
+
+.lf-page .lf-pc-topic-title {
+  font-family: var(--lf-display);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.008em;
+  line-height: 1.2;
+  color: var(--ink);
+  margin: var(--s-3) 0;
+}
+.lf-page .lf-pc-topic-title em {
+  font-style: italic;
+  color: var(--path-accent);
+  font-weight: 500;
+}
+
+.lf-page .lf-pc-topic-sub {
+  font-family: var(--lf-body);
+  font-size: 13.5px;
+  color: var(--ink-4);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.lf-page .lf-pc-topic-artifacts-label {
+  font-family: var(--lf-mono);
+  font-size: 9.5px;
+  color: var(--ink-4);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+.lf-page .lf-pc-topic-artifacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: auto;
+}
+.lf-page .lf-pc-topic-artifact {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  color: var(--path-accent-dark);
+  letter-spacing: 0.06em;
+  background: color-mix(in oklab, var(--path-accent) 8%, transparent);
+  padding: 4px 11px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--path-accent) 22%, var(--glass-border));
+}
+
+.lf-page .lf-pc-topic-cta-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: auto;
+}
+.lf-page .lf-pc-topic-cta {
+  padding: 11px 22px;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid color-mix(in oklab, var(--ink) 70%, white 10%);
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: var(--lf-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.006em;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 14px 36px -10px color-mix(in oklab, var(--ink) 50%, transparent);
+  transition: transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 240ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              background 240ms ease;
+}
+.lf-page .lf-pc-topic-card:hover .lf-pc-topic-cta {
+  background: color-mix(in oklab, var(--ink) 92%, black);
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 22px 48px -12px color-mix(in oklab, var(--ink) 70%, transparent);
+}
+.lf-page .lf-pc-topic-cta svg {
+  width: 13px;
+  height: 13px;
+}
+.lf-page .lf-pc-topic-cta-meta {
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.04em;
+}
+
+.lf-page .lf-pc-topic-notify {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  padding: 10px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  transition: transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              border-color 240ms ease,
+              background 240ms ease,
+              color 240ms ease;
+}
+.lf-page .lf-pc-topic-notify:hover {
+  background: var(--glass-bg-strong);
+  border-color: color-mix(in oklab, var(--path-accent) 32%, var(--glass-border));
+  color: var(--ink);
+  transform: translateY(-1px);
+}
+
+/* ── Methodology rail ──────────────────────────────────────────── */
+.lf-page .lf-pc-method-block {
+  padding: var(--s-5);
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 12px 40px -16px rgba(15, 23, 42, 0.18);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-4);
+}
+@media (max-width: 700px) {
+  .lf-page .lf-pc-method-block { grid-template-columns: 1fr; }
+}
+
+.lf-page .lf-pc-method-block-left {
+  padding-right: var(--s-3);
+  border-right: 0.5px solid var(--line-2);
+}
+@media (max-width: 700px) {
+  .lf-page .lf-pc-method-block-left {
+    border-right: none;
+    border-bottom: 0.5px solid var(--line-2);
+    padding-right: 0;
+    padding-bottom: var(--s-3);
+  }
+}
+.lf-page .lf-pc-method-block-title {
+  font-family: var(--lf-display);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.008em;
+  line-height: 1.2;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+.lf-page .lf-pc-method-block-desc {
+  font-family: var(--lf-body);
+  font-size: 13.5px;
+  color: var(--ink-4);
+  line-height: 1.55;
+  margin: 0;
+}
+.lf-page .lf-pc-method-block-letters {
+  display: flex;
+  gap: 10px;
+  margin-top: var(--s-3);
+  flex-wrap: wrap;
+}
+.lf-page .lf-pc-method-letter {
+  font-family: var(--lf-display);
+  font-size: 24px;
+  font-style: italic;
+  color: var(--ink);
+  line-height: 1;
+  padding-right: 10px;
+  border-right: 0.5px solid var(--line-2);
+}
+.lf-page .lf-pc-method-letter:last-child {
+  border-right: none;
+}
+
+/* ── Stamp footer ──────────────────────────────────────────────── */
+.lf-page .lf-pc-stamp {
+  padding: var(--s-4) 0 var(--s-6);
+  border-top: 0.5px solid var(--line-2);
+  max-width: 1440px;
+  margin: 0 auto;
+  padding-left: var(--s-5);
+  padding-right: var(--s-5);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.04em;
+}
+@media (max-width: 700px) {
+  .lf-page .lf-pc-stamp {
+    padding-left: var(--s-3);
+    padding-right: var(--s-3);
+  }
+}
+.lf-page .lf-pc-stamp strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+.lf-page .lf-pc-stamp-right {
+  display: flex;
+  gap: var(--s-3);
+}

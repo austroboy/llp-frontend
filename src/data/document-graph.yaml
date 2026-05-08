@@ -1,0 +1,223 @@
+# LLP Universe — Document Relationship Graph
+# Used for retrieval routing and document prioritization.
+# NOT embedded in vector store — loaded as structured data at query time.
+#
+# When a query mentions a section number, the graph tells the system:
+# 1. Which document family to search first (Act vs Rules)
+# 2. Which amendments modified that section
+# 3. Priority order for results
+
+# ── Document Families ─────────────────────────────────────────────
+
+families:
+  labour_act:
+    name: "Bangladesh Labour Act Family"
+    description: "The parent Labour Act 2006 and all its amendments"
+    parent: "DOC-010"  # Labour Act 2006 (in DB as DOC-010)
+    registry_id: "DOC-001"  # In universe-registry.json
+    amendments:
+      - "DOC-002"  # 2009 Amendment
+      - "DOC-003"  # 2010 Amendment
+      - "DOC-004"  # 2013 Amendment
+      - "DOC-005"  # 2018 Amendment
+      - "DOC-006"  # 2025 Ordinance
+    # When searching for Act sections, prioritize in this order:
+    search_priority: ["DOC-010", "DOC-006", "DOC-004", "DOC-005", "DOC-002", "DOC-003"]
+    section_range: "1-355"  # Act has sections 1-355
+    
+  labour_rules:
+    name: "Bangladesh Labour Rules Family"
+    description: "The Labour Rules 2015 implementing the Act, and amendments"
+    parent: "DOC-007"  # Labour Rules 2015
+    amendments:
+      - "DOC-008"  # 2022 Amendment
+    search_priority: ["DOC-007", "DOC-008"]
+    section_range: "1-350"  # Rules have rules 1-350
+    # Rules sections are prefixed "Rule" not "Section" in the original
+    # but in our chunks they're stored as "Section X"
+    
+  standards:
+    name: "International Standards"
+    parent: "DOC-009"  # SA8000
+    amendments: []
+    search_priority: ["DOC-009"]
+
+# ── Document Details ──────────────────────────────────────────────
+
+documents:
+  DOC-010:
+    title: "The Bangladesh Labour Act, 2006"
+    title_bn: "বাংলাদেশ শ্রম আইন, ২০০৬"
+    type: "act"
+    family: "labour_act"
+    is_parent: true
+    effective_date: "2006-10-11"
+    total_sections: 355
+    total_chapters: 21
+    key_topics:
+      - termination
+      - wages
+      - leave
+      - maternity
+      - provident_fund
+      - trade_unions
+      - safety
+      - working_hours
+      - compensation
+      - disputes
+      - apprenticeship
+      - child_labour
+      - retrenchment
+      - layoff
+      - retirement
+    
+  DOC-002:
+    title: "Bangladesh Labour (Amendment) Act, 2009"
+    type: "amendment"
+    family: "labour_act"
+    amends: "DOC-010"
+    effective_date: "2009-11-12"
+    key_changes:
+      - "Trade union registration for port authorities"
+      - "Dock Workers Management Boards"
+      - "Welfare fund provisions"
+    sections_modified: []  # Team to fill
+    
+  DOC-003:
+    title: "Bangladesh Labour (Amendment) Act, 2010"
+    type: "amendment"
+    family: "labour_act"
+    amends: "DOC-010"
+    effective_date: "2010-07-08"
+    key_changes:
+      - "Section 28: retirement age changed from 57 to 60"
+    sections_modified:
+      - section: "28"
+        change: "modified"
+        summary: "Retirement age increased from 57 to 60 years"
+
+  DOC-004:
+    title: "Bangladesh Labour (Amendment) Act, 2013"
+    type: "amendment"
+    family: "labour_act"
+    amends: "DOC-010"
+    effective_date: "2013-07-22"
+    key_changes:
+      - "Major amendment — 90+ sections modified"
+      - "Maternity leave extended to 16 weeks"
+      - "Trade union formation requirements updated"
+      - "Workplace safety provisions strengthened"
+    sections_modified: []  # Large — team to fill
+
+  DOC-005:
+    title: "Bangladesh Labour (Amendment) Act, 2018"
+    type: "amendment"
+    family: "labour_act"
+    amends: "DOC-010"
+    effective_date: "2018-11-13"
+    key_changes:
+      - "EPZ worker provisions updated"
+      - "Trade union rights in EPZ"
+    sections_modified: []  # Team to fill
+
+  DOC-006:
+    title: "Bangladesh Labour (Amendment) Ordinance, 2025"
+    type: "amendment"
+    family: "labour_act"
+    amends: "DOC-010"
+    effective_date: "2025-01-01"
+    key_changes:
+      - "Workplace violence and harassment policy required"
+      - "Provident Fund threshold changed to 100 workers"
+      - "Digital wage payment provisions"
+      - "OSH committee requirements updated"
+    sections_modified:
+      - section: "264"
+        change: "modified"
+        summary: "PF now mandatory for establishments with 100+ permanent workers"
+
+  DOC-007:
+    title: "Bangladesh Labour Rules, 2015"
+    type: "rules"
+    family: "labour_rules"
+    implements: "DOC-010"
+    effective_date: "2015-09-15"
+    total_rules: 350
+    key_topics:
+      - forms
+      - procedures
+      - apprenticeship_policy
+      - safety_standards
+      - welfare_measures
+      - factory_licensing
+    # NOTE: Rules have numbered sections that overlap with Act sections.
+    # The search system must differentiate "Section 20 of the Act" from "Rule 20 of the Rules"
+
+  DOC-008:
+    title: "Bangladesh Labour Rules (Amendment), 2022"
+    type: "rules_amendment"
+    family: "labour_rules"
+    amends: "DOC-007"
+    effective_date: "2022-01-01"
+    sections_modified: []  # Team to fill
+
+  DOC-009:
+    title: "Social Accountability 8000 International Standard"
+    type: "standard"
+    family: "standards"
+    key_topics:
+      - child_labour
+      - forced_labour
+      - health_safety
+      - freedom_of_association
+      - discrimination
+      - working_hours
+      - remuneration
+
+# ── Retrieval Routing Rules ───────────────────────────────────────
+
+routing_rules:
+  # When query mentions "Act" or is about core labour law topics:
+  # → Search labour_act family first, then rules
+  act_priority_keywords:
+    - "act"
+    - "আইন"
+    - "terminate"
+    - "dismissal"
+    - "retrenchment"
+    - "ছাঁটাই"
+    - "provident fund"
+    - "maternity"
+    - "মাতৃত্ব"
+    - "wages"
+    - "মজুরী"
+    - "leave"
+    - "ছুটি"
+    - "working hours"
+    - "কর্মঘন্টা"
+    - "trade union"
+    - "labour court"
+    - "শ্রম আদালত"
+    - "compensation"
+    - "ক্ষতিপূরণ"
+    - "retirement"
+    - "অবসর"
+    - "minimum age"
+    - "safety"
+
+  # When query mentions "Rules" or is about procedural/form topics:
+  # → Search labour_rules family first, then act
+  rules_priority_keywords:
+    - "rules"
+    - "বিধি"
+    - "form"
+    - "ফরম"
+    - "procedure"
+    - "license"
+    - "registration"
+    - "inspection"
+    - "schedule"
+    - "তফসিল"
+
+  # Default: search Act family first (most queries are about the Act)
+  default_family: "labour_act"

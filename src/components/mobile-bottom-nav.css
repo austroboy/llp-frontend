@@ -1,0 +1,191 @@
+/* ──────────────────────────────────────────────────────────────────
+ * mobile-bottom-nav.css — coffee/glass docker for dashboards on
+ * narrow viewports. Tokens resolve from the nearest `.lf-page`
+ * ancestor (light/dark theme via data-theme).
+ * ────────────────────────────────────────────────────────────────── */
+
+.lf-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: rgba(252, 250, 245, 0.91);
+  border-top: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: 0 -8px 28px -16px rgba(20, 20, 19, 0.18);
+}
+
+.lf-page[data-theme="dark"] .lf-bottom-nav {
+  background: rgba(30, 26, 20, 0.91);
+  border-top-color: rgba(237, 228, 210, 0.10);
+  box-shadow: 0 -10px 32px -16px rgba(0, 0, 0, 0.55);
+}
+
+.lf-bottom-nav-row {
+  display: flex;
+  align-items: stretch;
+  height: 64px;
+  padding: 0 6px;
+  gap: 0;
+}
+
+.lf-bottom-nav-item {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 4px 2px;
+  background: transparent;
+  border: 0;
+  border-radius: 12px;
+  color: var(--ink-3);
+  font-family: var(--lf-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.lf-bottom-nav-item:hover,
+.lf-bottom-nav-item:active {
+  color: var(--ink);
+  background: var(--glass-bg);
+}
+
+.lf-bottom-nav-item[data-active="true"] {
+  color: var(--accent-blue);
+  background: var(--accent-blue-ghost);
+}
+
+.lf-page[data-theme="dark"] .lf-bottom-nav-item[data-active="true"] {
+  color: #e8a472;
+  background: rgba(110, 74, 42, 0.32);
+}
+
+.lf-bottom-nav-item-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: transparent;
+  margin-bottom: 1px;
+  transition: background 160ms ease;
+}
+
+.lf-bottom-nav-item[data-active="true"] .lf-bottom-nav-item-dot {
+  background: currentColor;
+}
+
+.lf-bottom-nav-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.lf-bottom-nav-label {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+/* ── More sheet ────────────────────────────────────────────────── */
+.lf-bottom-more-sheet {
+  background: var(--paper) !important;
+  color: var(--ink) !important;
+  border-top: 1px solid var(--glass-border) !important;
+  border-radius: 24px 24px 0 0 !important;
+  padding: 20px 16px calc(20px + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+.lf-page[data-theme="dark"] .lf-bottom-more-sheet {
+  background: linear-gradient(180deg, #2a241b 0%, #1e1a14 100%) !important;
+  border-top-color: rgba(237, 228, 210, 0.10) !important;
+}
+
+.lf-bottom-more-title {
+  font-family: var(--lf-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 14px;
+}
+
+.lf-bottom-more-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+@media (min-width: 480px) {
+  .lf-bottom-more-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.lf-bottom-more-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 10px;
+  border-radius: 14px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--ink-2);
+  font-family: var(--lf-body);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+  min-height: 80px;
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+.lf-bottom-more-tile:hover {
+  background: var(--glass-bg-strong);
+  color: var(--ink);
+  border-color: color-mix(in oklab, var(--accent-blue) 28%, var(--glass-border));
+}
+
+.lf-bottom-more-tile[data-active="true"] {
+  background: var(--accent-blue-ghost);
+  color: var(--accent-blue);
+  border-color: color-mix(in oklab, var(--accent-blue) 36%, transparent);
+  font-weight: 600;
+}
+
+.lf-page[data-theme="dark"] .lf-bottom-more-tile[data-active="true"] {
+  background: rgba(110, 74, 42, 0.32);
+  color: #e8a472;
+  border-color: rgba(110, 74, 42, 0.55);
+}
+
+.lf-bottom-more-tile-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.lf-bottom-more-tile-label {
+  display: block;
+  line-height: 1.25;
+  word-break: break-word;
+}
+
+/* Hide the docker on lg+ where dashboard sidebars take over */
+@media (min-width: 1024px) {
+  .lf-bottom-nav { display: none; }
+}
