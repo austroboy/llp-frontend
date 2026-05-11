@@ -45,6 +45,8 @@ const cspDirectives = `
   frame-ancestors 'none';
   form-action 'self';
   base-uri 'self';
+  worker-src 'self' blob:;
+  child-src 'self' blob:;
   object-src 'none';
 `.replace(/\s{2,}/g, ' ').trim();
 
