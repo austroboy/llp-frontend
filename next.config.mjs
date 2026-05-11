@@ -24,12 +24,12 @@ const cspDirectives = `
       https://challenges.cloudflare.com
       https://*.posthog.com
       https://us-assets.i.posthog.com;
-    script-src-elem 'self' 'unsafe-inline' blob:
-      https://*.clerk.accounts.dev
-      https://*.clerk.com
-      https://challenges.cloudflare.com
-      https://*.posthog.com
-      https://us-assets.i.posthog.com;
+    script-src-elem 'self' 'unsafe-inline' 'unsafe-eval' blob:
+    https://*.clerk.accounts.dev
+    https://*.clerk.com
+    https://challenges.cloudflare.com
+    https://*.posthog.com
+    https://us-assets.i.posthog.com;
   style-src 'self' 'unsafe-inline' https://*.clerk.com;
   img-src 'self' data: blob: https:;
   font-src 'self' data: https://*.clerk.com;
