@@ -2155,8 +2155,7 @@ export async function POST(req: NextRequest) {
             tier,
             dailyRemaining: Math.max(0, fallbackDailyRemaining),
             language: chatLanguage,
-          }) + "
-"));
+          }) + "\n"));
           try {
             const anthropicRes = await fetch("https://api.anthropic.com/v1/messages", {
               method: "POST",
@@ -2176,10 +2175,8 @@ export async function POST(req: NextRequest) {
             if (!anthropicRes.ok || !anthropicRes.body) {
               const errText = await anthropicRes.text().catch(() => "");
               console.error("[chat] Anthropic fallback error:", anthropicRes.status, errText.slice(0, 200));
-              controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "error", message: "AI service temporarily unavailable." }) + "
-"));
-              controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "done" }) + "
-"));
+              controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "error", message: "AI service temporarily unavailable." }) + "\n"));
+              controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "done" }) + "\n"));
               controller.close();
               return;
             }
@@ -2191,8 +2188,7 @@ export async function POST(req: NextRequest) {
               const { done, value } = await reader.read();
               if (done) break;
               buffer += decoder.decode(value, { stream: true });
-              const lines = buffer.split("
-");
+              const lines = buffer.split("");
               buffer = lines.pop() ?? "";
               for (const line of lines) {
                 if (line.startsWith("data: ")) {
@@ -2203,8 +2199,7 @@ export async function POST(req: NextRequest) {
                     if (parsed.type === "content_block_delta" && parsed.delta?.type === "text_delta") {
                       const chunk = parsed.delta.text;
                       fullText += chunk;
-                      controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "text", content: chunk }) + "
-"));
+                      controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "text", content: chunk }) + "\n"));
                     }
                   } catch { /* skip malformed */ }
                 }
@@ -2212,14 +2207,11 @@ export async function POST(req: NextRequest) {
             }
             const citations = extractCitations(fullText);
             if (citations.length > 0) {
-              controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "meta_update", citations }) + "
-"));
+              controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "meta_update", citations }) + "\n"));
             }
             const title = message.length > 60 ? message.slice(0, 57) + "..." : message;
-            controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "title_update", conversation_id: fallbackConvId, title }) + "
-"));
-            controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "done" }) + "
-"));
+            controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "title_update", conversation_id: fallbackConvId, title }) + "\n"));
+            controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "done" }) + "\n"));
             // Persist conversation
             const sb = createServerClient();
             sb.from("conversations").upsert({ id: fallbackConvId, user_id: userId, title, language: chatLanguage, updated_at: new Date().toISOString() }, { onConflict: "id" }).then(null, () => {});
@@ -2229,10 +2221,8 @@ export async function POST(req: NextRequest) {
             ]).then(null, () => {});
           } catch (err) {
             console.error("[chat] Anthropic fallback stream error:", err);
-            controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "error", message: "AI service error." }) + "
-"));
-            controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "done" }) + "
-"));
+            controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "error", message: "AI service error." }) + "\n"));
+            controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "done" }) + "\n"));
           }
           controller.close();
         },
