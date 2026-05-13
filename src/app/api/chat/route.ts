@@ -599,41 +599,88 @@ async function callOrchestratorContinuation(ctx: ContinuationContext): Promise<R
       // real-mode, tag the summary so the dev can distinguish the
       // orchestrator-side path from the followup-delegate path.
       if (mockMode) {
-        const startedAt = new Date().toISOString();
-        const heuristicSection = heuristicFires
-          ? sectionFromCitation(priorAssistantTurn?.citations?.[0]) ?? defaultSection
-          : defaultSection;
-        const mockBase: DelegationEventBase = {
-          event: "delegation_status",
-          trace_id: traceId,
-          agent: "llp-chat-verify",
-          intent: "verify_section_citation",
-          section: heuristicSection,
-          started_at: startedAt,
-        };
-        controller.enqueue(captureAndEncode(delegationPendingEvent(mockBase)));
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        const finishedAt = new Date().toISOString();
-        const mockSummary = heuristicFires
-          ? "(mock heuristic) verify auto-triggered by orchestrator — scripted agree."
-          : "(mock) verification complete — orchestrator unavailable, scripted response.";
-        controller.enqueue(captureAndEncode(delegationCompleteEvent(
-          mockBase,
-          finishedAt,
-          "agree",
-          mockSummary,
-        )));
-        const mockAnswer =
-          ctx.chatLanguage === "bn"
-            ? "(mock) অর্কেস্ট্রেটর অনুপলব্ধ — ডেভ মোডে স্ক্রিপ্টেড প্রতিক্রিয়া।"
-            : "(mock) orchestrator unavailable — scripted continuation response for dev.";
-        controller.enqueue(encoder.encode(JSON.stringify({ type: "text", content: mockAnswer }) + "\n"));
-        controller.enqueue(encoder.encode(JSON.stringify({
-          type: "title_update",
-          conversation_id: ctx.convId,
-          title: ctx.userMessage.slice(0, 57),
-        }) + "\n"));
-        controller.enqueue(encoder.encode(JSON.stringify({ type: "done" }) + "\n"));
+        // ── Anthropic direct fallback for turn-2+ (no GOCLAW configured) ──
+        console.log("[chat] continuation · GOCLAW not set — falling back to Anthropic direct");
+        const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+        if (!ANTHROPIC_API_KEY) {
+          controller.enqueue(encoder.encode(JSON.stringify({ type: "error", message: "AI service not configured." }) + "\n"));
+          controller.enqueue(encoder.encode(JSON.stringify({ type: "done" }) + "\n"));
+          controller.close();
+          return;
+        }
+        try {
+          const contMessages = [
+            ...((ctx.resolvedHistory || []).slice(-8).map((m: { role: string; content: string }) => ({
+              role: m.role as "user" | "assistant",
+              content: typeof m.content === "string" ? m.content : "",
+            }))),
+            { role: "user" as const, content: ctx.userMessage },
+          ];
+          const anthropicContinuationRes = await fetch("https://api.anthropic.com/v1/messages", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-api-key": ANTHROPIC_API_KEY,
+              "anthropic-version": "2023-06-01",
+            },
+            body: JSON.stringify({
+              model: "claude-sonnet-4-20250514",
+              max_tokens: 4096,
+              system: buildSystemPrompt(ctx.tier, { intents: ["FACTUAL"], primary_intent: "FACTUAL", domain: "other", cross_domains: [], urgency: "general", language: ctx.language === "bn" ? "bangla" : "english", requires_file: false, perspective: "neutral" }, []),
+              messages: contMessages,
+              stream: true,
+            }),
+          });
+          if (!anthropicContinuationRes.ok || !anthropicContinuationRes.body) {
+            controller.enqueue(encoder.encode(JSON.stringify({ type: "error", message: "AI service temporarily unavailable." }) + "\n"));
+            controller.enqueue(encoder.encode(JSON.stringify({ type: "done" }) + "\n"));
+            controller.close();
+            return;
+          }
+          const contReader = anthropicContinuationRes.body.getReader();
+          const contDecoder = new TextDecoder();
+          let contBuffer = "";
+          let contFullText = "";
+          while (true) {
+            const { done, value } = await contReader.read();
+            if (done) break;
+            contBuffer += contDecoder.decode(value, { stream: true });
+            const lines = contBuffer.split("\n");
+            contBuffer = lines.pop() ?? "";
+            for (const line of lines) {
+              if (line.startsWith("data: ")) {
+                const data = line.slice(6).trim();
+                if (data === "[DONE]") continue;
+                try {
+                  const parsed = JSON.parse(data);
+                  if (parsed.type === "content_block_delta" && parsed.delta?.type === "text_delta") {
+                    const chunk = parsed.delta.text;
+                    contFullText += chunk;
+                    controller.enqueue(encoder.encode(JSON.stringify({ type: "text", content: chunk }) + "\n"));
+                  }
+                } catch { /* skip malformed */ }
+              }
+            }
+          }
+          const contCitations = extractCitations(contFullText);
+          if (contCitations.length > 0) {
+            controller.enqueue(encoder.encode(JSON.stringify({ type: "meta_update", citations: contCitations }) + "\n"));
+          }
+          const title = ctx.userMessage.length > 60 ? ctx.userMessage.slice(0, 57) + "..." : ctx.userMessage;
+          controller.enqueue(encoder.encode(JSON.stringify({ type: "title_update", conversation_id: ctx.convId, title }) + "\n"));
+          controller.enqueue(encoder.encode(JSON.stringify({ type: "done" }) + "\n"));
+          // Persist
+          const sb = createServerClient();
+          sb.from("conversations").upsert({ id: ctx.convId, user_id: ctx.userId, title, language: ctx.chatLanguage, updated_at: new Date().toISOString() }, { onConflict: "id" }).then(null, () => {});
+          sb.from("messages").insert([
+            { conversation_id: ctx.convId, role: "user", content: ctx.userMessage, language: ctx.chatLanguage },
+            { conversation_id: ctx.convId, role: "assistant", content: contFullText, language: ctx.chatLanguage, citations: contCitations },
+          ]).then(null, () => {});
+        } catch (err) {
+          console.error("[chat] Anthropic continuation fallback error:", err);
+          controller.enqueue(encoder.encode(JSON.stringify({ type: "error", message: "AI service error." }) + "\n"));
+          controller.enqueue(encoder.encode(JSON.stringify({ type: "done" }) + "\n"));
+        }
         controller.close();
         return;
       }
@@ -1096,10 +1143,9 @@ async function callOrchestratorDeepSearch(
   const DEEP_PROXY_URL = process.env.CHAT_PROXY_URL;
   const DEEP_PROXY_KEY = process.env.CHAT_PROXY_API_KEY || "";
   if (!DEEP_PROXY_URL) {
-    return new Response(JSON.stringify({ error: "CHAT_PROXY_URL not configured" }), {
-      status: 503,
-      headers: { "Content-Type": "application/json" },
-    });
+    // Deep Search fallback: route through standard Anthropic continuation
+    console.log("[chat] deep-search · CHAT_PROXY_URL not set — falling back to standard continuation");
+    return callOrchestratorContinuation(ctx);
   }
   const DEEP_VERIFY_CONCURRENCY = 3;
   // 200s budget: empirical Opus runs over corpus reads land at 60-120s
@@ -2085,10 +2131,113 @@ export async function POST(req: NextRequest) {
     const CHAT_PROXY_URL = process.env.CHAT_PROXY_URL;
     const CHAT_PROXY_API_KEY = process.env.CHAT_PROXY_API_KEY || "";
     if (!CHAT_PROXY_URL) {
-      return NextResponse.json(
-        { error: "CHAT_PROXY_URL not configured" },
-        { status: 503 },
-      );
+      // ── Anthropic direct fallback (no chat-proxy configured) ──
+      console.log(`[chat] turn=1 · CHAT_PROXY_URL not set — falling back to Anthropic direct`);
+      const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+      if (!ANTHROPIC_API_KEY) {
+        return NextResponse.json({ error: "AI service not configured." }, { status: 503 });
+      }
+      const fallbackEncoder = new TextEncoder();
+      const fallbackConvId = conversation_id || crypto.randomUUID();
+      const fallbackDailyRemaining = requestLimitCheck.limit - dailyUsage.requestCount - 1;
+      const fallbackMessages = [
+        ...((resolvedHistory || []).slice(-8).map((m: { role: string; content: string }) => ({
+          role: m.role as "user" | "assistant",
+          content: typeof m.content === "string" ? m.content : "",
+        }))),
+        { role: "user" as const, content: message },
+      ];
+      const fallbackStream = new ReadableStream({
+        async start(controller) {
+          controller.enqueue(fallbackEncoder.encode(JSON.stringify({
+            type: "meta",
+            conversation_id: fallbackConvId,
+            tier,
+            dailyRemaining: Math.max(0, fallbackDailyRemaining),
+            language: chatLanguage,
+          }) + "
+"));
+          try {
+            const anthropicRes = await fetch("https://api.anthropic.com/v1/messages", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "x-api-key": ANTHROPIC_API_KEY,
+                "anthropic-version": "2023-06-01",
+              },
+              body: JSON.stringify({
+                model: "claude-sonnet-4-20250514",
+                max_tokens: 4096,
+                system: systemPrompt,
+                messages: fallbackMessages,
+                stream: true,
+              }),
+            });
+            if (!anthropicRes.ok || !anthropicRes.body) {
+              const errText = await anthropicRes.text().catch(() => "");
+              console.error("[chat] Anthropic fallback error:", anthropicRes.status, errText.slice(0, 200));
+              controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "error", message: "AI service temporarily unavailable." }) + "
+"));
+              controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "done" }) + "
+"));
+              controller.close();
+              return;
+            }
+            const reader = anthropicRes.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = "";
+            let fullText = "";
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              buffer += decoder.decode(value, { stream: true });
+              const lines = buffer.split("
+");
+              buffer = lines.pop() ?? "";
+              for (const line of lines) {
+                if (line.startsWith("data: ")) {
+                  const data = line.slice(6).trim();
+                  if (data === "[DONE]") continue;
+                  try {
+                    const parsed = JSON.parse(data);
+                    if (parsed.type === "content_block_delta" && parsed.delta?.type === "text_delta") {
+                      const chunk = parsed.delta.text;
+                      fullText += chunk;
+                      controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "text", content: chunk }) + "
+"));
+                    }
+                  } catch { /* skip malformed */ }
+                }
+              }
+            }
+            const citations = extractCitations(fullText);
+            if (citations.length > 0) {
+              controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "meta_update", citations }) + "
+"));
+            }
+            const title = message.length > 60 ? message.slice(0, 57) + "..." : message;
+            controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "title_update", conversation_id: fallbackConvId, title }) + "
+"));
+            controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "done" }) + "
+"));
+            // Persist conversation
+            const sb = createServerClient();
+            sb.from("conversations").upsert({ id: fallbackConvId, user_id: userId, title, language: chatLanguage, updated_at: new Date().toISOString() }, { onConflict: "id" }).then(null, () => {});
+            sb.from("messages").insert([
+              { conversation_id: fallbackConvId, role: "user", content: message, language: chatLanguage },
+              { conversation_id: fallbackConvId, role: "assistant", content: fullText, language: chatLanguage, citations },
+            ]).then(null, () => {});
+          } catch (err) {
+            console.error("[chat] Anthropic fallback stream error:", err);
+            controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "error", message: "AI service error." }) + "
+"));
+            controller.enqueue(fallbackEncoder.encode(JSON.stringify({ type: "done" }) + "
+"));
+          }
+          controller.close();
+        },
+      });
+      return new Response(fallbackStream, { headers: { "Content-Type": "application/x-ndjson", "Transfer-Encoding": "chunked", "Cache-Control": "no-cache" } });
     }
     const proxyHeaders: Record<string, string> = { "Content-Type": "application/json" };
     if (CHAT_PROXY_API_KEY) proxyHeaders["Authorization"] = `Bearer ${CHAT_PROXY_API_KEY}`;
