@@ -16,45 +16,22 @@
 // Newlines inside a CSP header value are invalid per spec (RFC 7230 section
 // 3.2.4). The template literal below is collapsed to single spaces before use.
 // ----------------------------------------------------------------------------
-const cspDirectives = `
-  default-src 'self';
-  script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:
-      https://*.clerk.accounts.dev
-      https://*.clerk.com
-      https://challenges.cloudflare.com
-      https://*.posthog.com
-      https://us-assets.i.posthog.com;
-    script-src-elem 'self' 'unsafe-inline' 'unsafe-eval' blob:
-    https://*.clerk.accounts.dev
-    https://*.clerk.com
-    https://challenges.cloudflare.com
-    https://*.posthog.com
-    https://us-assets.i.posthog.com;
-  style-src 'self' 'unsafe-inline' https://*.clerk.com;
-  img-src 'self' data: blob: https:;
-  font-src 'self' data: https://*.clerk.com;
-  connect-src 'self'
-      https://*.clerk.accounts.dev
-      https://*.clerk.com
-      https://*.convex.cloud
-      wss://*.convex.cloud
-      https://*.posthog.com
-      https://us-assets.i.posthog.com
-      https://*.supabase.co
-      https://api.cloudflare.com;
-  frame-src 'self' blob:
-    https://*.clerk.com
-    https://challenges.cloudflare.com
-    https://www.youtube.com
-    https://www.youtube-nocookie.com
-    https://player.vimeo.com;
-  frame-ancestors 'none';
-  form-action 'self';
-  base-uri 'self';
-  worker-src 'self' blob:;
-  child-src 'self' blob:;
-  object-src 'none';
-`.replace(/\s{2,}/g, ' ').trim();
+const cspDirectives = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com https://*.posthog.com https://us-assets.i.posthog.com",
+  "script-src-elem 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com https://*.posthog.com https://us-assets.i.posthog.com",
+  "style-src 'self' 'unsafe-inline' https://*.clerk.com",
+  "img-src 'self' data: blob: https:",
+  "font-src 'self' data: https://*.clerk.com",
+  "connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://*.convex.cloud wss://*.convex.cloud https://*.posthog.com https://us-assets.i.posthog.com https://*.supabase.co https://api.cloudflare.com https://api.anthropic.com",
+  "frame-src 'self' blob: https://*.clerk.com https://challenges.cloudflare.com https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com",
+  "frame-ancestors 'none'",
+  "form-action 'self'",
+  "base-uri 'self'",
+  "worker-src 'self' blob:",
+  "child-src 'self' blob:",
+  "object-src 'none'",
+].join("; ");
 
 const securityHeaders = [
   { key: "Content-Security-Policy", value: cspDirectives },
