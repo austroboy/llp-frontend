@@ -2188,9 +2188,8 @@ export async function POST(req: NextRequest) {
               const { done, value } = await reader.read();
               if (done) break;
               buffer += decoder.decode(value, { stream: true });
-              const lines = buffer.split("
-");
-              buffer = lines.pop() ?? "";
+              const lines = buffer.split("");
+               buffer = lines.pop() ?? "";
               for (const line of lines) {
                 if (line.startsWith("data: ")) {
                   const data = line.slice(6).trim();
