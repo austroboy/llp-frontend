@@ -163,7 +163,7 @@ export function AcademyContent() {
           <div className="lf-pc-topics">
             {/* Topic 1: PF (live) — featured 2-column */}
             <Link
-              href="/academy/path/pf"
+              href="/academy/pf"
               className="lf-pc-topic-card lf-pc-topic-card--featured"
             >
               <div className="lf-pc-topic-left">
