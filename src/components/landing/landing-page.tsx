@@ -712,7 +712,6 @@ export function LandingPage() {
                   <strong>Mehnaz Islam</strong> · Operations{" "}
                   <strong>Shumon Ahmed</strong> and{" "}
                   <strong>Muhib Hossain</strong> · Technology{" "}
-                  <strong>Rasel Miah</strong>
                 </p>
               </div>
             </div>

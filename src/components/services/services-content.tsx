@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
 import { useQuery } from "convex/react";
 import { useTheme } from "next-themes";
 import { motion, MotionConfig, type Variants } from "framer-motion";
@@ -26,140 +25,64 @@ const stagger: Variants = {
   show: { transition: { staggerChildren: 0.06, delayChildren: 0.04 } },
 };
 
-const heroStagger: Variants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.08, delayChildren: 0.08 } },
-};
-
 const inViewOnce = { once: true, margin: "-72px 0px" } as const;
-
-/* ──────────────────────────────────────────────────────────────────── */
-/*  Category config                                                     */
-/* ──────────────────────────────────────────────────────────────────── */
 
 const categoryConfig = {
   expatriate: {
-    roman: "I",
+    catNo: "I",
+    id: "expat",
+    deskLabel: "Expatriate Mobility",
+    descShort: "Visas, work permits, security clearance, expatriate tax.",
     kickerKey: "services.expatriate.kicker",
     titleKey: "services.expatriate.title",
     subtitleKey: "services.expatriate.subtitle",
-    deskLabel: "Desk of Expatriate Affairs",
-    tone: "rust" as const,
   },
   hr: {
-    roman: "II",
+    catNo: "III",
+    id: "hr",
+    deskLabel: "HR Ops & Compliance",
+    descShort: "Advisory, audits, benchmarking, custom scoping.",
     kickerKey: "services.hr.kicker",
     titleKey: "services.hr.title",
     subtitleKey: "services.hr.subtitle",
-    deskLabel: "Desk of HR & People",
-    tone: "green" as const,
   },
   licensing: {
-    roman: "III",
+    catNo: "IV",
+    id: "lic",
+    deskLabel: "Licensing & Registrations",
+    descShort: "Trade, factory, fire, environmental, RJSC, VAT.",
     kickerKey: "services.licensing.kicker",
     titleKey: "services.licensing.title",
     subtitleKey: "services.licensing.subtitle",
-    deskLabel: "Desk of Licensing & Regulatory",
-    tone: "ink" as const,
   },
 } as const;
 
 type CategoryKey = keyof typeof categoryConfig;
-const CATEGORY_KEYS: readonly CategoryKey[] = [
-  "expatriate",
-  "hr",
-  "licensing",
-] as const;
-
-const ROMAN_INDEX = ["I", "II", "III", "IV"] as const;
-
-/* Operating standards (4 items, copy via i18n) */
-const STANDARDS = [
-  { idx: 0, titleKey: "services.standard.s1.title", descKey: "services.standard.s1.desc" },
-  { idx: 1, titleKey: "services.standard.s2.title", descKey: "services.standard.s2.desc" },
-  { idx: 2, titleKey: "services.standard.s3.title", descKey: "services.standard.s3.desc" },
-  { idx: 3, titleKey: "services.standard.s4.title", descKey: "services.standard.s4.desc" },
-] as const;
-
-/* Insight strip — 3 items (engagement velocity / operational standard / record retention) */
-type Insight = {
-  label: string;
-  stat: string;
-  unit: string;
-  desc: React.ReactNode;
-};
-
-const INSIGHTS: Insight[] = [
-  {
-    label: "Engagement velocity",
-    stat: "22",
-    unit: "services in catalog",
-    desc: (
-      <>
-        Covering expatriate visa work, HR and people solutions, licensing and
-        regulatory filings.{" "}
-        <strong>PF and gratuity services added Q2 2026.</strong>
-      </>
-    ),
-  },
-  {
-    label: "Operational standard",
-    stat: "1",
-    unit: "business day to scope",
-    desc: (
-      <>
-        From intake to written scope and fixed-fee quote.{" "}
-        <strong>Single named lead</strong> confirmed before work begins.
-      </>
-    ),
-  },
-  {
-    label: "Record retention",
-    stat: "7",
-    unit: "years archived",
-    desc: (
-      <>
-        Filings, correspondence, inspections, and meetings timestamped and
-        retrievable for <strong>seven years after closure</strong>.
-      </>
-    ),
-  },
-];
-
-/* ──────────────────────────────────────────────────────────────────── */
-/*  Main component                                                      */
-/* ──────────────────────────────────────────────────────────────────── */
+const CATEGORY_KEYS: readonly CategoryKey[] = ["expatriate", "hr", "licensing"] as const;
 
 export function ServicesContent() {
-  const { t, language } = useLanguage();
+  const { language } = useLanguage();
   const searchParams = useSearchParams();
   const { resolvedTheme } = useTheme();
 
-  // Avoid hydration flash — only commit theme attribute after mount.
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
-  const themeAttr = mounted
-    ? resolvedTheme === "dark"
-      ? "dark"
-      : "light"
-    : "light";
+  const themeAttr = mounted ? (resolvedTheme === "dark" ? "dark" : "light") : "light";
 
-  // Dialog state — preserved verbatim from original.
-  const [dialog, setDialog] = useState<{
-    open: boolean;
-    service: any;
-  }>({ open: false, service: null });
+  const [dialog, setDialog] = useState<{ open: boolean; service: any }>({
+    open: false,
+    service: null,
+  });
+  const [activeFilter, setActiveFilter] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // Convex query — preserved verbatim.
   const services = useQuery(api.serviceProducts.getActive, {});
 
-  // ?service= deep-link auto-open — preserved.
   const autoOpenHandled = useRef(false);
   useEffect(() => {
     if (autoOpenHandled.current) return;
     const requestCategory = searchParams.get("request") ?? searchParams.get("service");
     if (!requestCategory || !services?.length) return;
-
     const matchingService =
       services.find((s) => s._id === (requestCategory as any)) ||
       services.find((s) => s.category === requestCategory);
@@ -170,9 +93,8 @@ export function ServicesContent() {
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [searchParams, services]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [searchParams, services]);
 
-  // Hash scroll behaviour — preserved.
   useEffect(() => {
     if (typeof window === "undefined") return;
     const hash = window.location.hash;
@@ -184,289 +106,374 @@ export function ServicesContent() {
     return () => clearTimeout(timer);
   }, []);
 
+  const allServices = services ?? [];
+  const filteredServices = allServices.filter((s) => {
+    const matchesCat = activeFilter === "all" || s.category === activeFilter;
+    const q = searchQuery.toLowerCase();
+    const matchesSearch =
+      !q ||
+      s.title.toLowerCase().includes(q) ||
+      (s.description ?? "").toLowerCase().includes(q) ||
+      (s.workflow ?? "").toLowerCase().includes(q);
+    return matchesCat && matchesSearch;
+  });
+
+  const countByCat = (cat: CategoryKey) =>
+    allServices.filter((s) => s.category === cat).length;
+
+  const totalCount = allServices.length;
+
+  const jumpTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <MotionConfig reducedMotion="user">
-    <div className="lf-page" data-theme={themeAttr}>
-      <SiteTopNav />
+      <div className="lf-page" data-theme={themeAttr}>
+        <SiteTopNav />
 
-      <main>
-        <section className="lf-services-wrap">
-          {/* -- Hero -------------------------------------------- */}
-          <motion.header
-            className="lf-services-hero"
-            variants={heroStagger}
-            initial="hidden"
-            animate="show"
-          >
-            <motion.div variants={fadeUp} className="lf-kicker">
-              <span className="lf-kicker-mark">§ III</span>
-              {t("services.hero.kicker")}
-            </motion.div>
-            <motion.h1 variants={fadeUp} className="lf-services-title">
-              {t("services.hero.titleLead")}{" "}
-              <em>{t("services.hero.titleAccent")}</em>
-            </motion.h1>
-            <motion.p variants={fadeUp} className="lf-services-deck">
-              {t("services.hero.deck")}
-            </motion.p>
+        <main>
+          {/* ── HERO ─────────────────────────────────────────────── */}
+          <section className="sv2-hero">
+            <div className="sv2-wrap">
+              <motion.div variants={stagger} initial="hidden" animate="show">
+                <motion.div variants={fadeUp} className="sv2-hero-meta">
+                  <span className="sv2-eyebrow">Services Desk · v2026.05</span>
+                  <span className="sv2-chip">
+                    <span className="sv2-chip-dot" />
+                    <span className="sv2-chip-label">Engagements open · Q2 to Q3</span>
+                  </span>
+                </motion.div>
 
-            <motion.div variants={fadeUp} style={{ marginTop: "var(--s-4)" }}>
-              <a
-                href="mailto:support@laborlawpartner.com?subject=LLP%20Services%20Desk%20enquiry"
-                className="lf-services-cross-link"
-              >
-                {t("services.hero.ctaSecondary")} →
-              </a>
-            </motion.div>
-          </motion.header>
+                <div className="sv2-hero-grid">
+                  <motion.h1 variants={fadeUp} className="sv2-h-display">
+                    Bangladesh
+                    <br />
+                    <em>compliance,</em>
+                    <br />
+                    <span className="sv2-stroke">filed.</span> Cleanly.
+                  </motion.h1>
 
-          {/* -- 4 operating standards --------------------------- */}
-          <motion.div
-            className="lf-services-standards"
+                  <motion.aside variants={fadeUp} className="sv2-hero-aside">
+                    <p>
+                      A statutory services desk for Bangladesh. Expatriate mobility,
+                      licensing, HR compliance, and amendments. Lawyer led, platform
+                      tracked. The queries, validity windows, and committee cycles are
+                      handled inside the fee.
+                    </p>
+                    <dl className="sv2-meta-row">
+                      <div><dt>Jurisdiction</dt><dd>Bangladesh</dd></div>
+                      <div><dt>Delivery</dt><dd>Fixed scope · written</dd></div>
+                      <div><dt>Terms</dt><dd>50% advance · 50% on completion</dd></div>
+                      <div><dt>Catalog</dt><dd>{totalCount || "—"} service tracks</dd></div>
+                    </dl>
+                  </motion.aside>
+                </div>
+
+                <motion.div variants={fadeUp} className="sv2-hero-foot">
+                  <div className="sv2-stat">
+                    <span className="sv2-stat-n">{totalCount || "—"}</span>
+                    <span className="sv2-stat-l">Service tracks live</span>
+                  </div>
+                  <div className="sv2-stat">
+                    <span className="sv2-stat-n">3</span>
+                    <span className="sv2-stat-l">Practice categories</span>
+                  </div>
+                  <div className="sv2-stat">
+                    <span className="sv2-stat-n">20+</span>
+                    <span className="sv2-stat-l">Government authorities</span>
+                  </div>
+                  <span className="sv2-scroll-hint">Scroll · Index</span>
+                </motion.div>
+              </motion.div>
+            </div>
+          </section>
+
+          {/* ── PROMISE BAND ─────────────────────────────────────── */}
+          <section className="sv2-promise">
+            <div className="sv2-wrap sv2-promise-grid">
+              {[
+                { n: "01", title: "Scope before estimate", desc: "Every engagement begins with a written scope listing what we file, what we coordinate, and what's billed at actual." },
+                { n: "02", title: "Queries absorbed", desc: "Validity refreshes, committee re-schedules, and one to two rounds of officer queries are baked into the fee." },
+                { n: "03", title: "Authority cited", desc: "Each filing names the office, wing, portal, and the Act & latest amendment it sits under." },
+                { n: "04", title: "Two-track payment", desc: "50% advance, 50% on completion. Government fees at actual, billed separately, with the challan attached." },
+              ].map((item) => (
+                <div className="sv2-promise-item" key={item.n}>
+                  <span className="sv2-promise-num">{item.n}</span>
+                  <div>
+                    <h4>{item.title}</h4>
+                    <p>{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* ── CATEGORY NAV ─────────────────────────────────────── */}
+          <motion.section
+            className="sv2-catnav"
             variants={stagger}
             initial="hidden"
             whileInView="show"
             viewport={inViewOnce}
           >
-            {STANDARDS.map(({ idx, titleKey, descKey }) => (
-              <motion.div className="lf-standard" key={idx} variants={fadeUp}>
-                <div className="lf-standard-label">
-                  Standard {ROMAN_INDEX[idx]}
-                </div>
-                <h3 className="lf-standard-title">{t(titleKey)}</h3>
-                <p className="lf-standard-desc">{t(descKey)}</p>
-              </motion.div>
-            ))}
-          </motion.div>
+            <div className="sv2-wrap">
+              <div className="sv2-catnav-grid">
+                {CATEGORY_KEYS.map((catKey) => {
+                  const cfg = categoryConfig[catKey];
+                  const count = countByCat(catKey);
+                  return (
+                    <motion.button
+                      key={catKey}
+                      variants={fadeUp}
+                      className="sv2-catnav-card"
+                      type="button"
+                      onClick={() => jumpTo(cfg.id)}
+                    >
+                      <div className="sv2-catnav-top">
+                        <span className="sv2-catnav-catno">Category {cfg.catNo}</span>
+                        <span className="sv2-catnav-count">{count}</span>
+                      </div>
+                      <span className="sv2-catnav-title">{cfg.deskLabel}</span>
+                      <span className="sv2-catnav-desc">{cfg.descShort}</span>
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </div>
+          </motion.section>
 
-          {/* -- Insight strip (reuses landing.css `.lf-insight-*`) -- */}
-          <div className="lf-services-insights">
-            <motion.div
-              className="lf-insight-strip"
-              variants={stagger}
-              initial="hidden"
-              whileInView="show"
-              viewport={inViewOnce}
-            >
-              {INSIGHTS.map((insight) => (
-                <motion.div className="lf-insight-item" key={insight.label} variants={fadeUp}>
-                  <span className="lf-insight-label">{insight.label}</span>
-                  <h3 className="lf-insight-stat">
-                    {insight.stat}
-                    <span className="lf-unit">{insight.unit}</span>
-                  </h3>
-                  <p className="lf-insight-desc">{insight.desc}</p>
+          {/* ── FILTER + SEARCH ───────────────────────────────────── */}
+          <section className="sv2-filter-section">
+            <div className="sv2-wrap">
+              <motion.div
+                className="sv2-section-head"
+                variants={stagger}
+                initial="hidden"
+                whileInView="show"
+                viewport={inViewOnce}
+              >
+                <motion.div variants={fadeUp}>
+                  <span className="sv2-eyebrow">§ Services Index · 2026</span>
+                  <h2 className="sv2-section-h2">
+                    {totalCount ? `${totalCount} engagements,` : "All engagements,"}{" "}
+                    <em>one</em> delivery standard.
+                  </h2>
                 </motion.div>
-              ))}
-            </motion.div>
+                <motion.span variants={fadeUp} className="sv2-counter">
+                  Showing {filteredServices.length} of {totalCount}
+                </motion.span>
+              </motion.div>
+
+              <div className="sv2-chips">
+                {([
+                  { id: "all", label: "All", count: totalCount },
+                  { id: "expatriate", label: "Expatriate Mobility", count: countByCat("expatriate") },
+                  { id: "hr", label: "HR Ops & Compliance", count: countByCat("hr") },
+                  { id: "licensing", label: "Licensing & Registrations", count: countByCat("licensing") },
+                ] as const).map((chip) => (
+                  <button
+                    key={chip.id}
+                    type="button"
+                    className={`sv2-chip-btn${activeFilter === chip.id ? " is-active" : ""}`}
+                    onClick={() => setActiveFilter(chip.id)}
+                  >
+                    {chip.label} <span className="sv2-chip-ct">{chip.count}</span>
+                  </button>
+                ))}
+              </div>
+
+              <div className="sv2-search">
+                <span className="sv2-eyebrow" style={{ letterSpacing: "0.18em" }}>Search</span>
+                <input
+                  type="text"
+                  className="sv2-search-input"
+                  placeholder="e.g. work permit, fire license, ECC, RJSC, TIN, amendment…"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <span className="sv2-kbd">↵</span>
+              </div>
+            </div>
+          </section>
+
+          {/* ── SERVICE LIST ──────────────────────────────────────── */}
+          <section className="sv2-services">
+            <div className="sv2-wrap">
+              {services === undefined ? (
+                <div className="sv2-loading">Loading services…</div>
+              ) : filteredServices.length === 0 ? (
+                <div className="sv2-empty">No services match your filter or search.</div>
+              ) : (
+                (() => {
+                  const grouped: { catKey: CategoryKey; items: typeof filteredServices }[] = [];
+                  for (const catKey of CATEGORY_KEYS) {
+                    const items = filteredServices.filter((s) => s.category === catKey);
+                    if (items.length > 0) grouped.push({ catKey, items });
+                  }
+                  return grouped.map(({ catKey, items }) => {
+                    const cfg = categoryConfig[catKey];
+                    const catAll = allServices.filter((s) => s.category === catKey);
+                    return (
+                      <div key={catKey} id={cfg.id} className="sv2-cat-group">
+                        {/* Category header */}
+                        <div className="sv2-cat-header">
+                          <div className="sv2-cat-header-left">
+                            <span className="sv2-cat-header-kicker">
+                              CATEGORY {cfg.catNo} · {catAll.length} SERVICES
+                            </span>
+                            <h2 className="sv2-cat-header-h2">{cfg.deskLabel}</h2>
+                          </div>
+                          <span className="sv2-cat-header-meta">
+                            {cfg.catNo.toUpperCase()} · {catAll.length}
+                          </span>
+                        </div>
+
+                        {/* Service rows */}
+                        {items.map((svc, i) => {
+                          const globalIdx = catAll.findIndex((s) => s._id === svc._id);
+                          const ref = `${cfg.catNo}.${globalIdx + 1}`;
+                          const title = language === "bn" && svc.titleBn ? svc.titleBn : svc.title;
+
+                          return (
+                            <motion.button
+                              type="button"
+                              key={svc._id}
+                              className="sv2-svc-row"
+                              onClick={() => setDialog({ open: true, service: svc })}
+                              initial={{ opacity: 0, y: 8 }}
+                              whileInView={{ opacity: 1, y: 0 }}
+                              viewport={inViewOnce}
+                              transition={{ duration: 0.45, delay: i * 0.04, ease: EASE_OUT }}
+                            >
+                              <span className="sv2-svc-idx">{ref}</span>
+
+                              <div className="sv2-svc-name">
+                                <span className="sv2-svc-title">{title}</span>
+                                <span className="sv2-svc-kind">
+                                  {svc.workflow ?? "Application coordination"}
+                                </span>
+                              </div>
+
+                              <div className="sv2-svc-authority sv2-col-hide-md">
+                                <span className="sv2-svc-lab">Authority</span>
+                                <span>{svc.notes ?? "—"}</span>
+                              </div>
+
+                              <div className="sv2-svc-duration sv2-col-hide-md">
+                                <span className="sv2-svc-lab">Duration</span>
+                                <span>{svc.deliveryTimeline ?? "Scoped per job"}</span>
+                              </div>
+
+                              <div className="sv2-svc-fee">
+                                <span className="sv2-svc-lab">Fee</span>
+                                <span className="sv2-svc-fee-val">{svc.price ?? "—"}</span>
+                              </div>
+
+                              <div className="sv2-svc-arrow" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                  <path
+                                    d="M3.5 9H14.5M14.5 9L9.5 4M14.5 9L9.5 14"
+                                    stroke="currentColor"
+                                    strokeWidth="1.4"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                </svg>
+                              </div>
+                            </motion.button>
+                          );
+                        })}
+                      </div>
+                    );
+                  });
+                })()
+              )}
+            </div>
+          </section>
+
+          {/* ── PROCESS ──────────────────────────────────────────── */}
+          <section className="sv2-process">
+            <div className="sv2-wrap sv2-process-grid">
+              <div>
+                <span className="sv2-eyebrow">§ How we work</span>
+                <h2 className="sv2-process-h2">
+                  A delivery<br /><em>system,</em> not a thread.
+                </h2>
+                <p className="sv2-process-lead">
+                  Every engagement runs the same five stages. The work is predictable,
+                  the artefacts are reviewable, and you always know what is pending where.
+                </p>
+              </div>
+              <div className="sv2-steps">
+                {[
+                  { n: "01", t: "Scoping and intake", d: "A written scope memo. We confirm what is in, what is out, and what depends on what. Prerequisite licences and validity windows included.", time: "≤ 48h" },
+                  { n: "02", t: "Document & pre-validation", d: "Document collection, pre-validation against authority checklists, and refresh of anything inside its validity window.", time: "3–5 d" },
+                  { n: "03", t: "Filing & coordination", d: "Submission via the right portal or wing, with officer-query handling, committee scheduling, and parallel-agency coordination.", time: "Authority-bound" },
+                  { n: "04", t: "Issuance & verification", d: "Original collection or e-issuance, line-by-line check against the application, and rectification before hand-off if anything is off.", time: "≤ 48h" },
+                  { n: "05", t: "Hand-off & calendar", d: "Original + soft copies in your LLP workspace, the next renewal placed on calendar, and a 30-day post-delivery support window.", time: "D-day" },
+                ].map((step) => (
+                  <div className="sv2-step" key={step.n}>
+                    <span className="sv2-step-n">{step.n}</span>
+                    <div>
+                      <div className="sv2-step-t">{step.t}</div>
+                      <div className="sv2-step-d">{step.d}</div>
+                    </div>
+                    <span className="sv2-step-time">{step.time}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* ── CTA ──────────────────────────────────────────────── */}
+          <div className="sv2-wrap">
+            <div className="sv2-cta">
+              <div className="sv2-cta-inner">
+                <div>
+                  <h3 className="sv2-cta-h3">
+                    Not sure where to start?<br />Send us your <em>filing list.</em>
+                  </h3>
+                  <div className="sv2-cta-meta">
+                    <span>Free 30-min scoping call</span>
+                    <span>Written scope &amp; fee</span>
+                    <span>No obligation</span>
+                  </div>
+                </div>
+                <div>
+                  <p className="sv2-cta-body">
+                    Share the licences, registrations, or filings on your plate.
+                    We&apos;ll come back with the right service tracks, the dependency
+                    map, and a fixed-fee scope.
+                  </p>
+                  <a className="sv2-cta-btn" href="mailto:desk@laborlawpartner.com">
+                    Request a scope <span aria-hidden="true">→</span>
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* -- 3 categories ----------------------------------- */}
-          {CATEGORY_KEYS.map((catKey, catIdx) => {
-            const cfg = categoryConfig[catKey];
-            const items = (services ?? []).filter(
-              (s) => s.category === catKey
-            );
-            const deskShort = cfg.deskLabel.replace(/^Desk of\s+/, "");
+          {/* ── STAMP ────────────────────────────────────────────── */}
+          <div className="sv2-wrap">
+            <div className="sv2-stamp">
+              <span>Services Desk · {totalCount || "—"} service tracks</span>
+              <span>v2026.05</span>
+            </div>
+          </div>
+        </main>
 
-            return (
-              <section
-                id={catKey}
-                className="lf-services-category scroll-mt-20"
-                key={catKey}
-              >
-                <motion.div
-                  className="lf-services-category-header"
-                  variants={stagger}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={inViewOnce}
-                >
-                  <div className="lf-services-category-left">
-                    <motion.div
-                      variants={fadeUp}
-                      className="lf-services-category-kicker"
-                    >
-                      <span className="lf-services-category-kicker-mark">
-                        § III.{catIdx + 1}
-                      </span>
-                      {t(cfg.kickerKey)}
-                    </motion.div>
-                    <motion.h2
-                      variants={fadeUp}
-                      className="lf-services-category-title"
-                    >
-                      {t(cfg.titleKey)}
-                      <span style={{ color: "var(--ink-3)" }}>.</span>
-                    </motion.h2>
-                    <motion.p
-                      variants={fadeUp}
-                      className="lf-services-category-desc"
-                    >
-                      {t(cfg.subtitleKey)}
-                    </motion.p>
-                  </div>
-                  <motion.span
-                    variants={fadeUp}
-                    className="lf-services-category-anchor"
-                  >
-                    See all · {items.length}{" "}
-                    {items.length === 1 ? "service" : "services"}
-                  </motion.span>
-                </motion.div>
+        <HomepageFooter />
 
-                {services === undefined ? (
-                  <div className="lf-services-grid-loading">Loading…</div>
-                ) : items.length === 0 ? (
-                  <div className="lf-services-grid-empty">
-                    No services currently registered at this desk.
-                  </div>
-                ) : (
-                  <div className="lf-services-grid">
-                    {items.map((svc, i) => {
-                      const title =
-                        language === "bn" && svc.titleBn
-                          ? svc.titleBn
-                          : svc.title;
-                      const desc =
-                        language === "bn" && svc.descriptionBn
-                          ? svc.descriptionBn
-                          : svc.description;
-                      const ref = `§ III.${catIdx + 1}.${String(
-                        i + 1
-                      ).padStart(2, "0")}`;
-
-                      return (
-                        <motion.button
-                          type="button"
-                          className="lf-service-card"
-                          key={svc._id}
-                          onClick={() =>
-                            setDialog({ open: true, service: svc })
-                          }
-                          initial={{ opacity: 0, y: 14 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={inViewOnce}
-                          transition={{
-                            duration: 0.5,
-                            delay: i * 0.045,
-                            ease: EASE_OUT,
-                          }}
-                        >
-                          <div className="lf-service-card-ref">{ref}</div>
-                          <h3 className="lf-service-card-title">{title}</h3>
-                          <p className="lf-service-card-desc">{desc}</p>
-
-                          <div className="lf-service-card-meta">
-                            <div className="lf-service-card-meta-item">
-                              <span className="lf-service-card-meta-label">
-                                Fee
-                              </span>
-                              <span className="lf-service-card-meta-value lf-service-card-meta-value--small">
-                                {svc.price ?? "—"}
-                              </span>
-                            </div>
-                            <div className="lf-service-card-meta-item">
-                              <span className="lf-service-card-meta-label">
-                                Lead
-                              </span>
-                              <span className="lf-service-card-meta-value">
-                                {deskShort}
-                              </span>
-                            </div>
-                            <div className="lf-service-card-meta-item">
-                              <span className="lf-service-card-meta-label">
-                                Typical duration
-                              </span>
-                              <span className="lf-service-card-meta-value">
-                                {svc.deliveryTimeline ?? "Scoped per job"}
-                              </span>
-                            </div>
-                            <div className="lf-service-card-meta-item">
-                              <span className="lf-service-card-meta-label">
-                                Status
-                              </span>
-                              <span className="lf-service-card-meta-value">
-                                {svc.badge ?? "Active"}
-                              </span>
-                            </div>
-                          </div>
-
-                          <div className="lf-service-card-foot">
-                            <span className="lf-service-card-foot-kind">
-                              {svc.workflow ?? "Procedural support"}
-                            </span>
-                            <span className="lf-service-card-foot-scope">
-                              Scope it
-                            </span>
-                          </div>
-                        </motion.button>
-                      );
-                    })}
-                  </div>
-                )}
-              </section>
-            );
-          })}
-
-          {/* -- Cross-sell (Audit + Headhunting) --------------- */}
-          <motion.div
-            className="lf-services-cross"
-            variants={stagger}
-            initial="hidden"
-            whileInView="show"
-            viewport={inViewOnce}
-          >
-            <motion.div className="lf-services-cross-card" variants={fadeUp}>
-              <div className="lf-services-cross-kicker">§ Audit</div>
-              <h3 className="lf-services-cross-title">
-                {t("services.cross.audit.title")}
-              </h3>
-              <p className="lf-services-cross-desc">
-                {t("services.cross.audit.desc")}
-              </p>
-              <Link href="/audit" className="lf-services-cross-link">
-                Run an audit →
-              </Link>
-            </motion.div>
-            <motion.div className="lf-services-cross-card" variants={fadeUp}>
-              <div className="lf-services-cross-kicker">§ Headhunting</div>
-              <h3 className="lf-services-cross-title">
-                {t("services.cross.headhunt.title")}
-              </h3>
-              <p className="lf-services-cross-desc">
-                {t("services.cross.headhunt.desc")}
-              </p>
-              <Link href="/headhunting" className="lf-services-cross-link">
-                Visit Headhunting →
-              </Link>
-            </motion.div>
-          </motion.div>
-
-          {/* -- Stamp footer ----------------------------------- */}
-          <motion.div
-            className="lf-services-stamp"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={inViewOnce}
-            transition={{ duration: 0.6, ease: EASE_OUT }}
-          >
-            <span>Services Desk · 22+ statutory services</span>
-            <span>v2026.04.26</span>
-          </motion.div>
-        </section>
-      </main>
-
-      <HomepageFooter />
-
-      <ServiceRequestDialog
-        open={dialog.open}
-        onOpenChange={(open) =>
-          setDialog((prev) => ({ ...prev, open, service: open ? prev.service : null }))
-        }
-        service={dialog.service}
-      />
-    </div>
+        <ServiceRequestDialog
+          open={dialog.open}
+          onOpenChange={(open) =>
+            setDialog((prev) => ({ ...prev, open, service: open ? prev.service : null }))
+          }
+          service={dialog.service}
+        />
+      </div>
     </MotionConfig>
   );
 }

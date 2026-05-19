@@ -100,7 +100,6 @@ export function HomepageFooter() {
                 <em>Editorial</em> <strong>Mehnaz Islam</strong> ·{" "}
                 <em>Operations</em> <strong>Shumon Ahmed</strong> <em>and</em>{" "}
                 <strong>Muhib Hossain</strong> · <em>Technology</em>{" "}
-                <strong>Rasel Miah</strong>
               </p>
             </div>
           </div>
