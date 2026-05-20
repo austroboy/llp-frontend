@@ -70,7 +70,7 @@ const INSIGHTS: Insight[] = [
     desc: (
       <>
         The Labour Act 2006 has been amended through{" "}
-        <strong>five Acts, one Rules revision, and one 2025 Ordinance</strong>.
+        <strong>five Acts (2009, 2010, 2013, 2018, 2026), two Rules instruments (2015, 2022), and the 2025 Ordinance now enacted as the 2026 Act</strong>.
         We track every version.
       </>
     ),
@@ -100,7 +100,7 @@ const CORPUS: CorpusItem[] = [
   {
     name: "Bangladesh Labour Act, 2006",
     rollup:
-      "with Labour Rules 2015, five amending Acts, the 2022 Rules Amendment, and the 2025 Ordinance",
+      "with Labour Rules 2015, five amending Acts (2009, 2010, 2013, 2018, 2026), the 2022 Rules Amendment, and the 2025 Ordinance enacted into the 2026 Act",
     stats: (
       <>
         <span>
@@ -226,7 +226,7 @@ const PULSE: PulseBrief[] = [
     date: "04 Apr 2026",
     title: "The 2025 Ordinance on maternity, unpacked.",
     desc:
-      "What the 20-week extension means for 100-plus worker establishments, and how it interacts with the Provident Fund Rules on the tax side.",
+      "What the extension from 112 to 120 days means for women workers under the BLA, and how the additional 8 days interact with the Provident Fund Rules on the tax side.",
     kind: "Brief · Section 46",
   },
   {
@@ -354,7 +354,7 @@ export function LandingPage() {
                 <em>Bangladesh labor and compliance law.</em>
               </motion.h1>
               <motion.p variants={fadeUp} className="lf-hero-deck">
-                We read the Labor Act the way it is actually read in practice:
+                We read the Bangladesh Labour Act the way it is actually read in practice:
                 alongside the tax code, the safety rules, and the governance
                 framework. Ask a question. Get an answer phrased like a
                 conversation, cited like a statute.
@@ -591,10 +591,11 @@ export function LandingPage() {
           >
             <span className="lf-pulse-review-label">Currently under review</span>
             <p className="lf-pulse-review-text">
-              The 2025 Ordinance's maternity leave extension created a
-              tax-treatment question for the benefit above 16 weeks. The NBR
-              has not yet clarified. We are tracking circulars weekly and
-              expect editorial guidance by <strong>mid-May 2026</strong>.
+              Bangladesh's maternity benefit has long been treated as tax-free
+              in practice, but the 2025 extension from 112 to 120 days raises a
+              new question about whether the additional 8 days receives the same
+              treatment. We have not found a specific NBR circular addressing
+              that incremental period and are monitoring for any formal guidance.
             </p>
           </motion.div>
         </section>
@@ -712,6 +713,7 @@ export function LandingPage() {
                   <strong>Mehnaz Islam</strong> · Operations{" "}
                   <strong>Shumon Ahmed</strong> and{" "}
                   <strong>Muhib Hossain</strong> · Technology{" "}
+                  <strong>Rasel Miah</strong>
                 </p>
               </div>
             </div>
@@ -915,7 +917,7 @@ type DeskEvent = {
 const DESK_EVENTS: DeskEvent[] = [
   {
     year: "2006",
-    title: "Enacted at 16 weeks leave",
+    title: "Enacted at 112 days (8 weeks before, 8 weeks after)",
     meta: "Act XLII of 2006",
     state: "historical",
   },
@@ -927,8 +929,8 @@ const DESK_EVENTS: DeskEvent[] = [
   },
   {
     year: "2025",
-    title: "Leave extended to 20 weeks",
-    meta: "2025 Ordinance · 100+ worker establishments",
+    title: "Leave extended from 112 to 120 days (60 before, 60 after delivery)",
+    meta: "2025 Ordinance · Women workers under the BLA",
     state: "current",
   },
 ];
@@ -979,9 +981,12 @@ function DeskCard({ onClick }: { onClick: () => void }) {
       <div className="lf-desk-obs">
         <div className="lf-desk-obs-label">Currently under editorial review</div>
         <p className="lf-desk-obs-text">
-          The 2025 Ordinance extended maternity leave from 16 to 20 weeks for
-          establishments above 100 workers. Payroll treatment under the Income
-          Tax Act remains being reviewed.
+          The 2025 Ordinance (now enacted as the 2026 Amendment Act) extended
+          maternity leave from 112 to 120 days, with 60 days before and 60
+          days after delivery. The entitlement applies to all women workers
+          covered by the Bangladesh Labour Act 2006, irrespective of
+          establishment size. Payroll treatment of the additional 8 days under
+          the Income Tax Act 2023 is still under editorial review.
         </p>
       </div>
       <div className="lf-desk-foot">
