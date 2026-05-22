@@ -1,8 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet";
 import type { Id } from "@convex/_generated/dataModel";
 
 export interface ServiceDetail {
@@ -27,14 +30,12 @@ export interface ServiceDetail {
 interface Props {
   open: boolean;
   service: ServiceDetail | null;
-  refLabel: string; // e.g. "I.3"
-  catNo: string; // e.g. "I"
-  catLabel: string; // e.g. "Expatriate Mobility"
+  refLabel: string;
+  catNo: string;
+  catLabel: string;
   onClose: () => void;
   onRequestScope: () => void;
 }
-
-const EASE_OUT = [0.16, 1, 0.3, 1] as const;
 
 export function ServiceDetailDrawer({
   open,
@@ -45,33 +46,6 @@ export function ServiceDetailDrawer({
   onClose,
   onRequestScope,
 }: Props) {
-  // Mount check — portal only works after hydration
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
-  // Lock body scroll while open
-  useEffect(() => {
-    if (!open) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, [open]);
-
-  // Esc to close
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
-
-  if (!mounted) return null;
-
-  // Split process by → arrows for step rendering
   const processSteps = service?.workflow
     ? service.workflow
         .split(/→|->/)
@@ -79,84 +53,56 @@ export function ServiceDetailDrawer({
         .filter((s) => s.length > 1)
     : [];
 
-  const drawerTree = (
-    <AnimatePresence>
-      {open && service ? (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            key="sv2-drawer-backdrop"
-            className="sv2-drawer-backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25, ease: EASE_OUT }}
-            onClick={onClose}
-            aria-hidden="true"
-          />
+  return (
+    <Sheet open={open} onOpenChange={(o) => !o && onClose()}>
+      <SheetContent
+        side="right"
+        className="sv2-sheet-content p-0 w-full sm:max-w-[720px] sm:w-[720px] border-l-0"
+      >
+        <SheetTitle className="sr-only">
+          {service?.title ?? "Service details"}
+        </SheetTitle>
+        <SheetDescription className="sr-only">
+          {service?.description ?? ""}
+        </SheetDescription>
 
-          {/* Drawer panel */}
-          <motion.aside
-            key="sv2-drawer-panel"
-            className="sv2-drawer"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="sv2-drawer-title"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ duration: 0.4, ease: EASE_OUT }}
-          >
-            {/* Sticky header */}
+        {service ? (
+          <div className="sv2-drawer-frame">
             <header className="sv2-drawer-header">
               <span className="sv2-drawer-crumb">
                 SERVICES · {catLabel.toUpperCase()} · {refLabel}
               </span>
-              <button
-                type="button"
-                className="sv2-drawer-close"
-                onClick={onClose}
-                aria-label="Close detail panel"
-              >
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path
-                    d="M5 5L15 15M15 5L5 15"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </button>
             </header>
 
-            {/* Scrollable body */}
             <div className="sv2-drawer-body">
               <div className="sv2-drawer-eyebrow">
                 CATEGORY {catNo} · {catLabel.toUpperCase()} · {refLabel}
               </div>
-              <h2 className="sv2-drawer-title" id="sv2-drawer-title">
-                {service.title}
-              </h2>
+              <h2 className="sv2-drawer-title">{service.title}</h2>
               <p className="sv2-drawer-lead">{service.description}</p>
 
-              {/* Tag chips */}
               <div className="sv2-drawer-tags">
-                {service.kind ? <span className="sv2-drawer-tag">{service.kind}</span> : null}
+                {service.kind ? (
+                  <span className="sv2-drawer-tag">{service.kind}</span>
+                ) : null}
                 {service.deliveryTimeline ? (
-                  <span className="sv2-drawer-tag">{service.deliveryTimeline}</span>
+                  <span className="sv2-drawer-tag">
+                    {service.deliveryTimeline}
+                  </span>
                 ) : null}
                 {service.paymentTerms ? (
                   <span className="sv2-drawer-tag">{service.paymentTerms}</span>
                 ) : null}
               </div>
 
-              {/* At a glance grid */}
               <section className="sv2-drawer-section">
                 <h3 className="sv2-drawer-h3">At a glance</h3>
                 <div className="sv2-drawer-glance">
                   <div className="sv2-drawer-glance-item">
                     <span className="sv2-drawer-lab">Service fee</span>
-                    <span className="sv2-drawer-val">{service.price ?? "Scoped per job"}</span>
+                    <span className="sv2-drawer-val">
+                      {service.price ?? "Scoped per job"}
+                    </span>
                   </div>
                   <div className="sv2-drawer-glance-item">
                     <span className="sv2-drawer-lab">Typical duration</span>
@@ -175,7 +121,6 @@ export function ServiceDetailDrawer({
                 </div>
               </section>
 
-              {/* Process */}
               {processSteps.length > 0 ? (
                 <section className="sv2-drawer-section">
                   <h3 className="sv2-drawer-h3">Process</h3>
@@ -192,7 +137,6 @@ export function ServiceDetailDrawer({
                 </section>
               ) : null}
 
-              {/* Engagement covers */}
               {service.engagementCovers ? (
                 <section className="sv2-drawer-section">
                   <h3 className="sv2-drawer-h3">Engagement covers</h3>
@@ -200,7 +144,6 @@ export function ServiceDetailDrawer({
                 </section>
               ) : null}
 
-              {/* Authority & legal */}
               {(service.authority || service.legal) && (
                 <section className="sv2-drawer-section">
                   <h3 className="sv2-drawer-h3">Authority &amp; legal basis</h3>
@@ -221,7 +164,6 @@ export function ServiceDetailDrawer({
                 </section>
               )}
 
-              {/* Notes / caveats */}
               {service.notes ? (
                 <section className="sv2-drawer-section">
                   <h3 className="sv2-drawer-h3">Notes</h3>
@@ -230,7 +172,6 @@ export function ServiceDetailDrawer({
               ) : null}
             </div>
 
-            {/* Sticky footer CTA */}
             <footer className="sv2-drawer-footer">
               <div className="sv2-drawer-foot-meta">
                 <span className="sv2-drawer-foot-fee">{service.price ?? "—"}</span>
@@ -238,27 +179,17 @@ export function ServiceDetailDrawer({
                   {service.deliveryTimeline ?? "Scoped per job"}
                 </span>
               </div>
-              <button type="button" className="sv2-drawer-cta" onClick={onRequestScope}>
+              <button
+                type="button"
+                className="sv2-drawer-cta"
+                onClick={onRequestScope}
+              >
                 Request scope <span aria-hidden="true">→</span>
               </button>
             </footer>
-          </motion.aside>
-        </>
-      ) : null}
-    </AnimatePresence>
-  );
-
-  // Read current theme from the page-level lf-page wrapper so the
-  // portalised drawer inherits the same color tokens.
-  const pageThemeAttr =
-    typeof document !== "undefined"
-      ? document.querySelector(".lf-page")?.getAttribute("data-theme") ?? "light"
-      : "light";
-
-  return createPortal(
-    <div className="lf-page" data-drawer-portal="true" data-theme={pageThemeAttr}>
-      {drawerTree}
-    </div>,
-    document.body
+          </div>
+        ) : null}
+      </SheetContent>
+    </Sheet>
   );
 }
