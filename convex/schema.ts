@@ -166,6 +166,11 @@ export default defineSchema({
     price: v.optional(v.string()),
     paymentTerms: v.optional(v.string()),
     notes: v.optional(v.string()),
+    // ── v2 detail-drawer fields (HTML reference parity) ─────────────
+    kind: v.optional(v.string()),
+    authority: v.optional(v.string()),
+    legal: v.optional(v.string()),
+    engagementCovers: v.optional(v.string()),
     sortOrder: v.number(),
     isActive: v.boolean(),
     createdBy: v.string(),

@@ -33,6 +33,11 @@ interface ServiceInfo {
   workflow?: string;
   paymentTerms?: string;
   notes?: string;
+  // v2 detail-drawer fields (forwarded through but unused in this form)
+  kind?: string;
+  authority?: string;
+  legal?: string;
+  engagementCovers?: string;
 }
 
 interface ServiceRequestDialogProps {

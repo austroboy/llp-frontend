@@ -763,3 +763,145 @@
     padding-left: 8px;
   }
 }
+/* ────────────────────────────────────────────────────────────────
+   DRAWER VARIABLE FIX · paste this at the very end of services-styles.css
+   (After the previously appended drawer block. This overrides the
+   generic --lf-bg/--lf-text fallbacks with the project's brand vars.)
+   ──────────────────────────────────────────────────────────────── */
+
+.lf-page .sv2-drawer {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--lf-body, system-ui, sans-serif);
+}
+
+.lf-page .sv2-drawer-header {
+  border-bottom-color: var(--glass-border);
+}
+
+.lf-page .sv2-drawer-crumb {
+  font-family: var(--lf-mono, "JetBrains Mono", monospace);
+  color: var(--ink-3);
+  opacity: 1;
+}
+
+.lf-page .sv2-drawer-close {
+  border-color: var(--glass-border);
+  color: var(--ink);
+}
+
+.lf-page .sv2-drawer-close:hover {
+  background: var(--glass-bg);
+  border-color: var(--ink-3);
+}
+
+.lf-page .sv2-drawer-eyebrow {
+  font-family: var(--lf-mono, "JetBrains Mono", monospace);
+  color: var(--ink-4);
+  opacity: 1;
+}
+
+.lf-page .sv2-drawer-title {
+  font-family: var(--lf-display, "Fraunces", serif);
+  color: var(--ink);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.lf-page .sv2-drawer-lead {
+  color: var(--ink-3);
+  opacity: 1;
+}
+
+.lf-page .sv2-drawer-tag {
+  font-family: var(--lf-mono, "JetBrains Mono", monospace);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--ink-2);
+}
+
+.lf-page .sv2-drawer-section {
+  border-top-color: var(--glass-border);
+}
+
+.lf-page .sv2-drawer-h3 {
+  font-family: var(--lf-mono, "JetBrains Mono", monospace);
+  color: var(--ink-4);
+  opacity: 1;
+  letter-spacing: 0.14em;
+}
+
+.lf-page .sv2-drawer-glance {
+  border-color: var(--glass-border);
+}
+
+.lf-page .sv2-drawer-glance-item {
+  border-right-color: var(--glass-border);
+  border-bottom-color: var(--glass-border);
+}
+
+.lf-page .sv2-drawer-lab {
+  font-family: var(--lf-mono, "JetBrains Mono", monospace);
+  color: var(--ink-4);
+  opacity: 1;
+}
+
+.lf-page .sv2-drawer-val {
+  color: var(--ink);
+}
+
+.lf-page .sv2-drawer-step {
+  border-bottom-color: var(--glass-border);
+}
+
+.lf-page .sv2-drawer-step-n {
+  font-family: var(--lf-mono, "JetBrains Mono", monospace);
+  color: var(--ink-4);
+  opacity: 1;
+}
+
+.lf-page .sv2-drawer-step-t {
+  color: var(--ink-2);
+}
+
+.lf-page .sv2-drawer-prose {
+  color: var(--ink-3);
+  opacity: 1;
+}
+
+.lf-page .sv2-drawer-dl dt {
+  font-family: var(--lf-mono, "JetBrains Mono", monospace);
+  color: var(--ink-4);
+  opacity: 1;
+}
+
+.lf-page .sv2-drawer-dl dd {
+  color: var(--ink-2);
+}
+
+.lf-page .sv2-drawer-footer {
+  border-top-color: var(--glass-border);
+  background: var(--paper);
+}
+
+.lf-page .sv2-drawer-foot-fee {
+  font-family: var(--lf-display, "Fraunces", serif);
+  color: var(--ink);
+  font-weight: 400;
+}
+
+.lf-page .sv2-drawer-foot-dur {
+  font-family: var(--lf-mono, "JetBrains Mono", monospace);
+  color: var(--ink-4);
+  opacity: 1;
+}
+
+.lf-page .sv2-drawer-cta {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.lf-page .sv2-drawer-cta:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}

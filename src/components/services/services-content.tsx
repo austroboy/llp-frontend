@@ -10,6 +10,7 @@ import { SiteTopNav } from "@/components/site/site-top-nav";
 import { HomepageFooter } from "@/components/homepage/homepage-footer";
 import { useLanguage } from "@/hooks/use-language";
 import { ServiceRequestDialog } from "@/components/services/service-request-dialog";
+import { ServiceDetailDrawer, type ServiceDetail } from "@/components/services/service-detail-drawer";
 import "@/components/landing/landing.css";
 import "./services-styles.css";
 
@@ -73,6 +74,19 @@ export function ServicesContent() {
     open: false,
     service: null,
   });
+  const [drawer, setDrawer] = useState<{
+    open: boolean;
+    service: ServiceDetail | null;
+    refLabel: string;
+    catNo: string;
+    catLabel: string;
+  }>({
+    open: false,
+    service: null,
+    refLabel: "",
+    catNo: "",
+    catLabel: "",
+  });
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -88,8 +102,20 @@ export function ServicesContent() {
       services.find((s) => s.category === requestCategory);
     if (matchingService) {
       autoOpenHandled.current = true;
+      // Compute ref label for the drawer (e.g. "I.3")
+      const catKey = matchingService.category as CategoryKey;
+      const cfg = categoryConfig[catKey];
+      const catAll = services.filter((s) => s.category === catKey);
+      const globalIdx = catAll.findIndex((s) => s._id === matchingService._id);
+      const refLabel = `${cfg.catNo}.${globalIdx + 1}`;
       const timer = setTimeout(() => {
-        setDialog({ open: true, service: matchingService });
+        setDrawer({
+          open: true,
+          service: matchingService as ServiceDetail,
+          refLabel,
+          catNo: cfg.catNo,
+          catLabel: cfg.deskLabel,
+        });
       }, 500);
       return () => clearTimeout(timer);
     }
@@ -341,7 +367,15 @@ export function ServicesContent() {
                               type="button"
                               key={svc._id}
                               className="sv2-svc-row"
-                              onClick={() => setDialog({ open: true, service: svc })}
+                              onClick={() =>
+                                setDrawer({
+                                  open: true,
+                                  service: svc as ServiceDetail,
+                                  refLabel: ref,
+                                  catNo: cfg.catNo,
+                                  catLabel: cfg.deskLabel,
+                                })
+                              }
                               initial={{ opacity: 0, y: 8 }}
                               whileInView={{ opacity: 1, y: 0 }}
                               viewport={inViewOnce}
@@ -352,13 +386,13 @@ export function ServicesContent() {
                               <div className="sv2-svc-name">
                                 <span className="sv2-svc-title">{title}</span>
                                 <span className="sv2-svc-kind">
-                                  {svc.workflow ?? "Application coordination"}
+                                  {(svc as any).kind ?? "Application coordination"}
                                 </span>
                               </div>
 
                               <div className="sv2-svc-authority sv2-col-hide-md">
                                 <span className="sv2-svc-lab">Authority</span>
-                                <span>{svc.notes ?? "—"}</span>
+                                <span>{(svc as any).authority ?? "—"}</span>
                               </div>
 
                               <div className="sv2-svc-duration sv2-col-hide-md">
@@ -465,6 +499,23 @@ export function ServicesContent() {
         </main>
 
         <HomepageFooter />
+
+        <ServiceDetailDrawer
+          open={drawer.open}
+          service={drawer.service}
+          refLabel={drawer.refLabel}
+          catNo={drawer.catNo}
+          catLabel={drawer.catLabel}
+          onClose={() => setDrawer((p) => ({ ...p, open: false }))}
+          onRequestScope={() => {
+            // Close drawer, open request form
+            const svc = drawer.service;
+            setDrawer((p) => ({ ...p, open: false }));
+            if (svc) {
+              setTimeout(() => setDialog({ open: true, service: svc }), 250);
+            }
+          }}
+        />
 
         <ServiceRequestDialog
           open={dialog.open}
