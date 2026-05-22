@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Id } from "@convex/_generated/dataModel";
 
@@ -44,6 +45,10 @@ export function ServiceDetailDrawer({
   onClose,
   onRequestScope,
 }: Props) {
+  // Mount check — portal only works after hydration
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   // Lock body scroll while open
   useEffect(() => {
     if (!open) return;
@@ -64,6 +69,8 @@ export function ServiceDetailDrawer({
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
+  if (!mounted) return null;
+
   // Split process by → arrows for step rendering
   const processSteps = service?.workflow
     ? service.workflow
@@ -72,7 +79,7 @@ export function ServiceDetailDrawer({
         .filter((s) => s.length > 1)
     : [];
 
-  return (
+  const drawerTree = (
     <AnimatePresence>
       {open && service ? (
         <>
@@ -239,5 +246,19 @@ export function ServiceDetailDrawer({
         </>
       ) : null}
     </AnimatePresence>
+  );
+
+  // Read current theme from the page-level lf-page wrapper so the
+  // portalised drawer inherits the same color tokens.
+  const pageThemeAttr =
+    typeof document !== "undefined"
+      ? document.querySelector(".lf-page")?.getAttribute("data-theme") ?? "light"
+      : "light";
+
+  return createPortal(
+    <div className="lf-page" data-drawer-portal="true" data-theme={pageThemeAttr}>
+      {drawerTree}
+    </div>,
+    document.body
   );
 }
