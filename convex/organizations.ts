@@ -1,5 +1,5 @@
-import { query, mutation, internalMutation } from "./_generated/server";
-import { v, ConvexError } from "convex/values";
+import { query, mutation } from "./_generated/server";
+import { v } from "convex/values";
 import { requireUser, requireSelf } from "./_lib/auth";
 
 export const getByCreator = query({
@@ -28,81 +28,22 @@ export const create = mutation({
   },
   handler: async (ctx, args) => {
     const identity = await requireUser(ctx);
+    // Idempotency: if this user already has an org, return its id instead of
+    // creating a duplicate. Allows finalize-org self-heal to be called
+    // multiple times safely (e.g. from React StrictMode or cross-tab).
+    const existing = await ctx.db
+      .query("organizations")
+      .withIndex("by_creator", (q) => q.eq("createdByClerkId", identity.subject))
+      .first();
+    if (existing) {
+      return existing._id;
+    }
     // Force createdByClerkId to authenticated subject — never trust arg.
     return await ctx.db.insert("organizations", {
       ...args,
       createdByClerkId: identity.subject,
       createdAt: Date.now(),
     });
-  },
-});
-
-/**
- * Trusted server-only variant of `create`. Called from the
- * `/api/auth/finalize-org` Next.js route which has already verified the Clerk
- * session via `currentUser()` and passes the verified clerk user id explicitly.
- *
- * SECURITY: This is `internalMutation` so it CANNOT be called from the client
- * via ConvexHttpClient/useQuery — only from other Convex functions or via the
- * server-only `internal` reference passed into HTTP actions / Next route
- * handlers using the Convex action token.
- *
- * If you need to call this from a Next route, use the `internal` import on the
- * server side (NOT from the browser) and pass the verified clerk user id.
- */
-export const createTrusted = internalMutation({
-  args: {
-    name: v.string(),
-    industry: v.optional(v.string()),
-    size: v.optional(v.string()),
-    address: v.optional(v.string()),
-    website: v.optional(v.string()),
-    primaryContactName: v.optional(v.string()),
-    primaryContactDesignation: v.optional(v.string()),
-    primaryContactEmail: v.optional(v.string()),
-    primaryContactPhone: v.optional(v.string()),
-    createdByClerkId: v.string(),
-  },
-  handler: async (ctx, args) => {
-    try {
-      if (!args.createdByClerkId || args.createdByClerkId.length < 1) {
-        throw new ConvexError({
-          code: "missing_clerk_id",
-          message: "createdByClerkId is required and was empty",
-        });
-      }
-      if (!args.name || args.name.length < 1) {
-        throw new ConvexError({
-          code: "missing_name",
-          message: "name is required and was empty",
-        });
-      }
-
-      // Idempotency: if this user already has an org, return its id instead of
-      // creating a duplicate. Allows finalize-org to be called multiple times
-      // (e.g. by the self-heal effect across mounts/sessions) safely.
-      const existing = await ctx.db
-        .query("organizations")
-        .withIndex("by_creator", (q) => q.eq("createdByClerkId", args.createdByClerkId))
-        .first();
-      if (existing) {
-        return existing._id;
-      }
-
-      return await ctx.db.insert("organizations", {
-        ...args,
-        createdAt: Date.now(),
-      });
-    } catch (err) {
-      // Surface a structured ConvexError so the Next route gets a readable
-      // .data payload instead of a generic "Server Error" wrapper.
-      if (err instanceof ConvexError) throw err;
-      const message = err instanceof Error ? err.message : String(err);
-      throw new ConvexError({
-        code: "create_trusted_failed",
-        message,
-      });
-    }
   },
 });
 

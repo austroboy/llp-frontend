@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { currentUser, clerkClient } from "@clerk/nextjs/server";
+import { currentUser, clerkClient, auth } from "@clerk/nextjs/server";
 import { fetchMutation } from "convex/nextjs";
-import { internal } from "../../../../../convex/_generated/api";
+import { api } from "../../../../../convex/_generated/api";
 import type { Id } from "../../../../../convex/_generated/dataModel";
 import { z } from "zod";
 
@@ -98,25 +98,39 @@ export async function POST() {
     // Create the Convex organization if we don't already have an orgId
     let orgId = publicMeta.orgId;
     if (!orgId) {
-      // Use the trusted internalMutation variant. This Next.js route is itself a
-      // trusted server boundary — we've verified the Clerk session above via
-      // `currentUser()` and we explicitly pass the verified user.id below.
-      // The internalMutation cannot be invoked from a browser, only from
-      // server-side code with the Convex deployment key, so RLS is preserved.
-      const newOrgId = (await fetchMutation(internal.organizations.createTrusted, {
-        name: pending.companyName || `${fullName || "New"}'s Organization`,
-        industry: pending.industry,
-        size: pending.employeeCount,
-        address:
-          pending.city && pending.country
-            ? `${pending.city}, ${pending.country}`
-            : undefined,
-        primaryContactName: fullName || undefined,
-        primaryContactDesignation: pending.designation,
-        primaryContactEmail: email,
-        primaryContactPhone: pending.phone,
-        createdByClerkId: user.id,
-      })) as Id<"organizations">;
+      // Forward the caller's Clerk JWT to Convex so the `requireUser` guard
+      // inside `organizations.create` sees the same identity we already
+      // verified via `currentUser()` above. Without this token Convex sees
+      // an unauthenticated request and the mutation throws "Unauthorized".
+      // The "convex" template is configured in the Clerk dashboard and
+      // referenced by `convex/auth.config.ts`.
+      const { getToken } = await auth();
+      const token = await getToken({ template: "convex" });
+      if (!token) {
+        return NextResponse.json(
+          { error: "Could not mint Convex token for current session" },
+          { status: 500 }
+        );
+      }
+
+      const newOrgId = (await fetchMutation(
+        api.organizations.create,
+        {
+          name: pending.companyName || `${fullName || "New"}'s Organization`,
+          industry: pending.industry,
+          size: pending.employeeCount,
+          address:
+            pending.city && pending.country
+              ? `${pending.city}, ${pending.country}`
+              : undefined,
+          primaryContactName: fullName || undefined,
+          primaryContactDesignation: pending.designation,
+          primaryContactEmail: email,
+          primaryContactPhone: pending.phone,
+          createdByClerkId: user.id,
+        },
+        { token }
+      )) as Id<"organizations">;
       orgId = newOrgId;
     }
 
