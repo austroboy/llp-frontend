@@ -133,8 +133,19 @@ export async function POST() {
 
     return NextResponse.json({ ok: true, status: "finalized", orgId });
   } catch (err) {
-    console.error("[finalize-org] failed:", err);
-    const message = err instanceof Error ? err.message : "Failed to finalize org";
+    // Surface as much detail as possible — Convex wraps non-ConvexError throws
+    // into a generic "Server Error" with no `data` field, which makes silent
+    // 500s frustrating to debug. Log everything we can serialise.
+    const errAny = err as Error & { data?: unknown; cause?: unknown };
+    console.error("[finalize-org] failed:", {
+      message: errAny?.message,
+      name: errAny?.name,
+      data: errAny?.data,
+      cause: errAny?.cause,
+      stack: errAny?.stack,
+    });
+    const message =
+      typeof errAny?.message === "string" ? errAny.message : "Failed to finalize org";
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

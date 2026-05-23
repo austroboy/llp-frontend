@@ -1,5 +1,5 @@
 import { query, mutation, internalMutation } from "./_generated/server";
-import { v } from "convex/values";
+import { v, ConvexError } from "convex/values";
 import { requireUser, requireSelf } from "./_lib/auth";
 
 export const getByCreator = query({
@@ -64,10 +64,45 @@ export const createTrusted = internalMutation({
     createdByClerkId: v.string(),
   },
   handler: async (ctx, args) => {
-    return await ctx.db.insert("organizations", {
-      ...args,
-      createdAt: Date.now(),
-    });
+    try {
+      if (!args.createdByClerkId || args.createdByClerkId.length < 1) {
+        throw new ConvexError({
+          code: "missing_clerk_id",
+          message: "createdByClerkId is required and was empty",
+        });
+      }
+      if (!args.name || args.name.length < 1) {
+        throw new ConvexError({
+          code: "missing_name",
+          message: "name is required and was empty",
+        });
+      }
+
+      // Idempotency: if this user already has an org, return its id instead of
+      // creating a duplicate. Allows finalize-org to be called multiple times
+      // (e.g. by the self-heal effect across mounts/sessions) safely.
+      const existing = await ctx.db
+        .query("organizations")
+        .withIndex("by_creator", (q) => q.eq("createdByClerkId", args.createdByClerkId))
+        .first();
+      if (existing) {
+        return existing._id;
+      }
+
+      return await ctx.db.insert("organizations", {
+        ...args,
+        createdAt: Date.now(),
+      });
+    } catch (err) {
+      // Surface a structured ConvexError so the Next route gets a readable
+      // .data payload instead of a generic "Server Error" wrapper.
+      if (err instanceof ConvexError) throw err;
+      const message = err instanceof Error ? err.message : String(err);
+      throw new ConvexError({
+        code: "create_trusted_failed",
+        message,
+      });
+    }
   },
 });
 
