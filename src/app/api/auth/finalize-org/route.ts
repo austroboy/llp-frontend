@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 import { currentUser, clerkClient } from "@clerk/nextjs/server";
+import { fetchMutation } from "convex/nextjs";
+import { internal } from "../../../../../convex/_generated/api";
+import type { Id } from "../../../../../convex/_generated/dataModel";
 import { z } from "zod";
 
 interface PendingOrg {
@@ -95,11 +98,12 @@ export async function POST() {
     // Create the Convex organization if we don't already have an orgId
     let orgId = publicMeta.orgId;
     if (!orgId) {
-      const { ConvexHttpClient } = await import("convex/browser");
-      const { api } = await import("../../../../../convex/_generated/api");
-      const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
-
-      const newOrgId: string = await convex.mutation(api.organizations.create, {
+      // Use the trusted internalMutation variant. This Next.js route is itself a
+      // trusted server boundary — we've verified the Clerk session above via
+      // `currentUser()` and we explicitly pass the verified user.id below.
+      // The internalMutation cannot be invoked from a browser, only from
+      // server-side code with the Convex deployment key, so RLS is preserved.
+      const newOrgId = (await fetchMutation(internal.organizations.createTrusted, {
         name: pending.companyName || `${fullName || "New"}'s Organization`,
         industry: pending.industry,
         size: pending.employeeCount,
@@ -112,7 +116,7 @@ export async function POST() {
         primaryContactEmail: email,
         primaryContactPhone: pending.phone,
         createdByClerkId: user.id,
-      });
+      })) as Id<"organizations">;
       orgId = newOrgId;
     }
 

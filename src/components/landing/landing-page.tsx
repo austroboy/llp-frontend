@@ -712,8 +712,7 @@ export function LandingPage() {
                   Led by <strong>Tanbhir Siddiki</strong> · Editorial{" "}
                   <strong>Mehnaz Islam</strong> · Operations{" "}
                   <strong>Shumon Ahmed</strong> and{" "}
-                  <strong>Muhib Hossain</strong> · Technology{" "}
-                  <strong>Rasel Miah</strong>
+                  <strong>Muhib Hossain</strong>
                 </p>
               </div>
             </div>
