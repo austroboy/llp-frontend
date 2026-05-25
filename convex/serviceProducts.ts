@@ -48,6 +48,11 @@ export const create = mutation({
     price: v.optional(v.string()),
     paymentTerms: v.optional(v.string()),
     notes: v.optional(v.string()),
+    // v2 detail-drawer fields — required for full admin-side editing parity
+    kind: v.optional(v.string()),
+    authority: v.optional(v.string()),
+    legal: v.optional(v.string()),
+    engagementCovers: v.optional(v.string()),
     sortOrder: v.number(),
     isActive: v.boolean(),
     createdBy: v.string(),
@@ -82,6 +87,11 @@ export const update = mutation({
     price: v.optional(v.string()),
     paymentTerms: v.optional(v.string()),
     notes: v.optional(v.string()),
+    // v2 detail-drawer fields — required for full admin-side editing parity
+    kind: v.optional(v.string()),
+    authority: v.optional(v.string()),
+    legal: v.optional(v.string()),
+    engagementCovers: v.optional(v.string()),
     sortOrder: v.optional(v.number()),
     isActive: v.optional(v.boolean()),
   },

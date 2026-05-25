@@ -67,6 +67,7 @@ import type * as personalServiceRequests from "../personalServiceRequests.js";
 import type * as professionalProfiles from "../professionalProfiles.js";
 import type * as quickQuestions from "../quickQuestions.js";
 import type * as savedItems from "../savedItems.js";
+import type * as servicePatches from "../servicePatches.js";
 import type * as serviceProducts from "../serviceProducts.js";
 import type * as serviceRequests from "../serviceRequests.js";
 import type * as templates from "../templates.js";
@@ -139,6 +140,7 @@ declare const fullApi: ApiFromModules<{
   professionalProfiles: typeof professionalProfiles;
   quickQuestions: typeof quickQuestions;
   savedItems: typeof savedItems;
+  servicePatches: typeof servicePatches;
   serviceProducts: typeof serviceProducts;
   serviceRequests: typeof serviceRequests;
   templates: typeof templates;

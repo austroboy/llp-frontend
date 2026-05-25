@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useQuery } from "convex/react";
 import { useTheme } from "next-themes";
 import { motion, MotionConfig, type Variants } from "framer-motion";
@@ -64,6 +64,7 @@ const CATEGORY_KEYS: readonly CategoryKey[] = ["expatriate", "hr", "licensing"] 
 export function ServicesContent() {
   const { language } = useLanguage();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const { resolvedTheme } = useTheme();
 
   const [mounted, setMounted] = useState(false);
@@ -135,13 +136,29 @@ export function ServicesContent() {
   const allServices = services ?? [];
   const filteredServices = allServices.filter((s) => {
     const matchesCat = activeFilter === "all" || s.category === activeFilter;
-    const q = searchQuery.toLowerCase();
-    const matchesSearch =
-      !q ||
-      s.title.toLowerCase().includes(q) ||
-      (s.description ?? "").toLowerCase().includes(q) ||
-      (s.workflow ?? "").toLowerCase().includes(q);
-    return matchesCat && matchesSearch;
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return matchesCat;
+    // Search across all visible text fields so the box matches the way users
+    // actually phrase queries (e.g. "RJSC" hits the authority, "fire license"
+    // hits the title, "amendment" hits the kind or notes).
+    const haystack = [
+      s.title,
+      s.titleBn,
+      s.description,
+      s.descriptionBn,
+      s.workflow,
+      s.authority,
+      s.legal,
+      s.kind,
+      s.notes,
+      s.engagementCovers,
+      ...(s.deliverables ?? []),
+      ...(s.deliverablesBn ?? []),
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+    return matchesCat && haystack.includes(q);
   });
 
   const countByCat = (cat: CategoryKey) =>
@@ -166,10 +183,6 @@ export function ServicesContent() {
               <motion.div variants={stagger} initial="hidden" animate="show">
                 <motion.div variants={fadeUp} className="sv2-hero-meta">
                   <span className="sv2-eyebrow">Services Desk · v2026.05</span>
-                  <span className="sv2-chip">
-                    <span className="sv2-chip-dot" />
-                    <span className="sv2-chip-label">Engagements open · Q2 to Q3</span>
-                  </span>
                 </motion.div>
 
                 <div className="sv2-hero-grid">
@@ -191,7 +204,7 @@ export function ServicesContent() {
                     <dl className="sv2-meta-row">
                       <div><dt>Jurisdiction</dt><dd>Bangladesh</dd></div>
                       <div><dt>Delivery</dt><dd>Fixed scope · written</dd></div>
-                      <div><dt>Terms</dt><dd>50% advance · 50% on completion</dd></div>
+                      <div><dt>Terms</dt><dd>Advance on scope confirmation, balance on delivery. Government fees billed at actual, separately, with the challan attached.</dd></div>
                       <div><dt>Catalog</dt><dd>{totalCount || "—"} service tracks</dd></div>
                     </dl>
                   </motion.aside>
@@ -221,9 +234,9 @@ export function ServicesContent() {
             <div className="sv2-wrap sv2-promise-grid">
               {[
                 { n: "01", title: "Scope before estimate", desc: "Every engagement begins with a written scope listing what we file, what we coordinate, and what's billed at actual." },
-                { n: "02", title: "Queries absorbed", desc: "Validity refreshes, committee re-schedules, and one to two rounds of officer queries are baked into the fee." },
+                { n: "02", title: "Queries absorbed", desc: "Regulatory queries, validity pressure, and officer-level follow-ups are part of the engagement — not billed as extras." },
                 { n: "03", title: "Authority cited", desc: "Each filing names the office, wing, portal, and the Act & latest amendment it sits under." },
-                { n: "04", title: "Two-track payment", desc: "50% advance, 50% on completion. Government fees at actual, billed separately, with the challan attached." },
+                { n: "04", title: "Two-track payment", desc: "Advance on scope confirmation, balance on delivery. Government fees billed at actual, separately, with the challan attached." },
               ].map((item) => (
                 <div className="sv2-promise-item" key={item.n}>
                   <span className="sv2-promise-num">{item.n}</span>
@@ -367,15 +380,31 @@ export function ServicesContent() {
                               type="button"
                               key={svc._id}
                               className="sv2-svc-row"
-                              onClick={() =>
+                              onClick={() => {
+                                // Headhunting cards route to the dedicated
+                                // /headhunting page instead of opening the
+                                // shared service-detail drawer (per V2026.05
+                                // markup — "Click on This should take the HH
+                                // Page"). Match on the title since the
+                                // category enum lumps headhunting under HR.
+                                const t = svc.title.toLowerCase();
+                                if (
+                                  t.includes("head hunting") ||
+                                  t.includes("headhunting") ||
+                                  t.includes("placement and outplacement") ||
+                                  t.includes("placement & outplacement")
+                                ) {
+                                  router.push("/headhunting");
+                                  return;
+                                }
                                 setDrawer({
                                   open: true,
                                   service: svc as ServiceDetail,
                                   refLabel: ref,
                                   catNo: cfg.catNo,
                                   catLabel: cfg.deskLabel,
-                                })
-                              }
+                                });
+                              }}
                               initial={{ opacity: 0, y: 8 }}
                               whileInView={{ opacity: 1, y: 0 }}
                               viewport={inViewOnce}

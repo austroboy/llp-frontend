@@ -96,10 +96,7 @@ export function HomepageFooter() {
             <div className="lf-footer-team">
               <div className="lf-footer-team-label">The Lab</div>
               <p className="lf-footer-team-line">
-                <em>Led by</em> <strong>Tanbhir Siddiki</strong> ·{" "}
-                <em>Editorial</em> <strong>Mehnaz Islam</strong> ·{" "}
-                <em>Operations</em> <strong>Shumon Ahmed</strong> <em>and</em>{" "}
-                <strong>Muhib Hossain</strong> · <em>Technology</em>{" "}
+                A small team of legal, editorial, and technology practitioners.
               </p>
             </div>
           </div>

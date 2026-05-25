@@ -51,6 +51,13 @@ export function ServiceDialog({ open, onOpenChange, editId }: ServiceDialogProps
   const [price, setPrice] = useState("");
   const [paymentTerms, setPaymentTerms] = useState("");
   const [notes, setNotes] = useState("");
+  // v2 detail-drawer fields — these appear on the public service-detail
+  // drawer (kind chip, authority dl row, legal dl row, "engagement covers"
+  // section) and were previously not editable from the admin form.
+  const [kind, setKind] = useState("");
+  const [authority, setAuthority] = useState("");
+  const [legal, setLegal] = useState("");
+  const [engagementCovers, setEngagementCovers] = useState("");
   const [sortOrder, setSortOrder] = useState("0");
   const [isActive, setIsActive] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -76,6 +83,10 @@ export function ServiceDialog({ open, onOpenChange, editId }: ServiceDialogProps
         setPrice(service.price ?? "");
         setPaymentTerms(service.paymentTerms ?? "");
         setNotes(service.notes ?? "");
+        setKind(service.kind ?? "");
+        setAuthority(service.authority ?? "");
+        setLegal(service.legal ?? "");
+        setEngagementCovers(service.engagementCovers ?? "");
         setSortOrder(service.sortOrder.toString());
         setIsActive(service.isActive);
       }
@@ -97,6 +108,10 @@ export function ServiceDialog({ open, onOpenChange, editId }: ServiceDialogProps
       setPrice("");
       setPaymentTerms("");
       setNotes("");
+      setKind("");
+      setAuthority("");
+      setLegal("");
+      setEngagementCovers("");
       setSortOrder("0");
       setIsActive(true);
     }
@@ -139,6 +154,10 @@ export function ServiceDialog({ open, onOpenChange, editId }: ServiceDialogProps
           price: price || undefined,
           paymentTerms: paymentTerms || undefined,
           notes: notes || undefined,
+          kind: kind || undefined,
+          authority: authority || undefined,
+          legal: legal || undefined,
+          engagementCovers: engagementCovers || undefined,
           sortOrder: parseInt(sortOrder) || 0,
           isActive,
         });
@@ -161,6 +180,10 @@ export function ServiceDialog({ open, onOpenChange, editId }: ServiceDialogProps
           price: price || undefined,
           paymentTerms: paymentTerms || undefined,
           notes: notes || undefined,
+          kind: kind || undefined,
+          authority: authority || undefined,
+          legal: legal || undefined,
+          engagementCovers: engagementCovers || undefined,
           sortOrder: parseInt(sortOrder) || 0,
           isActive,
           createdBy: user?.id ?? "unknown",
@@ -277,6 +300,43 @@ export function ServiceDialog({ open, onOpenChange, editId }: ServiceDialogProps
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Govt. fees extra, additional info..."
+              />
+            </div>
+
+            {/* v2 detail-drawer fields — kind, authority, legal, engagement covers */}
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <Label>Kind</Label>
+                <Input
+                  value={kind}
+                  onChange={(e) => setKind(e.target.value)}
+                  placeholder="Application coordination · Filing and follow-up support"
+                />
+              </div>
+              <div>
+                <Label>Authority</Label>
+                <Input
+                  value={authority}
+                  onChange={(e) => setAuthority(e.target.value)}
+                  placeholder="BIDA · Work Permit Cell · OSS Portal"
+                />
+              </div>
+            </div>
+            <div>
+              <Label>Legal Basis</Label>
+              <Input
+                value={legal}
+                onChange={(e) => setLegal(e.target.value)}
+                placeholder="Foreign Exchange Regulation Act, 1947 · BIDA Act, 2016"
+              />
+            </div>
+            <div>
+              <Label>Engagement Covers</Label>
+              <Textarea
+                value={engagementCovers}
+                onChange={(e) => setEngagementCovers(e.target.value)}
+                rows={2}
+                placeholder="Validity refreshes, committee reschedules, one to two rounds of officer queries..."
               />
             </div>
 
