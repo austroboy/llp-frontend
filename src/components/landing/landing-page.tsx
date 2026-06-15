@@ -709,10 +709,8 @@ export function LandingPage() {
               <div className="lf-footer-team">
                 <div className="lf-footer-team-label">The lab</div>
                 <p className="lf-footer-team-line">
-                  Led by <strong>Tanbhir Siddiki</strong> · Editorial{" "}
-                  <strong>Mehnaz Islam</strong> · Operations{" "}
-                  <strong>Shumon Ahmed</strong> and{" "}
-                  <strong>Muhib Hossain</strong>
+                  A small team of legal, editorial, and technology
+                  practitioners.
                 </p>
               </div>
             </div>
@@ -735,8 +733,6 @@ export function LandingPage() {
           </motion.div>
           <div className="lf-footer-foot">
             <span>© 2026 Labor Law Partner · Dhaka, Bangladesh</span>
-            <div className="lf-footer-foot-right">
-            </div>
           </div>
         </footer>
       </main>
