@@ -33,7 +33,7 @@ const inViewOnce = { once: true, margin: "-72px 0px" } as const;
 
 const HERO_CHIPS = [
   "Terminating for unauthorised absence",
-  "Maternity leave after the 2025 Ordinance",
+  "Maternity benefit after the 2026 Amendment",
   "Gratuity calculation basis",
 ];
 
@@ -224,9 +224,9 @@ const PULSE: PulseBrief[] = [
   },
   {
     date: "04 Apr 2026",
-    title: "The 2025 Ordinance on maternity, unpacked.",
+    title: "The 2026 Amendment to maternity benefit, unpacked.",
     desc:
-      "What the extension from 112 to 120 days means for women workers under the BLA, and how the additional 8 days interact with the Provident Fund Rules on the tax side.",
+      "How s.16 of the 2026 Act substitutes \u201Ceight weeks\u201D with \u201C60 (sixty) days\u201D each side in s.46(1), what it means for women workers under the BLA, and why the separate 112\u2192120 day change belongs to s.14(2)(d).",
     kind: "Brief · Section 46",
   },
   {
@@ -591,11 +591,12 @@ export function LandingPage() {
           >
             <span className="lf-pulse-review-label">Currently under review</span>
             <p className="lf-pulse-review-text">
-              Bangladesh's maternity benefit has long been treated as tax-free
-              in practice, but the 2025 extension from 112 to 120 days raises a
-              new question about whether the additional 8 days receives the same
-              treatment. We have not found a specific NBR circular addressing
-              that incremental period and are monitoring for any formal guidance.
+              The 2026 Amendment Act (s.16) substitutes &ldquo;eight
+              weeks&rdquo; with &ldquo;60 (sixty) days&rdquo; in s.46(1) of the
+              Bangladesh Labour Act, giving women workers 60 days before and 60
+              days after delivery. We are monitoring for any formal NBR or
+              Provident Fund guidance on how the longer benefit period is
+              treated, and will source it before stating a tax position.
             </p>
           </motion.div>
         </section>
@@ -916,20 +917,16 @@ type DeskEvent = {
 const DESK_EVENTS: DeskEvent[] = [
   {
     year: "2006",
-    title: "Enacted at 112 days (8 weeks before, 8 weeks after)",
-    meta: "Act XLII of 2006",
+    title:
+      "Enacted: maternity benefit for \u201Ceight weeks\u201D before + \u201Ceight weeks\u201D after delivery",
+    meta: "Act XLII of 2006 · s.46(1)",
     state: "historical",
   },
   {
-    year: "2018",
-    title: "Benefit calculation refined",
-    meta: "2018 Amendment · Section 50",
-    state: "historical",
-  },
-  {
-    year: "2025",
-    title: "Leave extended from 112 to 120 days (60 before, 60 after delivery)",
-    meta: "2025 Ordinance · Women workers under the BLA",
+    year: "2026",
+    title:
+      "s.46(1): \u201Ceight weeks\u201D \u2192 \u201C60 (sixty) days\u201D each side (60 before + 60 after)",
+    meta: "2026 Amendment Act · s.16(a) · mirrors Ordinance 65/2025",
     state: "current",
   },
 ];
@@ -955,7 +952,7 @@ function DeskCard({ onClick }: { onClick: () => void }) {
       </div>
       <div className="lf-desk-ref">§ BANGLADESH LABOUR ACT 2006</div>
       <h2 className="lf-desk-title">
-        Section 46 · <em>Maternity leave</em>
+        Section 46 · <em>Right to maternity benefit</em>
       </h2>
       <motion.div
         className="lf-desk-timeline"
@@ -980,12 +977,15 @@ function DeskCard({ onClick }: { onClick: () => void }) {
       <div className="lf-desk-obs">
         <div className="lf-desk-obs-label">Currently under editorial review</div>
         <p className="lf-desk-obs-text">
-          The 2025 Ordinance (now enacted as the 2026 Amendment Act) extended
-          maternity leave from 112 to 120 days, with 60 days before and 60
-          days after delivery. The entitlement applies to all women workers
-          covered by the Bangladesh Labour Act 2006, irrespective of
-          establishment size. Payroll treatment of the additional 8 days under
-          the Income Tax Act 2023 is still under editorial review.
+          The 2025 Ordinance (now enacted as the 2026 Amendment Act, s.16)
+          substituted &ldquo;eight weeks&rdquo; with &ldquo;60 (sixty)
+          days&rdquo; in s.46(1), giving 60 days before and 60 days after
+          delivery. The 2026 amendment also swaps a Bangla term in s.46(2)
+          (&ldquo;&#2478;&#2489;&#2495;&#2482;&#2494;&#2453;&#2503;&rdquo;
+          &rarr;
+          &ldquo;&#2474;&#2509;&#2480;&#2488;&#2498;&#2468;&#2495;&#2453;&#2503;&rdquo;),
+          which is invisible in the English text. The separate 112 &rarr; 120
+          day change belongs to s.14(2)(d), not s.46.
         </p>
       </div>
       <div className="lf-desk-foot">

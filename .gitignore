@@ -48,3 +48,6 @@ AGENTS.md
 .codex
 skills-src/
 skills-lock.json
+
+.vercel
+.env*
