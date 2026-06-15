@@ -591,12 +591,11 @@ export function LandingPage() {
           >
             <span className="lf-pulse-review-label">Currently under review</span>
             <p className="lf-pulse-review-text">
-              The 2026 Amendment Act (s.16) substitutes &ldquo;eight
-              weeks&rdquo; with &ldquo;60 (sixty) days&rdquo; in s.46(1) of the
-              Bangladesh Labour Act, giving women workers 60 days before and 60
-              days after delivery. We are monitoring for any formal NBR or
-              Provident Fund guidance on how the longer benefit period is
-              treated, and will source it before stating a tax position.
+              The 2025 Ordinance, subsequently formalized by Section 16(a) of
+              the 2026 Amendment Act, extended the statutory maternity benefit
+              window under Section 46(1) from 112 days (eight weeks preceding
+              and eight weeks following delivery) to 120 days (60 days
+              preceding and 60 days following delivery).
             </p>
           </motion.div>
         </section>
