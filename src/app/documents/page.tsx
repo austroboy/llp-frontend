@@ -6,15 +6,31 @@ export const metadata = {
   description: "Browse Bangladesh Labour Law documents",
 };
 
+// Skip static generation at build time. The /documents/* routes are
+// gated by proxy.ts to /coming-soon pre-launch, so build-time Supabase
+// access is not needed.
+export const dynamic = "force-dynamic";
+
 export default async function DocumentsPage() {
-  const documents = await getRegistry();
-  const chains = await getSupersessionChains();
+  try {
+    const documents = await getRegistry();
+    const chains = await getSupersessionChains();
 
-  // Build translation flags map for all documents
-  const translationFlags: Record<string, { enTranslated?: boolean; bnTranslated?: boolean }> = {};
-  for (const doc of documents) {
-    translationFlags[doc.id] = await getTranslationFlags(doc.id);
+    const translationFlags: Record<string, { enTranslated?: boolean; bnTranslated?: boolean }> = {};
+    for (const doc of documents) {
+      translationFlags[doc.id] = await getTranslationFlags(doc.id);
+    }
+
+    return (
+      <DocumentsIndex
+        documents={documents}
+        chains={chains}
+        translationFlags={translationFlags}
+      />
+    );
+  } catch {
+    // Backend unreachable — render empty index. The proxy gate will
+    // typically rewrite this route to /coming-soon anyway pre-launch.
+    return <DocumentsIndex documents={[]} chains={{}} translationFlags={{}} />;
   }
-
-  return <DocumentsIndex documents={documents} chains={chains} translationFlags={translationFlags} />;
 }
