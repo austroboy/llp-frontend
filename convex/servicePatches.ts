@@ -298,3 +298,45 @@ export const applyV2026_06 = internalMutation({
     return report;
   },
 });
+// ─────────────────────────────────────────────────────────────────────
+// V2026.07 — Follow-up: Expatriate TIN price 3,000 → 5,000
+// (V2026_06 matched plain "Expatriate TIN" but DB uses
+//  "Expatriate TIN · Registration" with middle-dot separator.)
+//
+//   pnpm dlx convex run servicePatches:applyV2026_07 --prod
+// ─────────────────────────────────────────────────────────────────────
+export const applyV2026_07 = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    const now = Date.now();
+    const expatTin = await ctx.db
+      .query("serviceProducts")
+      .filter((q) =>
+        q.or(
+          q.eq(q.field("title"), "Expatriate TIN · Registration"),
+          q.eq(q.field("title"), "Expatriate TIN · registration"),
+          q.eq(q.field("title"), "Expatriate TIN · Registration "),
+          q.eq(q.field("title"), "Expatriate TIN"),
+          q.eq(q.field("title"), "Expat TIN"),
+        ),
+      )
+      .first();
+
+    if (!expatTin) {
+      return { expatriateTin: "not_found", searched_titles: 5 };
+    }
+
+    await ctx.db.patch(expatTin._id, {
+      price: "Starting from BDT 5,000 + VAT",
+      updatedAt: now,
+    });
+
+    return {
+      expatriateTin: "patched",
+      title: expatTin.title,
+      old_price: expatTin.price,
+      new_price: "Starting from BDT 5,000 + VAT",
+    };
+  },
+});
+
