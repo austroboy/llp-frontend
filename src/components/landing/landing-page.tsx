@@ -736,8 +736,6 @@ export function LandingPage() {
           <div className="lf-footer-foot">
             <span>© 2026 Labor Law Partner · Dhaka, Bangladesh</span>
             <div className="lf-footer-foot-right">
-              <span>Design Foundation v1.9</span>
-              <span>Content v2026.04.26</span>
             </div>
           </div>
         </footer>
