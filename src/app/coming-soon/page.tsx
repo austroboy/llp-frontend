@@ -41,13 +41,7 @@ export default function ComingSoonPage() {
           </Link>
         </div>
 
-        <p className="mt-10 text-xs text-neutral-500">
-          For urgent matters reach us at{" "}
-          <a className="underline hover:text-neutral-700" href="mailto:hello@laborlawpartner.com">
-            hello@laborlawpartner.com
-          </a>
-          .
-        </p>
+
       </div>
     </main>
   );

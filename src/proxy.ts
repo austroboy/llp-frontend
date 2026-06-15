@@ -1,4 +1,5 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
 const isPublicRoute = createRouteMatcher([
   "/",
@@ -32,9 +33,45 @@ const isPublicRoute = createRouteMatcher([
   "/og(.*)",
   "/research(.*)",
   "/audit(.*)",
+  "/coming-soon(.*)",
+]);
+
+/**
+ * Pre-launch coming-soon gate.
+ *
+ * Live routes:
+ *   /                — home
+ *   /services        — services desk
+ *   /coming-soon     — the gate itself
+ *   /admin/*         — admin panel (required for service data edits)
+ *   /api/*           — API + cron + webhooks
+ *   /sign-in, /sign-up — Clerk auth
+ *
+ * All other top-level routes are rewritten to /coming-soon.
+ * To re-open routes: remove this gate (the `comingSoonAllowed` matcher
+ * and the early rewrite branch) and ship.
+ */
+const comingSoonAllowed = createRouteMatcher([
+  "/",
+  "/services(.*)",
+  "/admin(.*)",
+  "/api(.*)",
+  "/sign-in(.*)",
+  "/sign-up(.*)",
+  "/coming-soon(.*)",
+  "/og(.*)",
+  "/_next(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, request) => {
+  // Coming-soon gate fires BEFORE Clerk auth so we don't ask users to
+  // log in just to see the placeholder page.
+  if (!comingSoonAllowed(request)) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/coming-soon";
+    return NextResponse.rewrite(url);
+  }
+
   if (!isPublicRoute(request)) {
     await auth.protect();
   }
