@@ -141,7 +141,7 @@ export function PublicProfileContent({ slug }: PublicProfileContentProps) {
             animate="show"
           >
             <motion.div variants={fadeUp} className="lf-kicker">
-              <span className="lf-kicker-mark">§ 01</span>
+              <span className="lf-kicker-mark">01</span>
               <span>
                 {lang === "bn" ? "প্রোফেশনাল প্রোফাইল" : "Professional Profile"}
               </span>

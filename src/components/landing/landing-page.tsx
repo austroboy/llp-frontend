@@ -192,6 +192,17 @@ type PulseBrief = {
   kind: string;
 };
 
+// ── Landing section visibility (admin-ready) ──────────────────────────────
+// These two homepage surfaces are hidden for now per Tanbhir's request and
+// are intended to be controlled from the admin panel in future. The
+// `data-admin-surface` markers on the JSX (pulse_briefs / currently_under_review)
+// are the hook points for that admin toggle. To re-enable a section, flip its
+// flag to true here, or later wire it to the admin/Convex setting of the same key.
+const SECTION_VISIBILITY = {
+  pulse_briefs: false, // #5 "What we read this fortnight"
+  currently_under_review: false, // #6 "Currently under review"
+};
+
 const PULSE: PulseBrief[] = [
   {
     date: "18 Apr 2026",
@@ -511,8 +522,11 @@ export function LandingPage() {
           </div>
         </section>
 
-        {/* -- § III · Pulse --------------------------------------- */}
+        {/* -- § III · Pulse (admin-controlled visibility) --------- */}
+        {(SECTION_VISIBILITY.pulse_briefs ||
+          SECTION_VISIBILITY.currently_under_review) && (
         <section className="lf-section">
+          {SECTION_VISIBILITY.pulse_briefs && (
           <motion.div
             className="lf-section-header"
             variants={stagger}
@@ -529,6 +543,8 @@ export function LandingPage() {
               reviewed before publication.
             </motion.p>
           </motion.div>
+          )}
+          {SECTION_VISIBILITY.pulse_briefs && (
           <motion.div
             className="lf-pulse-grid"
             data-admin-surface="pulse_briefs"
@@ -549,6 +565,8 @@ export function LandingPage() {
               </motion.article>
             ))}
           </motion.div>
+          )}
+          {SECTION_VISIBILITY.currently_under_review && (
           <motion.div
             className="lf-pulse-review"
             data-admin-surface="currently_under_review"
@@ -566,7 +584,9 @@ export function LandingPage() {
               preceding and 60 days following delivery).
             </p>
           </motion.div>
+          )}
         </section>
+        )}
 
         {/* -- § IV · Arms ----------------------------------------- */}
         <section className="lf-section">
@@ -616,6 +636,14 @@ export function LandingPage() {
                 </MotionTag>
               );
             })}
+          </motion.div>
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="show"
+            viewport={inViewOnce}
+          >
+            <WaitlistForm />
           </motion.div>
         </section>
 
@@ -861,6 +889,112 @@ function SubscribeField() {
             fontSize: "0.9rem",
           }}
         >
+          {status.message}
+        </p>
+      )}
+    </div>
+  );
+}
+
+// ── Waiting-list signup (coming-soon features) ────────────────────────────
+// #8: simple join-the-waiting-list form — name + email + optional phone.
+// NOTE: submission is a stub for now (no backend write). To wire it up later,
+// replace the body of `submit()` with a Convex mutation (e.g. api.waitlist.join)
+// or a POST to /api/waitlist. The success/idle/error UX below is already final.
+function WaitlistForm() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [status, setStatus] = useState<SubscribeStatus>({ kind: "idle" });
+
+  const submit = async () => {
+    const n = name.trim();
+    const e = email.trim();
+    if (!n) {
+      setStatus({ kind: "error", message: "Please enter your name." });
+      return;
+    }
+    if (!e || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) {
+      setStatus({ kind: "error", message: "Please enter a valid email." });
+      return;
+    }
+    setStatus({ kind: "submitting" });
+    // TODO(convex): persist { name, email, phone } to the waitlist table.
+    // For now we acknowledge locally so the UX is complete.
+    await new Promise((r) => setTimeout(r, 400));
+    setStatus({
+      kind: "success",
+      message: "You're on the list. We'll email you when these open.",
+    });
+    setName("");
+    setEmail("");
+    setPhone("");
+  };
+
+  const isSubmitting = status.kind === "submitting";
+
+  return (
+    <div className="lf-waitlist" data-admin-surface="waitlist">
+      <div className="lf-waitlist-head">
+        <h3 className="lf-waitlist-title">Join the waiting list</h3>
+        <p className="lf-waitlist-deck">
+          Be first to know when Academy, Audit, and the Expert Network open.
+        </p>
+      </div>
+      <form
+        className="lf-waitlist-form"
+        onSubmit={(ev) => {
+          ev.preventDefault();
+          submit();
+        }}
+      >
+        <div className="lf-waitlist-fields">
+          <input
+            type="text"
+            autoComplete="name"
+            className="lf-waitlist-input"
+            value={name}
+            onChange={(ev) => setName(ev.target.value)}
+            placeholder="Full name"
+            disabled={isSubmitting}
+            aria-label="Full name"
+          />
+          <input
+            type="email"
+            autoComplete="email"
+            className="lf-waitlist-input"
+            value={email}
+            onChange={(ev) => setEmail(ev.target.value)}
+            placeholder="your@email.com"
+            disabled={isSubmitting}
+            aria-label="Email address"
+          />
+          <input
+            type="tel"
+            autoComplete="tel"
+            className="lf-waitlist-input"
+            value={phone}
+            onChange={(ev) => setPhone(ev.target.value)}
+            placeholder="Phone (optional)"
+            disabled={isSubmitting}
+            aria-label="Contact number (optional)"
+          />
+        </div>
+        <button
+          type="submit"
+          className="lf-waitlist-submit lf-glow"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Joining..." : "Join the waiting list"}
+        </button>
+      </form>
+      {status.kind === "success" && (
+        <p role="status" className="lf-waitlist-msg lf-waitlist-msg--ok">
+          {status.message}
+        </p>
+      )}
+      {status.kind === "error" && (
+        <p role="alert" className="lf-waitlist-msg lf-waitlist-msg--err">
           {status.message}
         </p>
       )}

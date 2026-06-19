@@ -74,7 +74,7 @@ function ContactHero() {
       >
         <motion.div variants={fadeUp}>
           <div className="lf-kicker">
-            <span className="lf-kicker-mark">§ 01</span>
+            <span className="lf-kicker-mark">01</span>
             Contact
           </div>
         </motion.div>
@@ -109,7 +109,7 @@ function ContactChannels() {
       >
         <motion.div variants={fadeUp}>
           <div className="lf-kicker">
-            <span className="lf-kicker-mark">§ 02</span>
+            <span className="lf-kicker-mark">02</span>
             Channels
           </div>
         </motion.div>
@@ -230,7 +230,7 @@ function ContactDirect() {
           <div>
             <div className="lf-section-eyebrow">
               <span className="lf-section-eyebrow-rule" />
-              <span className="lf-meta lf-meta--accent">§ 03</span>
+              <span className="lf-meta lf-meta--accent">03</span>
               <span className="lf-meta">Direct line</span>
             </div>
             <h2

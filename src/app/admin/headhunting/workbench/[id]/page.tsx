@@ -256,7 +256,7 @@ export default function ScreeningWorkbenchPage() {
         <motion.div variants={fadeUp} className="flex items-center justify-between gap-4 flex-wrap">
           <div>
             <span className="lf-kicker">
-              <span className="lf-kicker-mark">§ 2.2</span>
+              <span className="lf-kicker-mark">2.2</span>
               Admin · Headhunting · Workbench
             </span>
             <h1

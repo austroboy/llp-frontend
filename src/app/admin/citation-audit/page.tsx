@@ -85,7 +85,7 @@ export default function CitationAuditPage() {
           }}
         >
           <div className="lf-kicker">
-            <span className="lf-kicker-mark">§ 3.4</span>
+            <span className="lf-kicker-mark">3.4</span>
             Admin · Citation Audit
           </div>
           <span

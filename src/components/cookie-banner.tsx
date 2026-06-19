@@ -96,7 +96,7 @@ export function CookieBanner() {
             <div className="lf-section-eyebrow">
               <span className="lf-section-eyebrow-rule" />
               <span className="lf-kicker">
-                <span className="lf-kicker-mark">§ IX</span>
+                <span className="lf-kicker-mark">IX</span>
                 <span>— Privacy &amp; Cookies</span>
               </span>
             </div>

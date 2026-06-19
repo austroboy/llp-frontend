@@ -117,7 +117,7 @@ function AdminHeadhuntingContent() {
         style={{ paddingBottom: "var(--s-5)" }}
       >
         <motion.div variants={fadeUp} className="lf-kicker">
-          <span className="lf-kicker-mark">§ V</span>
+          <span className="lf-kicker-mark">V</span>
           Admin · Headhunting
         </motion.div>
 

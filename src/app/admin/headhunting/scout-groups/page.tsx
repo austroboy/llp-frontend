@@ -253,7 +253,7 @@ function ScoutGroupsContent() {
         </motion.div>
 
         <motion.div variants={fadeUp} className="lf-kicker">
-          <span className="lf-kicker-mark">§ 2.2.c</span>
+          <span className="lf-kicker-mark">2.2.c</span>
           Admin · Headhunting · Scout Groups
         </motion.div>
 

@@ -103,7 +103,6 @@ export default function MandateDetailPage() {
         style={{ paddingBottom: "var(--s-6)" }}
       >
         <motion.div variants={fadeUp} className="lf-kicker">
-          <span className="lf-kicker-mark">§</span>
           Mandate · {mandateRef}
         </motion.div>
 

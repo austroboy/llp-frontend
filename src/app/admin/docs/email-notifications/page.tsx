@@ -262,7 +262,7 @@ export default function EmailNotificationsDocsPage() {
         style={{ paddingBottom: "var(--s-6)" }}
       >
         <motion.div variants={fadeUp} className="lf-kicker">
-          <span className="lf-kicker-mark">§ 5.1</span>
+          <span className="lf-kicker-mark">5.1</span>
           Admin · Docs · Email notifications
         </motion.div>
         <motion.h1
@@ -421,7 +421,7 @@ export default function EmailNotificationsDocsPage() {
           style={{ marginBottom: "var(--s-4)" }}
         >
           <div className="lf-kicker">
-            <span className="lf-kicker-mark">§ 5.1.1</span>
+            <span className="lf-kicker-mark">5.1.1</span>
             Per-area summary
           </div>
           <h2 className="lf-h2" style={{ marginTop: "var(--s-2)" }}>
@@ -485,7 +485,7 @@ export default function EmailNotificationsDocsPage() {
           style={{ marginBottom: "var(--s-4)" }}
         >
           <div className="lf-kicker">
-            <span className="lf-kicker-mark">§ 5.1.2</span>
+            <span className="lf-kicker-mark">5.1.2</span>
             Per-event detail
           </div>
           <h2 className="lf-h2" style={{ marginTop: "var(--s-2)" }}>

@@ -160,7 +160,7 @@ function Kicker({ n, labelKey }: { n: string; labelKey: string }) {
   const { t } = useLanguage();
   return (
     <div className="lf-kicker">
-      <span className="lf-kicker-mark">§ {n}</span>
+      <span className="lf-kicker-mark">{n}</span>
       {t(labelKey)}
     </div>
   );
@@ -786,7 +786,7 @@ function PricingCTA() {
           <div>
             <div className="lf-section-eyebrow">
               <span className="lf-section-eyebrow-rule" />
-              <span className="lf-meta lf-meta--accent">§ 05</span>
+              <span className="lf-meta lf-meta--accent">05</span>
               <span className="lf-meta">{t("pricing.cta.markerLabel")}</span>
             </div>
             <TitleTriple

@@ -463,7 +463,7 @@ export function ExpertsContent() {
               animate="show"
             >
               <motion.div variants={fadeUp} className="lf-kicker">
-                <span className="lf-kicker-mark">§ I</span>The Directory
+                <span className="lf-kicker-mark">I</span>The Directory
               </motion.div>
             </motion.div>
 
@@ -728,7 +728,7 @@ export function ExpertsContent() {
               viewport={inViewOnce}
             >
               <motion.div variants={fadeUp} className="lf-kicker">
-                <span className="lf-kicker-mark">§ II</span>The Directory
+                <span className="lf-kicker-mark">II</span>The Directory
               </motion.div>
               <motion.h2 variants={fadeUp} className="lf-h2">
                 {t("experts.directory.title") || "Browse practitioners"}
@@ -1112,7 +1112,7 @@ export function ExpertsContent() {
               viewport={inViewOnce}
             >
               <motion.div variants={fadeUp} className="lf-kicker">
-                <span className="lf-kicker-mark">§ III</span>How it works
+                <span className="lf-kicker-mark">III</span>How it works
               </motion.div>
               <motion.h2 variants={fadeUp} className="lf-h2">
                 {t("experts.how.title")}
@@ -1164,7 +1164,7 @@ export function ExpertsContent() {
               viewport={inViewOnce}
             >
               <motion.div variants={fadeUp} className="lf-kicker">
-                <span className="lf-kicker-mark">§ IV</span>Foundations
+                <span className="lf-kicker-mark">IV</span>Foundations
               </motion.div>
               <motion.h2 variants={fadeUp} className="lf-h2">
                 {t("experts.pillars.title")}
@@ -1248,7 +1248,7 @@ export function ExpertsContent() {
               viewport={inViewOnce}
             >
               <motion.div variants={fadeUp} className="lf-kicker">
-                <span className="lf-kicker-mark">§ V</span>Editorial standards
+                <span className="lf-kicker-mark">V</span>Editorial standards
               </motion.div>
               <motion.h2 variants={fadeUp} className="lf-h2">
                 {t("experts.standards.title")}
@@ -1276,8 +1276,7 @@ export function ExpertsContent() {
                   className="lf-card lf-card--hover"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="lf-meta lf-meta--accent">
-                      § {String(i + 1).padStart(2, "0")}
+                    <span className="lf-meta lf-meta--accent">{String(i + 1).padStart(2, "0")}
                     </span>
                     <Icon
                       className="size-4"
@@ -1328,7 +1327,7 @@ export function ExpertsContent() {
                   style={{ justifyContent: "center" }}
                 >
                   <span className="lf-section-eyebrow-rule" />
-                  <span className="lf-meta lf-meta--accent">§ VI</span>
+                  <span className="lf-meta lf-meta--accent">VI</span>
                   <span className="lf-meta">Begin</span>
                 </div>
                 <h2

@@ -88,7 +88,7 @@ export default function EmailAdminPage() {
         style={{ paddingBottom: "var(--s-6)" }}
       >
         <motion.div variants={fadeUp} className="lf-kicker">
-          <span className="lf-kicker-mark">§ 4.1</span>
+          <span className="lf-kicker-mark">4.1</span>
           Admin · Communications · Email
         </motion.div>
         <motion.h1

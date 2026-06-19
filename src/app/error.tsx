@@ -77,7 +77,7 @@ export default function GlobalError({
               animate="show"
             >
               <motion.div variants={fadeUp} className="lf-kicker">
-                <span className="lf-kicker-mark">§ E.01</span>An incident in
+                <span className="lf-kicker-mark">E.01</span>An incident in
                 transit
               </motion.div>
               <motion.h1 variants={fadeUp} className="lf-h2">

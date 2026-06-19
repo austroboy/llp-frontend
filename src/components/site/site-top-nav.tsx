@@ -246,7 +246,7 @@ export function SiteTopNav() {
                 style={{ animation: "none" }}
               >
                 <div className="lf-topnav-drawer-head">
-                  <span className="lf-topnav-drawer-eyebrow">§ INDEX</span>
+                  <span className="lf-topnav-drawer-eyebrow">INDEX</span>
                   <div className="lf-topnav-drawer-head-actions">
                     <button
                       type="button"

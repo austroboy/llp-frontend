@@ -38,7 +38,7 @@ export function ResearchContent() {
               animate="show"
             >
               <motion.div variants={fadeUp} className="lf-kicker">
-                <span className="lf-kicker-mark">§ II</span>
+                <span className="lf-kicker-mark">II</span>
                 Research Lab
               </motion.div>
               <motion.h1 variants={fadeUp} className="lf-rl-title">

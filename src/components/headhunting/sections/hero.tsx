@@ -277,7 +277,7 @@ export function Hero() {
         >
           <div className="reg-marker">
             <span className="reg-marker-rule" />
-            <span className="reg-marker-num">§ I</span>
+            <span className="reg-marker-num">I</span>
             <span>The Commission</span>
           </div>
           <div className="reg-coord hidden sm:block">

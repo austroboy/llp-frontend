@@ -144,7 +144,7 @@ export function DocumentsIndex({
               animate="show"
             >
               <motion.div variants={fadeUp} className="lf-kicker">
-                <span className="lf-kicker-mark">§ I</span>
+                <span className="lf-kicker-mark">I</span>
                 {t("docs.heroBadge")}
               </motion.div>
 
@@ -219,7 +219,7 @@ export function DocumentsIndex({
               style={{ marginBottom: "var(--s-5)" }}
             >
               <motion.div variants={fadeUp} className="lf-kicker">
-                <span className="lf-kicker-mark">§ II</span>
+                <span className="lf-kicker-mark">II</span>
                 The Registry
               </motion.div>
               <motion.h2 variants={fadeUp} className="lf-h2">
@@ -402,7 +402,7 @@ export function DocumentsIndex({
                 viewport={inViewOnce}
               >
                 <motion.div variants={fadeUp} className="lf-kicker">
-                  <span className="lf-kicker-mark">§ III</span>
+                  <span className="lf-kicker-mark">III</span>
                   {t("docs.supersessionTimeline")}
                 </motion.div>
                 <motion.h2 variants={fadeUp} className="lf-h2">
@@ -466,7 +466,7 @@ export function DocumentsIndex({
               <div style={{ position: "relative" }}>
                 <div className="lf-section-eyebrow">
                   <span className="lf-section-eyebrow-rule" />
-                  <span className="lf-meta lf-meta--accent">§ IV</span>
+                  <span className="lf-meta lf-meta--accent">IV</span>
                   <span className="lf-meta" style={{ fontSize: 10 }}>
                     Query the Registry
                   </span>

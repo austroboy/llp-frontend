@@ -270,7 +270,7 @@ export default function AdminApprovalsPage() {
         >
           <div>
             <motion.div variants={fadeUp} className="lf-kicker">
-              <span className="lf-kicker-mark">§ 1.2</span>
+              <span className="lf-kicker-mark">1.2</span>
               Admin · Approvals
             </motion.div>
             <motion.h1

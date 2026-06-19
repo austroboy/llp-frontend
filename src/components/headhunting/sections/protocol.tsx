@@ -99,7 +99,7 @@ export function Protocol() {
           <div className="lg:col-span-7 xl:col-span-7">
             <div className="reg-marker">
               <span className="reg-marker-rule" />
-              <span className="reg-marker-num">§ II</span>
+              <span className="reg-marker-num">II</span>
               <span>The Protocol</span>
             </div>
             <h2 className="reg-display mt-7 text-[36px] sm:text-[46px] lg:text-[56px] leading-[1.02] font-normal max-w-[22ch]">

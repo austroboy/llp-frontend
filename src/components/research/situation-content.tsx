@@ -138,7 +138,7 @@ export function SituationContent() {
               animate="show"
             >
               <motion.div variants={fadeUp} className="lf-kicker">
-                <span className="lf-kicker-mark">§ II.2</span>
+                <span className="lf-kicker-mark">II.2</span>
                 Situation Map
               </motion.div>
               <motion.h1 variants={fadeUp} className="lf-rl-title">

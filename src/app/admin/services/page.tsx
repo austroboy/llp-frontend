@@ -106,7 +106,7 @@ export default function AdminServicesPage() {
           style={{ paddingBottom: "var(--s-4)" }}
         >
           <motion.div variants={fadeUp} className="lf-kicker">
-            <span className="lf-kicker-mark">§ 2</span>
+            <span className="lf-kicker-mark">2</span>
             Admin · Service Catalogue
           </motion.div>
           <motion.h1

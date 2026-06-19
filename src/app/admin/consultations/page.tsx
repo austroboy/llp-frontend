@@ -70,7 +70,7 @@ export default function AdminConsultationsPage() {
           style={{ paddingBottom: "var(--s-4)" }}
         >
           <motion.div variants={fadeUp} className="lf-kicker">
-            <span className="lf-kicker-mark">§ 3</span>
+            <span className="lf-kicker-mark">3</span>
             Admin · Consultation Queue
           </motion.div>
           <motion.h1

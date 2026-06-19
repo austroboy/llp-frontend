@@ -294,7 +294,7 @@ export function ServicesContent() {
                 viewport={inViewOnce}
               >
                 <motion.div variants={fadeUp}>
-                  <span className="sv2-eyebrow">§ Services Index · 2026</span>
+                  <span className="sv2-eyebrow">Services Index · 2026</span>
                   <h2 className="sv2-section-h2">
                     {totalCount ? `${totalCount} engagements,` : "All engagements,"}{" "}
                     <em>one</em> delivery standard.
@@ -460,7 +460,7 @@ export function ServicesContent() {
           <section className="sv2-process">
             <div className="sv2-wrap sv2-process-grid">
               <div>
-                <span className="sv2-eyebrow">§ How we work</span>
+                <span className="sv2-eyebrow">How we work</span>
                 <h2 className="sv2-process-h2">
                   A delivery<br /><em>system,</em> not a thread.
                 </h2>

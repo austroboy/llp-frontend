@@ -55,7 +55,7 @@ export default function OrgDocumentsPage() {
         style={{ paddingBottom: "var(--s-6)" }}
       >
         <motion.div variants={fadeUp} className="lf-kicker">
-          <span className="lf-kicker-mark">§ I</span>
+          <span className="lf-kicker-mark">I</span>
           Organization Desk · Documents
         </motion.div>
 
@@ -157,7 +157,7 @@ export default function OrgDocumentsPage() {
           style={{ marginBottom: "var(--s-4)" }}
         >
           <div className="lf-kicker">
-            <span className="lf-kicker-mark">§ II</span>
+            <span className="lf-kicker-mark">II</span>
             All documents
           </div>
           <h2 className="lf-h2" style={{ marginTop: "var(--s-2)" }}>

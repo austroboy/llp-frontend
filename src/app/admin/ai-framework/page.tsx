@@ -605,7 +605,7 @@ export default function AIFrameworkPage() {
           style={{ paddingBottom: "var(--s-3)" }}
         >
           <motion.div variants={fadeUp} className="lf-kicker">
-            <span className="lf-kicker-mark">§ 3.2</span>
+            <span className="lf-kicker-mark">3.2</span>
             Admin · AI Framework
           </motion.div>
           <motion.h1

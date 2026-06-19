@@ -96,7 +96,7 @@ export default function AdminBlogPage() {
           style={{ paddingBottom: "var(--s-4)" }}
         >
           <motion.div variants={fadeUp} className="lf-kicker">
-            <span className="lf-kicker-mark">§ 5</span>
+            <span className="lf-kicker-mark">5</span>
             Admin · Editorial Desk
           </motion.div>
           <motion.h1

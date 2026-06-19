@@ -180,7 +180,7 @@ export function ActionCta() {
         >
           <div className="reg-marker justify-center">
             <span className="reg-marker-rule" />
-            <span className="reg-marker-num">§ IX</span>
+            <span className="reg-marker-num">IX</span>
             <span>The Appointment</span>
           </div>
           <h2 className="reg-display mt-7 text-[36px] sm:text-[46px] lg:text-[56px] leading-[1.02] font-normal max-w-[22ch] mx-auto">

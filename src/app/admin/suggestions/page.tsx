@@ -335,7 +335,7 @@ export default function SuggestionsPage() {
         style={{ paddingBottom: "var(--s-6)" }}
       >
         <motion.div variants={fadeUp} className="lf-kicker">
-          <span className="lf-kicker-mark">§ V</span>
+          <span className="lf-kicker-mark">V</span>
           Admin · Communications · Suggestions
         </motion.div>
         <motion.h1

@@ -26,7 +26,7 @@ export function TermsContent() {
         >
           <div className="lf-section-header">
             <div className="lf-kicker">
-              <span className="lf-kicker-mark">§ T</span>The compact between you
+              <span className="lf-kicker-mark">T</span>The compact between you
               and LLP
             </div>
             <h1 className="lf-h2">Terms of Service</h1>

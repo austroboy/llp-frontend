@@ -51,7 +51,7 @@ export function Pipeline() {
         >
           <div className="reg-marker justify-center">
             <span className="reg-marker-rule" />
-            <span className="reg-marker-num">§ VI</span>
+            <span className="reg-marker-num">VI</span>
             <span>The Ledger</span>
           </div>
           <h2 className="reg-display mt-7 text-[34px] sm:text-[44px] lg:text-[52px] leading-[1.04] font-normal">

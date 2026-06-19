@@ -76,7 +76,7 @@ export default function ControlTowerPage() {
         >
           <div>
             <motion.div variants={fadeUp} className="lf-kicker">
-              <span className="lf-kicker-mark">§ 1.1</span>
+              <span className="lf-kicker-mark">1.1</span>
               Admin · Control Tower
             </motion.div>
             <motion.h1

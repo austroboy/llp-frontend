@@ -340,7 +340,7 @@ export default function EditEmailTemplatePage({
           </Link>
         </motion.div>
         <motion.div variants={fadeUp} className="lf-kicker">
-          <span className="lf-kicker-mark">§ 4.4</span>
+          <span className="lf-kicker-mark">4.4</span>
           Admin · Email templates · Edit
         </motion.div>
         <motion.h1

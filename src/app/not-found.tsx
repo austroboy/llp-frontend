@@ -87,7 +87,7 @@ export default function NotFound() {
                 animate="show"
               >
                 <motion.div variants={fadeUp} className="lf-kicker">
-                  <span className="lf-kicker-mark">§ 404</span>Instrument not
+                  <span className="lf-kicker-mark">404</span>Instrument not
                   found
                 </motion.div>
                 <motion.h1 variants={fadeUp} className="lf-h2">

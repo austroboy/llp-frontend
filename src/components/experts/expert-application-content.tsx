@@ -1510,7 +1510,7 @@ export function ExpertApplicationContent() {
               }}
             >
               <motion.div variants={fadeUp} className="lf-kicker" style={{ justifyContent: "center" }}>
-                <span className="lf-kicker-mark">§ Closing</span>
+                <span className="lf-kicker-mark">Closing</span>
                 Admitted for review
               </motion.div>
 
@@ -1682,7 +1682,7 @@ export function ExpertApplicationContent() {
               }}
             >
               <motion.div variants={fadeUp} className="lf-kicker" style={{ justifyContent: "center" }}>
-                <span className="lf-kicker-mark">§ II</span>
+                <span className="lf-kicker-mark">II</span>
                 Pending chamber review
               </motion.div>
 

@@ -130,7 +130,7 @@ export function BlogContent() {
               animate="show"
             >
               <motion.div variants={fadeUp} className="lf-kicker">
-                <span className="lf-kicker-mark">§ I</span>The Gazette
+                <span className="lf-kicker-mark">I</span>The Gazette
               </motion.div>
 
               <motion.div
@@ -259,7 +259,7 @@ export function BlogContent() {
                 viewport={inViewOnce}
               >
                 <motion.div variants={fadeUp} className="lf-kicker">
-                  <span className="lf-kicker-mark">§ II</span>Lead Opinion
+                  <span className="lf-kicker-mark">II</span>Lead Opinion
                 </motion.div>
               </motion.div>
 
@@ -287,7 +287,7 @@ export function BlogContent() {
               viewport={inViewOnce}
             >
               <motion.div variants={fadeUp} className="lf-kicker">
-                <span className="lf-kicker-mark">§ III</span>The Registry
+                <span className="lf-kicker-mark">III</span>The Registry
               </motion.div>
 
               <div className="flex flex-wrap items-end justify-between gap-4">
@@ -386,7 +386,7 @@ export function BlogContent() {
               viewport={inViewOnce}
             >
               <motion.div variants={fadeUp} className="lf-kicker">
-                <span className="lf-kicker-mark">§ IV</span>The Editorial Board
+                <span className="lf-kicker-mark">IV</span>The Editorial Board
               </motion.div>
               <motion.h2 variants={fadeUp} className="lf-h2">
                 {t("blog.contribute.title").replace(/\.$/, "")}.
@@ -440,7 +440,7 @@ export function BlogContent() {
                     className="flex items-center justify-between"
                     style={{ marginBottom: 18 }}
                   >
-                    <span className="lf-meta lf-meta--accent">§ {n.toUpperCase()}</span>
+                    <span className="lf-meta lf-meta--accent">{n.toUpperCase()}</span>
                     <span className="lf-meta" style={{ fontSize: 9.5 }}>
                       Step {i + 1} / 3
                     </span>
@@ -491,7 +491,7 @@ export function BlogContent() {
               viewport={inViewOnce}
             >
               <motion.div variants={fadeUp} className="lf-kicker">
-                <span className="lf-kicker-mark">§ V</span>Editorial Standards
+                <span className="lf-kicker-mark">V</span>Editorial Standards
               </motion.div>
               <motion.h2 variants={fadeUp} className="lf-h2">
                 {t("blog.guidelines.title")}
@@ -522,7 +522,7 @@ export function BlogContent() {
                     borderBottom: "1px solid var(--line-1)",
                   }}
                 >
-                  <span className="lf-meta lf-meta--emerald">§ V.a</span>
+                  <span className="lf-meta lf-meta--emerald">V.a</span>
                   <span className="lf-h3" style={{ fontSize: 18 }}>
                     {t("blog.guidelines.publishTitle")}
                   </span>
@@ -561,7 +561,7 @@ export function BlogContent() {
                     borderBottom: "1px solid var(--line-1)",
                   }}
                 >
-                  <span className="lf-meta lf-meta--bronze">§ V.b</span>
+                  <span className="lf-meta lf-meta--bronze">V.b</span>
                   <span className="lf-h3" style={{ fontSize: 18 }}>
                     {t("blog.guidelines.rejectTitle")}
                   </span>
@@ -603,7 +603,7 @@ export function BlogContent() {
               viewport={inViewOnce}
             >
               <motion.div variants={fadeUp} className="lf-kicker">
-                <span className="lf-kicker-mark">§ VI</span>Submit a Manuscript
+                <span className="lf-kicker-mark">VI</span>Submit a Manuscript
               </motion.div>
             </motion.div>
 
@@ -737,7 +737,7 @@ export function BlogContent() {
               <div style={{ position: "relative" }}>
                 <div className="lf-section-eyebrow">
                   <span className="lf-section-eyebrow-rule" />
-                  <span className="lf-meta lf-meta--accent">§ VII</span>
+                  <span className="lf-meta lf-meta--accent">VII</span>
                   <span className="lf-meta" style={{ fontSize: 10 }}>
                     Consult the Registry
                   </span>
@@ -1078,7 +1078,7 @@ function LeadOpinionCard({
                 borderBottom: "1px solid var(--line-1)",
               }}
             >
-              <span className="lf-meta lf-meta--accent">§ Folio 001</span>
+              <span className="lf-meta lf-meta--accent">Folio 001</span>
               <span
                 aria-hidden
                 style={{

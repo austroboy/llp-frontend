@@ -80,7 +80,7 @@ export function OrderLookupForm({ initialOrderNumber = "" }: OrderLookupFormProp
             style={{ justifyContent: "center" }}
           >
             <span className="lf-section-eyebrow-rule" />
-            <span className="lf-meta lf-meta--accent">§ Track</span>
+            <span className="lf-meta lf-meta--accent">Track</span>
             <span className="lf-meta">Service request status</span>
           </div>
         </motion.div>

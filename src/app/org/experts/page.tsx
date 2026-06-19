@@ -69,7 +69,7 @@ export default function OrgExpertsPage() {
         style={{ paddingBottom: "var(--s-6)" }}
       >
         <motion.div variants={fadeUp} className="lf-kicker">
-          <span className="lf-kicker-mark">§ I</span>
+          <span className="lf-kicker-mark">I</span>
           Organization Desk · Expert consultation
         </motion.div>
 
@@ -143,7 +143,7 @@ export default function OrgExpertsPage() {
           style={{ marginBottom: "var(--s-5)" }}
         >
           <div className="lf-kicker">
-            <span className="lf-kicker-mark">§ II</span>
+            <span className="lf-kicker-mark">II</span>
             How it works
           </div>
           <h2 className="lf-h2" style={{ marginTop: "var(--s-2)" }}>

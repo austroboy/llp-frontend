@@ -46,7 +46,7 @@ export default function SubscribersAdminPage() {
         style={{ paddingBottom: "var(--s-6)" }}
       >
         <motion.div variants={fadeUp} className="lf-kicker">
-          <span className="lf-kicker-mark">§ 4.2</span>
+          <span className="lf-kicker-mark">4.2</span>
           Admin · Communications · Subscribers
         </motion.div>
         <motion.h1

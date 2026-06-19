@@ -143,7 +143,7 @@ export default function ChatUsagePage() {
           style={{ paddingBottom: "var(--s-3)" }}
         >
           <motion.div variants={fadeUp} className="lf-kicker">
-            <span className="lf-kicker-mark">§ 3.3</span>
+            <span className="lf-kicker-mark">3.3</span>
             Admin · Chat Usage
           </motion.div>
           <motion.h1

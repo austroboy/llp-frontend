@@ -534,7 +534,7 @@ export default function AdminChatTestPage() {
       className="flex items-center gap-2 mb-2 shrink-0"
     >
       <motion.div variants={fadeUp} className="lf-kicker">
-        <span className="lf-kicker-mark">§ 3.6</span>
+        <span className="lf-kicker-mark">3.6</span>
         Admin · Chat Workbench
       </motion.div>
       <motion.span

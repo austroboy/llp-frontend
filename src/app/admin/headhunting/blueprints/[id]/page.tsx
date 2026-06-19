@@ -632,7 +632,7 @@ function BlueprintEditorContent() {
         </motion.div>
 
         <motion.div variants={fadeUp} className="lf-kicker">
-          <span className="lf-kicker-mark">§ V</span>
+          <span className="lf-kicker-mark">V</span>
           Admin · Headhunting · Blueprint Editor
         </motion.div>
       </motion.section>

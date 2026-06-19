@@ -880,7 +880,7 @@ export default function CostCalculatorPage() {
       >
         <div className="space-y-2">
           <motion.div variants={fadeUp} className="lf-kicker">
-            <span className="lf-kicker-mark">§ 3.7</span>
+            <span className="lf-kicker-mark">3.7</span>
             Admin · Cost Analytics
           </motion.div>
           <motion.h1

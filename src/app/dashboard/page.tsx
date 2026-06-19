@@ -141,7 +141,7 @@ export default function MemberDashboardPage() {
         style={{ paddingBottom: "var(--s-6)" }}
       >
         <motion.div variants={fadeUp} className="lf-kicker">
-          <span className="lf-kicker-mark">§ I</span>
+          <span className="lf-kicker-mark">I</span>
           Personal Desk · {today} ·{" "}
           <Link
             href="/org"
@@ -475,7 +475,7 @@ export default function MemberDashboardPage() {
           style={{ marginBottom: "var(--s-5)" }}
         >
           <div className="lf-kicker">
-            <span className="lf-kicker-mark">§ II</span>
+            <span className="lf-kicker-mark">II</span>
             Your next steps
           </div>
           <h2 className="lf-h2" style={{ marginTop: "var(--s-2)" }}>
@@ -667,7 +667,7 @@ export default function MemberDashboardPage() {
           style={{ marginBottom: "var(--s-5)" }}
         >
           <div className="lf-kicker">
-            <span className="lf-kicker-mark">§ III</span>
+            <span className="lf-kicker-mark">III</span>
             Your modules
           </div>
           <h2 className="lf-h2" style={{ marginTop: "var(--s-2)" }}>
@@ -969,7 +969,7 @@ export default function MemberDashboardPage() {
             style={{ marginBottom: "var(--s-4)" }}
           >
             <div className="lf-kicker">
-              <span className="lf-kicker-mark">§ IV</span>
+              <span className="lf-kicker-mark">IV</span>
               Recent activity
             </div>
             <h2

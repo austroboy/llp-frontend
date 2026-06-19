@@ -285,7 +285,7 @@ export default function AdminUsersPage() {
         >
           <div>
             <motion.div variants={fadeUp} className="lf-kicker">
-              <span className="lf-kicker-mark">§ 1.3</span>
+              <span className="lf-kicker-mark">1.3</span>
               Admin · Users
             </motion.div>
             <motion.h1

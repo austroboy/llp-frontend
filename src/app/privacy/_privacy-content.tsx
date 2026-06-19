@@ -26,7 +26,7 @@ export function PrivacyContent() {
         >
           <div className="lf-section-header">
             <div className="lf-kicker">
-              <span className="lf-kicker-mark">§ P</span>How LLP handles personal
+              <span className="lf-kicker-mark">P</span>How LLP handles personal
               data
             </div>
             <h1 className="lf-h2">Privacy Policy</h1>

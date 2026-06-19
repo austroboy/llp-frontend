@@ -46,7 +46,7 @@ export default function CampaignsAdminPage() {
         style={{ paddingBottom: "var(--s-6)" }}
       >
         <motion.div variants={fadeUp} className="lf-kicker">
-          <span className="lf-kicker-mark">§ 4.3</span>
+          <span className="lf-kicker-mark">4.3</span>
           Admin · Communications · Campaigns
         </motion.div>
         <motion.h1

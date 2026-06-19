@@ -233,7 +233,7 @@ export default function OpPage() {
         >
           <div>
             <motion.div variants={fadeUp} className="lf-kicker">
-              <span className="lf-kicker-mark">§ 1.4</span>
+              <span className="lf-kicker-mark">1.4</span>
               Admin · Operations
             </motion.div>
             <motion.h1

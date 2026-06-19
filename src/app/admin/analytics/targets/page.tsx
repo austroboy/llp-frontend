@@ -169,7 +169,7 @@ export default function KpiTargetsPage() {
         style={{ paddingBottom: "var(--s-5)" }}
       >
         <motion.div variants={fadeUp} className="lf-kicker">
-          <span className="lf-kicker-mark">§ 3.8.a</span>
+          <span className="lf-kicker-mark">3.8.a</span>
           Admin · Analytics · KPI Targets
         </motion.div>
         <motion.h1

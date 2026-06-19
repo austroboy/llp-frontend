@@ -148,7 +148,7 @@ export function Stakeholders() {
           <div className="lg:col-span-7">
             <div className="reg-marker">
               <span className="reg-marker-rule" />
-              <span className="reg-marker-num">§ VIII</span>
+              <span className="reg-marker-num">VIII</span>
               <span>The Interfaces</span>
             </div>
             <h2 className="reg-display mt-7 text-[36px] sm:text-[46px] lg:text-[54px] leading-[1.02] font-normal max-w-[24ch]">

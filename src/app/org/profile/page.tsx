@@ -187,7 +187,7 @@ export default function OrgProfilePage() {
         style={{ paddingBottom: "var(--s-6)" }}
       >
         <motion.div variants={fadeUp} className="lf-kicker">
-          <span className="lf-kicker-mark">§ I</span>
+          <span className="lf-kicker-mark">I</span>
           Organization Desk · Profile
         </motion.div>
 
@@ -246,7 +246,7 @@ export default function OrgProfilePage() {
         >
           <div>
             <div className="lf-kicker">
-              <span className="lf-kicker-mark">§ II</span>
+              <span className="lf-kicker-mark">II</span>
               Company information
             </div>
             <h2 className="lf-h2" style={{ marginTop: "var(--s-2)", fontSize: 32 }}>
@@ -390,7 +390,7 @@ export default function OrgProfilePage() {
         >
           <div>
             <div className="lf-kicker">
-              <span className="lf-kicker-mark">§ III</span>
+              <span className="lf-kicker-mark">III</span>
               Primary contact
             </div>
             <h2 className="lf-h2" style={{ marginTop: "var(--s-2)", fontSize: 32 }}>
@@ -536,7 +536,7 @@ export default function OrgProfilePage() {
           style={{ marginBottom: "var(--s-4)" }}
         >
           <div className="lf-kicker">
-            <span className="lf-kicker-mark">§ IV</span>
+            <span className="lf-kicker-mark">IV</span>
             LLP usage
           </div>
           <h2 className="lf-h2" style={{ marginTop: "var(--s-2)", fontSize: 32 }}>
@@ -599,7 +599,7 @@ export default function OrgProfilePage() {
           style={{ marginBottom: "var(--s-4)" }}
         >
           <div className="lf-kicker">
-            <span className="lf-kicker-mark">§ V</span>
+            <span className="lf-kicker-mark">V</span>
             Billing details
           </div>
           <h2 className="lf-h2" style={{ marginTop: "var(--s-2)", fontSize: 32 }}>

@@ -149,7 +149,7 @@ export function Network() {
         >
           <div className="reg-marker">
             <span className="reg-marker-rule" />
-            <span className="reg-marker-num">§ V</span>
+            <span className="reg-marker-num">V</span>
             <span>The Cartogram</span>
           </div>
           <h2 className="reg-display mt-7 text-[36px] sm:text-[46px] lg:text-[56px] leading-[1.02] font-normal max-w-[22ch]">

@@ -116,7 +116,7 @@ export default function AnalyticsPage() {
         </motion.div>
 
         <motion.div variants={fadeUp} className="lf-kicker">
-          <span className="lf-kicker-mark">§ 2.2</span>
+          <span className="lf-kicker-mark">2.2</span>
           Admin · Headhunting · Analytics
         </motion.div>
 

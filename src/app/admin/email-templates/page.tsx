@@ -43,7 +43,7 @@ export default function EmailTemplatesPage() {
         style={{ paddingBottom: "var(--s-6)" }}
       >
         <motion.div variants={fadeUp} className="lf-kicker">
-          <span className="lf-kicker-mark">§ 4.4</span>
+          <span className="lf-kicker-mark">4.4</span>
           Admin · Communications · Email Templates
         </motion.div>
         <motion.h1

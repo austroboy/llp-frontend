@@ -98,7 +98,7 @@ export default function OrgHiringPage() {
         style={{ paddingBottom: "var(--s-6)" }}
       >
         <motion.div variants={fadeUp} className="lf-kicker">
-          <span className="lf-kicker-mark">§ I</span>
+          <span className="lf-kicker-mark">I</span>
           Organization Desk · Hiring
         </motion.div>
 
@@ -168,7 +168,7 @@ export default function OrgHiringPage() {
           style={{ marginBottom: "var(--s-5)" }}
         >
           <div className="lf-kicker">
-            <span className="lf-kicker-mark">§ II</span>
+            <span className="lf-kicker-mark">II</span>
             Active mandates
           </div>
           <h2 className="lf-h2" style={{ marginTop: "var(--s-2)" }}>

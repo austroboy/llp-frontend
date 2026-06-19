@@ -136,7 +136,7 @@ export function Governance() {
               className="reg-marker-rule"
               style={{ background: "var(--reg-emerald)" }}
             />
-            <span className="reg-marker-num">§ VII</span>
+            <span className="reg-marker-num">VII</span>
             <span>The Vault</span>
           </div>
           <h2 className="reg-display mt-7 text-[36px] sm:text-[46px] lg:text-[54px] leading-[1.02] font-normal max-w-[22ch] mx-auto text-white/95">

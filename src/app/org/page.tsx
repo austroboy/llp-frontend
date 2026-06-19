@@ -167,7 +167,7 @@ export default function OrgDashboardPage() {
         style={{ paddingBottom: "var(--s-6)" }}
       >
         <motion.div variants={fadeUp} className="lf-kicker">
-          <span className="lf-kicker-mark">§ I</span>
+          <span className="lf-kicker-mark">I</span>
           Organization Desk · {today} ·{" "}
           <Link
             href="/dashboard"
@@ -307,7 +307,7 @@ export default function OrgDashboardPage() {
           style={{ marginBottom: "var(--s-5)" }}
         >
           <div className="lf-kicker">
-            <span className="lf-kicker-mark">§ II</span>
+            <span className="lf-kicker-mark">II</span>
             Quick doors
           </div>
           <h2 className="lf-h2" style={{ marginTop: "var(--s-2)" }}>
@@ -391,7 +391,7 @@ export default function OrgDashboardPage() {
           style={{ marginBottom: "var(--s-5)" }}
         >
           <div className="lf-kicker">
-            <span className="lf-kicker-mark">§ III</span>
+            <span className="lf-kicker-mark">III</span>
             Work surfaces
           </div>
           <h2 className="lf-h2" style={{ marginTop: "var(--s-2)" }}>
@@ -480,7 +480,7 @@ export default function OrgDashboardPage() {
           style={{ marginBottom: "var(--s-4)" }}
         >
           <div className="lf-kicker">
-            <span className="lf-kicker-mark">§ IV</span>
+            <span className="lf-kicker-mark">IV</span>
             Dispatch from LLP
           </div>
           <h2

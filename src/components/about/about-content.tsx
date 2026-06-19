@@ -86,7 +86,7 @@ const keyFacts = [
 function Kicker({ n, label }: { n: string; label: string }) {
   return (
     <div className="lf-kicker">
-      <span className="lf-kicker-mark">§ {n}</span>
+      <span className="lf-kicker-mark">{n}</span>
       {label}
     </div>
   );
@@ -342,7 +342,7 @@ function AboutCTA() {
           <div>
             <div className="lf-section-eyebrow">
               <span className="lf-section-eyebrow-rule" />
-              <span className="lf-meta lf-meta--accent">§ 05</span>
+              <span className="lf-meta lf-meta--accent">05</span>
               <span className="lf-meta">Get started</span>
             </div>
             <h2

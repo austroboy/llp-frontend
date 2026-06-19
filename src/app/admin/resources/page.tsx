@@ -246,7 +246,7 @@ export default function AdminResourcesPage() {
           style={{ paddingBottom: "var(--s-3)" }}
         >
           <motion.div variants={fadeUp} className="lf-kicker">
-            <span className="lf-kicker-mark">§ 4</span>
+            <span className="lf-kicker-mark">4</span>
             Admin · Resource Centre
           </motion.div>
           <motion.h1

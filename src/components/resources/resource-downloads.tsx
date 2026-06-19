@@ -93,7 +93,6 @@ export function ResourceDownloads({ categories, files, language }: Props) {
                 }}
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <span className="lf-meta lf-meta--accent">§</span>
                   <h3
                     className="lf-h3 truncate"
                     style={{ fontSize: 18, lineHeight: 1.25 }}

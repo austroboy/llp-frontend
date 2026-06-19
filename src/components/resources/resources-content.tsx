@@ -141,7 +141,7 @@ export function ResourcesContent() {
               animate="show"
             >
               <motion.div variants={fadeUp} className="lf-kicker">
-                <span className="lf-kicker-mark">§ I</span>The Resource Centre
+                <span className="lf-kicker-mark">I</span>The Resource Centre
               </motion.div>
 
               <motion.div
@@ -266,7 +266,7 @@ export function ResourcesContent() {
               viewport={inViewOnce}
             >
               <motion.div variants={fadeUp} className="lf-kicker">
-                <span className="lf-kicker-mark">§ II</span>The Stacks
+                <span className="lf-kicker-mark">II</span>The Stacks
               </motion.div>
               <motion.h2 variants={fadeUp} className="lf-h2">
                 Browse by <em>shelf</em>, or read by chapter.
@@ -348,7 +348,7 @@ export function ResourcesContent() {
               <div style={{ position: "relative" }}>
                 <div className="lf-section-eyebrow">
                   <span className="lf-section-eyebrow-rule" />
-                  <span className="lf-meta lf-meta--accent">§ III</span>
+                  <span className="lf-meta lf-meta--accent">III</span>
                   <span className="lf-meta" style={{ fontSize: 10 }}>
                     Consult the Registry
                   </span>
