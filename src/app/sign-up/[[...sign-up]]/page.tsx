@@ -126,7 +126,7 @@ function ChooseStep({
     >
       <AuthSpine
         dossier={dossier}
-        kicker="§ 1.0 · New Account · Labour-Law Research"
+        kicker="1.0 · New Account · Labour-Law Research"
         title="Open a research account."
         body="Get AI-assisted Bangladesh labour-law answers — bilingual (EN · বাংলা), cited, and grounded in the nine governing instruments from the 2006 Act through the 2026 amendments."
         foot="Enrolment · Under oath · Recorded"
@@ -145,7 +145,7 @@ function ChooseStep({
             variants={fadeUp}
           >
             <span className="lf-auth-kicker">
-              <span className="lf-auth-kicker-mark">§ 1.0</span>
+              <span className="lf-auth-kicker-mark">1.0</span>
               Create an account
             </span>
             <Link href="/sign-in" className="lf-auth-link" style={{ fontFamily: "var(--lf-mono)", fontSize: 11.5, letterSpacing: "0.18em", textTransform: "uppercase" }}>
@@ -259,7 +259,7 @@ function IndividualStep({
     >
       <AuthSpine
         dossier={dossier}
-        kicker="§ 1.1 · Individual · Labour-Law Research"
+        kicker="1.1 · Individual · Labour-Law Research"
         title="Research as an individual."
         body="Workers, HR practitioners, students — bilingual answers cited to the exact section of the 2006 Act, 2015 Rules, and every amendment through 2026."
         foot="Enrolment · Under oath · Recorded"
@@ -283,7 +283,7 @@ function IndividualStep({
           </motion.button>
 
           <motion.span className="lf-auth-kicker" style={{ marginTop: 24 }} variants={fadeUp}>
-            <span className="lf-auth-kicker-mark">§ 1.1</span>
+            <span className="lf-auth-kicker-mark">1.1</span>
             Individual · Labour-Law Research
           </motion.span>
           <motion.h2 className="lf-auth-h2" variants={fadeUp}>
@@ -559,14 +559,14 @@ function OrgSignUpFlow({
   const chapters = useMemo(
     () => [
       {
-        label: "§ I Identity",
+        label: "I Identity",
         done:
           !!form.representativeName.trim() &&
           !!form.email.trim() &&
           !!form.phone.trim(),
       },
       {
-        label: "§ II Company",
+        label: "II Company",
         done:
           !!form.companyName.trim() &&
           !!form.designation.trim() &&
@@ -575,11 +575,11 @@ function OrgSignUpFlow({
           !!form.employeeCount,
       },
       {
-        label: "§ III Domicile",
+        label: "III Domicile",
         done: !!form.city.trim() && !!form.country.trim(),
       },
       {
-        label: "§ IV Credentials",
+        label: "IV Credentials",
         done:
           form.password.length >= 8 && form.password === form.confirmPassword,
       },
@@ -672,14 +672,11 @@ function OrgFormState({
             <ArrowLeft className="size-3.5" />
             Back to account types
           </button>
-          <span className="lf-auth-topbar-serial" suppressHydrationWarning>
-            {dossier}
-          </span>
         </div>
 
         <div style={{ marginBottom: 32 }}>
           <span className="lf-auth-kicker">
-            <span className="lf-auth-kicker-mark">§ 2.0</span>
+            <span className="lf-auth-kicker-mark">2.0</span>
             Organization Account
           </span>
           <h1 className="lf-auth-h2" style={{ fontSize: "clamp(32px, 4vw, 44px)" }}>
@@ -694,7 +691,7 @@ function OrgFormState({
 
         <form onSubmit={onSubmit} className="lf-auth-org-grid">
           <div className="lf-auth-filing">
-            <FilingSection num="§ I" title="Identity" />
+            <FilingSection num="I" title="Identity" />
             <FilingRow label="Representative" htmlFor="repName">
               <input
                 id="repName"
@@ -733,7 +730,7 @@ function OrgFormState({
               />
             </FilingRow>
 
-            <FilingSection num="§ II" title="Company" />
+            <FilingSection num="II" title="Company" />
             <FilingRow label="Company Name" htmlFor="company">
               <input
                 id="company"
@@ -797,7 +794,7 @@ function OrgFormState({
               </select>
             </FilingRow>
 
-            <FilingSection num="§ III" title="Domicile" />
+            <FilingSection num="III" title="Domicile" />
             <FilingRow label="City" htmlFor="city">
               <input
                 id="city"
@@ -819,7 +816,7 @@ function OrgFormState({
               />
             </FilingRow>
 
-            <FilingSection num="§ IV" title="Credentials" />
+            <FilingSection num="IV" title="Credentials" />
             <FilingRow label="Password" htmlFor="password">
               <div className="lf-auth-input-pwd">
                 <input
@@ -890,7 +887,7 @@ function OrgFormState({
           <aside>
             <div className="lf-auth-ledger">
               <p className="lf-auth-kicker" style={{ marginBottom: 4 }}>
-                <span className="lf-auth-kicker-mark">§</span> Progress
+                Progress
               </p>
               <p style={{ marginBottom: 16, fontSize: 12, lineHeight: 1.5, color: "var(--ink-2)" }}>
                 Each section ticks off as you fill it in.
@@ -907,13 +904,6 @@ function OrgFormState({
                   <span>{c.label}</span>
                 </div>
               ))}
-
-              <div className="lf-auth-ledger-foot">
-                <p className="lf-auth-ledger-foot-label">Reference</p>
-                <p className="lf-auth-ledger-foot-value" suppressHydrationWarning>
-                  {dossier.replace("DOSSIER № ", "")}
-                </p>
-              </div>
             </div>
           </aside>
         </form>
@@ -1003,7 +993,7 @@ function OrgVerifyState({
           style={{ marginTop: 32, justifyContent: "center" }}
           variants={fadeUp}
         >
-          <span className="lf-auth-kicker-mark">§ 1.2</span>
+          <span className="lf-auth-kicker-mark">1.2</span>
           Email Verification
         </motion.span>
         <motion.h2 className="lf-auth-h2" style={{ marginTop: 16 }} variants={fadeUp}>

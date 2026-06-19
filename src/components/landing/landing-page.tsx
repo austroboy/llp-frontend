@@ -82,7 +82,7 @@ const INSIGHTS: Insight[] = [
     desc: (
       <>
         Every legal claim links to its primary section.{" "}
-        <strong>Reviewed by Mehnaz Islam</strong> before publication.
+        <strong>Reviewed</strong> before publication.
       </>
     ),
   },
@@ -101,36 +101,14 @@ const CORPUS: CorpusItem[] = [
     name: "Bangladesh Labour Act, 2006",
     rollup:
       "with Labour Rules 2015, five amending Acts (2009, 2010, 2013, 2018, 2026), the 2022 Rules Amendment, and the 2025 Ordinance enacted into the 2026 Act",
-    stats: (
-      <>
-        <span>
-          <strong>354</strong> sections
-        </span>
-        <span>
-          <strong>9</strong> acts and rules
-        </span>
-        <span>
-          <strong>47</strong> briefs
-        </span>
-        <span>EN · BN</span>
-      </>
-    ),
+    stats: null,
     status: "indexed",
     depth: 5,
   },
   {
     name: "Income Tax Act, 2023",
     rollup: "with NBR circulars and employment-related provisions",
-    stats: (
-      <>
-        <span>
-          Section map · <strong>Partial</strong>
-        </span>
-        <span>
-          Full text · <strong>Q3 2026</strong>
-        </span>
-      </>
-    ),
+    stats: null,
     status: "structural",
     depth: 2,
   },
@@ -263,6 +241,7 @@ const ARMS: Arm[] = [
       "Become the HR professional who knows the compliance topic cold. Five sessions per topic, personalized per company, Session 1 free. ৳990 for Sessions 2-5. Provident Fund and Gratuity at launch.",
     anchor: "See the Paths",
     href: "/academy",
+    comingSoon: true,
   },
   {
     num: "III",
@@ -278,6 +257,7 @@ const ARMS: Arm[] = [
     desc:
       "When an AI answer is insufficient, book a human reviewer who knows the area. Labor practitioners, compliance specialists, and industry experts, rated and scoped.",
     anchor: "Book a reviewer",
+    comingSoon: true,
   },
 ];
 
@@ -346,7 +326,7 @@ export function LandingPage() {
           <div className="lf-hero-grid">
             <motion.div variants={heroStagger} initial="hidden" animate="show">
               <motion.div variants={fadeUp} className="lf-kicker">
-                <span className="lf-kicker-mark">§ I</span>A new kind of
+                <span className="lf-kicker-mark">I</span>A new kind of
                 research instrument
               </motion.div>
               <motion.h1 variants={fadeUp} className="lf-hero-title">
@@ -380,18 +360,6 @@ export function LandingPage() {
                     {c}
                   </button>
                 ))}
-              </motion.div>
-
-              <motion.div variants={fadeUp} className="lf-trust">
-                <span className="lf-trust-item">
-                  47 editorial briefs published
-                </span>
-                <span className="lf-trust-item">
-                  354 sections indexed · 9 acts and rules
-                </span>
-                <span className="lf-trust-item">
-                  First question free · no signup
-                </span>
               </motion.div>
             </motion.div>
 
@@ -431,7 +399,7 @@ export function LandingPage() {
             viewport={inViewOnce}
           >
             <motion.div variants={fadeUp} className="lf-kicker">
-              <span className="lf-kicker-mark">§ II</span>The library and the
+              <span className="lf-kicker-mark">II</span>The library and the
               tools
             </motion.div>
             <motion.h2 variants={fadeUp} className="lf-section-title">
@@ -470,7 +438,7 @@ export function LandingPage() {
                     <div className="lf-corpus-left">
                       <h4 className="lf-corpus-name">{c.name}</h4>
                       <p className="lf-corpus-rollup">{c.rollup}</p>
-                      <div className="lf-corpus-stats">{c.stats}</div>
+                      {c.stats && <div className="lf-corpus-stats">{c.stats}</div>}
                     </div>
                     <div className="lf-corpus-right">
                       <span className={`lf-corpus-status lf-${c.status}`}>
@@ -553,7 +521,7 @@ export function LandingPage() {
             viewport={inViewOnce}
           >
             <motion.div variants={fadeUp} className="lf-kicker">
-              <span className="lf-kicker-mark">§ III</span>Recent editorial work
+              <span className="lf-kicker-mark">III</span>Recent editorial work
             </motion.div>
             <motion.h2 variants={fadeUp} className="lf-section-title">What we read this fortnight.</motion.h2>
             <motion.p variants={fadeUp} className="lf-section-deck">
@@ -610,7 +578,7 @@ export function LandingPage() {
             viewport={inViewOnce}
           >
             <motion.div variants={fadeUp} className="lf-kicker">
-              <span className="lf-kicker-mark">§ IV</span>When reading is not
+              <span className="lf-kicker-mark">IV</span>When reading is not
               enough
             </motion.div>
             <motion.h2 variants={fadeUp} className="lf-section-title">
@@ -665,7 +633,7 @@ export function LandingPage() {
               className="lf-kicker"
               style={{ marginBottom: "var(--s-3)", justifyContent: "center" }}
             >
-              <span className="lf-kicker-mark">§ V</span>Stay in the loop
+              <span className="lf-kicker-mark">V</span>Stay in the loop
             </motion.div>
             <motion.h2 variants={fadeUp} className="lf-final-title">
               Subscribe to the lab.{" "}
@@ -943,7 +911,7 @@ function DeskCard({ onClick }: { onClick: () => void }) {
         <div className="lf-desk-kicker">Today at the lab</div>
         <span className="lf-desk-timestamp">24 Apr 2026 · 09:22</span>
       </div>
-      <div className="lf-desk-ref">§ BANGLADESH LABOUR ACT 2006</div>
+      <div className="lf-desk-ref">BANGLADESH LABOUR ACT 2006</div>
       <h2 className="lf-desk-title">
         Section 46 · <em>Right to maternity benefit</em>
       </h2>

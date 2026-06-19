@@ -49,14 +49,6 @@ export function AuthSpine({ dossier, kicker, title, body, foot }: AuthSpineProps
         </motion.div>
 
         <div className="lf-auth-spine-bottom">
-          <motion.span
-            className="lf-auth-dossier-vertical"
-            suppressHydrationWarning
-            variants={fadeUp}
-          >
-            {dossier}
-          </motion.span>
-
           <div>
             <motion.p className="lf-auth-spine-kicker" variants={fadeUp}>
               {kicker}
