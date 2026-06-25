@@ -1,5 +1,4 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
 
 const isPublicRoute = createRouteMatcher([
   "/",
@@ -37,41 +36,18 @@ const isPublicRoute = createRouteMatcher([
 ]);
 
 /**
- * Pre-launch coming-soon gate.
+ * Pre-launch coming-soon gate — REMOVED.
  *
- * Live routes:
- *   /                — home
- *   /services        — services desk
- *   /coming-soon     — the gate itself
- *   /admin/*         — admin panel (required for service data edits)
- *   /api/*           — API + cron + webhooks
- *   /sign-in, /sign-up — Clerk auth
+ * All routes now resolve to their real pages. The previous gate rewrote
+ * every route except home/services/admin/api/auth to /coming-soon.
+ * The /coming-soon page itself still exists and can be linked directly,
+ * but no route is force-redirected to it any more.
  *
- * All other top-level routes are rewritten to /coming-soon.
- * To re-open routes: remove this gate (the `comingSoonAllowed` matcher
- * and the early rewrite branch) and ship.
+ * To re-enable a pre-launch gate in future, restore a `comingSoonAllowed`
+ * route matcher and the early-rewrite branch in the middleware below.
  */
-const comingSoonAllowed = createRouteMatcher([
-  "/",
-  "/services(.*)",
-  "/admin(.*)",
-  "/api(.*)",
-  "/sign-in(.*)",
-  "/sign-up(.*)",
-  "/coming-soon(.*)",
-  "/og(.*)",
-  "/_next(.*)",
-]);
 
 export default clerkMiddleware(async (auth, request) => {
-  // Coming-soon gate fires BEFORE Clerk auth so we don't ask users to
-  // log in just to see the placeholder page.
-  if (!comingSoonAllowed(request)) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/coming-soon";
-    return NextResponse.rewrite(url);
-  }
-
   if (!isPublicRoute(request)) {
     await auth.protect();
   }
